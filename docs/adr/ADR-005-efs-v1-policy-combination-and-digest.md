@@ -1,6 +1,6 @@
 # ADR-005 — EFS v1 policy combination and content digest
 
-- **Status:** Proposed — architecture decision for founder review
+- **Status:** Accepted — delegated architecture decision (2026-11-16)
 - **Date:** 2026-11-16
 - **Owner:** EFS architecture
 - **Related issue:** PSI-52
@@ -12,7 +12,7 @@ PSI-34 requires immutable, digest-pinned policy references, but the policy docum
 
 ## Decision
 
-This ADR proposes:
+The project owner delegated resolution of these choices to the architecture role on 2026-11-16. This ADR therefore accepts:
 
 1. **Policy profile:** `efs-policy-v1`.
 2. **Policy content digest:** `efs-policy-jcs-sha256-v1`, defined as SHA-256 over RFC 8785 JCS UTF-8 bytes of `{"domain":"efs.policy.v1","policy":<policy projection>}`, excluding only the policy's top-level `digest` member. This is a separate object profile and does not reuse or alter ADR-001's release digest profile.
@@ -40,4 +40,4 @@ This ADR proposes:
 
 | Date | Change |
 |---|---|
-| 2026-11-16 | Proposed policy digest profile, deterministic combining algorithm and exact-scope semantics |
+| 2026-11-16 | Accepted policy digest profile, deterministic combining algorithm and exact-scope semantics under delegated architecture authority |
