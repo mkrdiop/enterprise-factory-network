@@ -11,7 +11,6 @@ from typing import Any
 import rfc8785
 
 from scripts.validate_manifest import (
-    InvalidJSONConstant,
     reject_duplicate_members,
     reject_non_json_constant,
 )
@@ -122,3 +121,10 @@ def reconstruct_manifest(raw: bytes, expected: DigestIdentity) -> dict[str, Any]
         "value": expected.value,
     }
     return projection
+
+
+class EFSReleaseDigestService:
+    """Object adapter implementing the shared ReleaseDigestService protocol."""
+
+    def canonicalize_and_verify(self, manifest_bytes: bytes) -> CanonicalReleasePayload:
+        return canonicalize_and_verify(manifest_bytes)
