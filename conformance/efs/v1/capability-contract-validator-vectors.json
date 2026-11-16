@@ -1,0 +1,78 @@
+{
+  "profile": "efs-v1",
+  "validatorVersion": "1.0",
+  "normativeModel": "docs/efs-v1-capability-contract-model.md",
+  "diagnostics": {
+    "EFS_CAPABILITY_ID_DUPLICATE": "profile",
+    "EFS_CONTRACT_ERROR_CODE_DUPLICATE": "profile",
+    "EFS_CAPABILITY_EXECUTION_PROFILE_UNRESOLVED": "profile",
+    "EFS_SCHEMA_REF_UNRESOLVED": "embedded_schemas",
+    "EFS_CONTRACT_PAYLOAD_INVALID": "payload",
+    "EFS_CONTRACT_RELEASE_COORDINATE_MISMATCH": "payload",
+    "EFS_CONTRACT_VERSION_MISMATCH": "payload"
+  },
+  "rules": [
+    {
+      "id": "duplicate-capability-id",
+      "input": "same capability id repeated in one exact release",
+      "expected": "reject",
+      "diagnostic": "EFS_CAPABILITY_ID_DUPLICATE"
+    },
+    {
+      "id": "duplicate-error-code",
+      "input": "same exact error code repeated in one contract",
+      "expected": "reject",
+      "diagnostic": "EFS_CONTRACT_ERROR_CODE_DUPLICATE"
+    },
+    {
+      "id": "case-sensitive-error-code",
+      "input": "error codes differ only by ASCII case",
+      "expected": "distinct"
+    },
+    {
+      "id": "missing-profile",
+      "input": "capability references no profile in selected execution source",
+      "expected": "reject",
+      "diagnostic": "EFS_CAPABILITY_EXECUTION_PROFILE_UNRESOLVED"
+    },
+    {
+      "id": "ambiguous-profile",
+      "input": "capability profile id matches more than one declared profile",
+      "expected": "reject",
+      "diagnostic": "EFS_CAPABILITY_EXECUTION_PROFILE_UNRESOLVED"
+    },
+    {
+      "id": "remote-schema-reference",
+      "input": "absolute or network $ref",
+      "expected": "reject",
+      "diagnostic": "EFS_SCHEMA_REF_REMOTE"
+    },
+    {
+      "id": "unresolved-schema-reference",
+      "input": "local reference absent from immutable schema resource graph",
+      "expected": "reject",
+      "diagnostic": "EFS_SCHEMA_REF_UNRESOLVED"
+    },
+    {
+      "id": "local-json-pointer",
+      "input": "fragment JSON Pointer resolves inside the embedded schema resource",
+      "expected": "accept"
+    },
+    {
+      "id": "exact-release-payload",
+      "input": "publisher, factory, release version and digest all match exact immutable release",
+      "expected": "validate"
+    },
+    {
+      "id": "wrong-release-payload",
+      "input": "any exact release coordinate or digest component differs",
+      "expected": "reject",
+      "diagnostic": "EFS_CONTRACT_RELEASE_COORDINATE_MISMATCH"
+    },
+    {
+      "id": "payload-privacy",
+      "input": "invalid concrete payload",
+      "expected": "diagnostic excludes payload values"
+    }
+  ]
+}
