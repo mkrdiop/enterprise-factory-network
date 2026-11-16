@@ -288,7 +288,7 @@ def evaluate_efs_version_range(candidate: str, supported_range: str) -> bool:
         return parsed_candidate.minor == int(minor_text)
 
     # Exact versions and comparator conjunctions use strict full SemVer tokens.
-    if " " not in supported_range:
+    if " " not in supported_range and not supported_range.startswith((">", "<", "=")):
         try:
             bound = parse_field_version(VersionDimension.EFS_SPECIFICATION, supported_range)
         except VersionError as exc:
