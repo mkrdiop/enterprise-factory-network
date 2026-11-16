@@ -230,3 +230,100 @@ def test_machine_readable_negative_vectors_are_executable():
         elif kind == "freshness-boundary":
             assert vector["evaluation_time"] == vector["expires_at"]
             assert not (vector["evaluation_time"] < vector["expires_at"])
+
+
+# PSI-52 v1 conformance oracle: these validators are contract checks, not a production PDP.
+def _validate_action_resource_request(request):
+    validate(request, policy_schema(), "evaluationRequest")
+    allowed = ACTIONS_BY_RESOURCE.get(request["resource"]["type"], set())
+    if request["action"] not in allowed:
+        return {"classification": "invalid-input", "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"}
+    return {"classification": "valid-input"}
+
+
+def _validate_policy_semantics(policy):
+    ids = [rule["rule_id"] for rule in policy["rules"]]
+    if len(ids) != len(set(ids)):
+        return {"classification": "semantic-invalid", "reason_code": "DUPLICATE_RULE_ID"}
+    return {"classification": "semantic-valid"}
+
+
+def test_every_action_resource_negative_vector_is_a_complete_executable_request():
+    package = vector_package()
+    vectors = [v for v in package["validation_vectors"] if v["kind"] == "action-resource-compatibility"]
+    assert len(vectors) == 80
+    for vector in vectors:
+        request = vector["evaluation_request"]
+        validate(request, policy_schema(), "evaluationRequest")
+        assert _validate_action_resource_request(request) == vector["expected"]
+
+
+def test_action_resource_vector_coverage_matches_normative_matrix():
+    package = vector_package()
+    vectors = [v for v in package["validation_vectors"] if v["kind"] == "action-resource-compatibility"]
+    expected_pairs = {
+        (action, resource_type)
+        for resource_type, allowed in ACTIONS_BY_RESOURCE.items()
+        for action in set().union(*ACTIONS_BY_RESOURCE.values())
+        if action not in allowed
+    }
+    actual_pairs = {
+        (v["evaluation_request"]["action"], v["evaluation_request"]["resource"]["type"])
+        for v in vectors
+    }
+    assert actual_pairs == expected_pairs
+
+
+def test_duplicate_rule_vector_produces_normative_semantic_invalid_result():
+    vector = next(v for v in vector_package()["validation_vectors"] if v["kind"] == "semantic-policy")
+    assert _validate_policy_semantics(vector["policy"]) == vector["expected"]
+
+
+def test_validation_vector_schema_rejects_incomplete_and_ambiguous_vectors():
+    schema = load_json(VECTOR_SCHEMA_PATH)
+    vector = vector_package()["validation_vectors"][0]
+    incomplete = copy.deepcopy(vector)
+    del incomplete["evaluation_request"]
+    with pytest.raises(ValidationError):
+        validate(incomplete, schema, "validationVector")
+    ambiguous = copy.deepcopy(vector)
+    ambiguous["unexpected"] = "must not be silently accepted"
+    with pytest.raises(ValidationError):
+        validate(ambiguous, schema, "validationVector")
+    wrong_expected = copy.deepcopy(vector)
+    wrong_expected["expected"] = "invalid"
+    with pytest.raises(ValidationError):
+        validate(wrong_expected, schema, "validationVector")
+
+
+def test_all_validation_vectors_are_consumed_by_their_declared_contract():
+    package = vector_package()
+    schema = policy_schema()
+    for vector in package["validation_vectors"]:
+        kind = vector["kind"]
+        if kind == "action-resource-compatibility":
+            assert _validate_action_resource_request(vector["evaluation_request"]) == vector["expected"]
+        elif kind == "invalid-policy":
+            with pytest.raises(ValidationError):
+                validate(vector["policy"], schema, "policy")
+        elif kind == "invalid-resource":
+            with pytest.raises(ValidationError):
+                validate(vector["resource"], schema, "resource")
+        elif kind == "semantic-policy":
+            assert _validate_policy_semantics(vector["policy"]) == vector["expected"]
+        elif kind == "condition-limit":
+            condition = vector["condition"]
+            if vector["limit"] in {"children", "literal-array"}:
+                with pytest.raises(ValidationError):
+                    validate(condition, schema, "condition")
+            else:
+                with pytest.raises(ValueError):
+                    condition_metrics(condition)
+        elif kind == "timestamp-format":
+            with pytest.raises(ValidationError):
+                validate(vector["attribute"], schema, "attribute")
+        elif kind == "freshness-boundary":
+            assert vector["evaluation_time"] == vector["expires_at"]
+            assert not (vector["evaluation_time"] < vector["expires_at"])
+        else:
+            pytest.fail(f"unsupported validation vector kind: {kind}")
