@@ -17,7 +17,10 @@ from efs.versioning import (
     validate_release_transition,
 )
 
-from registry.publication_service import ManifestValidationError, RegistryPublicationService
+from registry.publication_service import (
+    ManifestValidationError,
+    RegistryPublicationService,
+)
 
 
 @pytest.mark.parametrize("value", ["0.0.0", "1.2.3", "1.2.3-alpha", "1.2.3-alpha.1",
