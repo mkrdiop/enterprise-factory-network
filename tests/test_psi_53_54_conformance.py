@@ -68,9 +68,14 @@ def test_psi53_external_effect_intent_uses_psi45_invocation_state() -> None:
     commit = vector["input"]["commit"]
     intent = commit["side_effect"]
     execution = commit["execution_state"]
-    assert intent["operation_id"] == execution["invocation_id"]
-    assert execution["initial_state"] == "requested"
-    assert execution["initial_revision"] == 1
+    request_event = execution["request_event"]
+    initial = execution["initial_snapshot"]
+    assert intent["operation_id"] == request_event["invocationId"]
+    assert request_event["fromState"] == "created"
+    assert request_event["toState"] == "requested"
+    assert request_event["expectedRevision"] == 0
+    assert initial["state"] == "requested" and initial["revision"] == 1
+    assert initial["lastEventId"] == request_event["eventId"]
     assert execution["persisted_with_intent"] and execution["revision_cas"]
 
 
