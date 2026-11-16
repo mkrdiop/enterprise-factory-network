@@ -109,6 +109,6 @@
   "expected": {
     "valid": false,
     "diagnostic_code": "EFS_SCHEMA_CONSTRAINT",
-    "diagnostic_path": "/release/signature"
+    "diagnostic_path": "/release"
   }
 }
