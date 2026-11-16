@@ -324,7 +324,6 @@ def render_factory_passport_markdown(passport: dict[str, Any]) -> str:
             f"- **Profile source:** `{passport['execution']['source']}`",
             "",
             *_json_block(passport["execution"]),
-            "",
         ]
     )
     if passport["execution"]["source"] == "manifest":
