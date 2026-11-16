@@ -305,14 +305,18 @@ def _validate_envelope(envelope: dict, schema_path: str | Path | None = None):
     )
     if errors:
         first = errors[0]
-        if first.path and (
-            first.path[0] == "profile_id"
-            or "algorithm" in first.path
+        error_path = list(first.path)
+        if error_path == ["profile_id"] or (
+            error_path and error_path[0] == "signatures" and "algorithm" in error_path
         ):
             raise SignatureEnvelopeError(
                 SignatureCode.UNSUPPORTED_PROFILE, "unsupported signature profile or algorithm"
             )
-        if "signature" in first.path and "signatures" in first.path:
+        if error_path and error_path[0] == "statement" and "digest" in error_path:
+            raise SignatureEnvelopeError(
+                SignatureCode.DIGEST_PROFILE_MISMATCH, "unsupported or malformed release digest profile"
+            )
+        if "signature" in error_path and "signatures" in error_path:
             raise SignatureEnvelopeError(
                 SignatureCode.ENVELOPE_ENCODING_INVALID, "signature encoding violates the canonical Base64URL profile"
             )
