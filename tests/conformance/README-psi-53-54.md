@@ -21,4 +21,4 @@ A conforming implementation MUST validate each package against its adjacent JSON
 
 PSI-53 external effects are not claimed to be atomic with a local database. A durable intent must precede dispatch; an uncertain outcome is indeterminate and reconciled using the same operation/idempotency identity. PSI-45 remains authoritative for execution lifecycle.
 
-PSI-54 idempotency lookup is scoped by tenant, authenticated principal, exact release record and operation. It occurs before current-state/revision validation and returns the stored original result, reason and response reference.
+PSI-54 idempotency lookup is scoped by tenant, authenticated principal, canonical exact release coordinate (publisher, Factory, version and digest) and operation. It occurs before current-state/revision validation and returns the stored original result, reason and response reference.
