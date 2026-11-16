@@ -222,37 +222,11 @@
                 "type": "object",
                 "required": [
                   "required",
-                  "publisher_id",
-                  "key_id",
-                  "status",
-                  "evidence",
                   "required_signers"
                 ],
                 "properties": {
                   "required": {
                     "type": "boolean"
-                  },
-                  "publisher_id": {
-                    "type": "string"
-                  },
-                  "key_id": {
-                    "type": "string"
-                  },
-                  "status": {
-                    "type": "string",
-                    "enum": [
-                      "trusted",
-                      "untrusted",
-                      "revoked",
-                      "unavailable",
-                      "not_required"
-                    ]
-                  },
-                  "evidence": {
-                    "type": [
-                      "object",
-                      "null"
-                    ]
                   },
                   "required_signers": {
                     "type": "array",
@@ -451,7 +425,6 @@
                   "AUTHN_REQUIRED",
                   "ACTION_UNMAPPED",
                   "RESOURCE_COORDINATES_INVALID",
-                  "ACTION_RESOURCE_MISMATCH",
                   "POLICY_DENIED",
                   "PDP_INDETERMINATE",
                   "OBLIGATION_UNFULFILLED",
@@ -464,7 +437,8 @@
                   "AUDIT_DURABILITY_FAILURE",
                   "AUTHORIZATION_REVISION_CHANGED",
                   "EXECUTION_INTENT_NOT_DURABLE",
-                  "EXECUTION_OUTCOME_UNKNOWN"
+                  "EXECUTION_OUTCOME_UNKNOWN",
+                  "INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR"
                 ]
               }
             }
