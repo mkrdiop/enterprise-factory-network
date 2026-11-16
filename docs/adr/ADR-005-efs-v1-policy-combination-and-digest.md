@@ -2,7 +2,7 @@
 
 - **Status:** Accepted — delegated architecture decision (2026-11-16)
 - **Date:** 2026-11-16
-- **Owner:** EFS architecture
+- **Owner:** EFS architecture, acting under project-owner delegation (2026-11-16)
 - **Related issue:** PSI-52
 - **Normative dependencies:** PSI-34, EFS v1 Baseline
 
