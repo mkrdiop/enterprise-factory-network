@@ -5,9 +5,10 @@
 - **Factory ID:** `golden-factory`
 - **Release:** `1.0.0`
 - **EFS version:** `1.0.0`
-- **Digest:** `efs-jcs-sha256-v1:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`
+- **Digest:** `efs-jcs-sha256-v1:SHA-256:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`
 - **Registry release record:** `00000000-0000-4000-8000-000000000041`
 - **Published at:** `2026-11-16T09:00:00+00:00`
+- **Artifact bytes:** 42
 
 ## Capabilities
 
