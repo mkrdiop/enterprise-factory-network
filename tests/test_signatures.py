@@ -341,3 +341,34 @@ def test_resolver_missing_validity_or_evidence_fails_closed():
     result = verify_release_signature(raw, encoded, IncompleteResolver())
     assert result.code is SignatureCode.KEY_BINDING_MISMATCH
     assert result.trusted_signature_evidence is False
+
+
+def test_signature_array_order_does_not_change_verification_result():
+    raw, _manifest = _manifest_bytes()
+    first = create_signature_envelope(raw, "z-key", SIGNER)
+    second_signer = Ed25519Signer.from_private_bytes(bytes(reversed(range(32))))
+    combined = add_signature(first, "a-key", second_signer)
+    signature = bytearray(base64.urlsafe_b64decode(combined["signatures"][0]["signature"] + "=="))
+    signature[0] ^= 1
+    combined["signatures"][0]["signature"] = base64.urlsafe_b64encode(signature).rstrip(b"=").decode()
+
+    class MultiKeyResolver:
+        def resolve(self, publisher_id, key_id, algorithm, usage):
+            private = PRIVATE if key_id == "z-key" else Ed25519PrivateKey.from_private_bytes(bytes(reversed(range(32))))
+            return KeyResolution(
+                status=KeyTrustStatus.TRUSTED,
+                publisher_id=publisher_id,
+                key_id=key_id,
+                algorithm=algorithm,
+                public_key=private.public_key().public_bytes_raw(),
+                usage=usage,
+                valid_from=datetime(2026, 1, 1, tzinfo=UTC),
+                evidence_version="test-multi-key-v1",
+            )
+
+    reordered = json.loads(json.dumps(combined))
+    reordered["signatures"].reverse()
+    first_report = verify_release_signature(raw, serialize_signature_envelope(combined), MultiKeyResolver())
+    second_report = verify_release_signature(raw, serialize_signature_envelope(reordered), MultiKeyResolver())
+    assert first_report == second_report
+    assert first_report.code is SignatureCode.INVALID
