@@ -32,7 +32,7 @@ def test_duplicate_identity_conflicts(session):
 def test_release_is_immutable_and_digest_bound(session):
     PublisherRepository(session).create("urn:example:publisher:r")
     FactoryRepository(session).create("urn:example:publisher:r","f")
-    row=ReleaseRepository(session).publish("urn:example:publisher:r","f","1.0","efs-jcs-sha256-v1","SHA-256","abc",12,"test","abc",datetime.now(timezone.utc))
+    row=ReleaseRepository(session).publish("urn:example:publisher:r","f","1.0","efs-jcs-sha256-v1","SHA-256","abc",12,"test","abc",datetime.now(UTC))
     with pytest.raises(DBAPIError):
         session.execute(text("UPDATE factory_releases SET digest_value='changed' WHERE release_record_id=:id"),{"id":str(row.release_record_id)})
         session.flush()
