@@ -219,15 +219,15 @@ def build_factory_passport(
     for field, source_path in (
         ("capabilityCount", "/capabilities"),
         ("dependencyCount", "/dependencies"),
-        ("policyDeclarationCount", "/policies/declarations"),
-        ("policyReferenceCount", "/policies/references"),
+        ("policyDeclarationCount", "/policies"),
+        ("policyReferenceCount", "/policies"),
         ("endpointCount", "/capabilities"),
     ):
         provenance.append({
             "target": f"/summary/{field}",
             "source": "manifest",
             "sourcePointer": source_path,
-            "rule": "count-endpoint-items" if field == "endpointCount" else "count-items",
+            "rule": {\n                "endpointCount": "count-endpoint-items",\n                "policyDeclarationCount": "count-policy-declarations",\n                "policyReferenceCount": "count-policy-references",\n            }.get(field, "count-items"),
         })
 
     if "name" in manifest["publisher"]:
