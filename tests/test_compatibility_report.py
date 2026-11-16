@@ -149,6 +149,15 @@ def test_unknown_or_non_boolean_range_evaluator_result_stays_unknown():
 
 
 
+def test_subject_semver_coordinates_are_validated_by_psi47():
+    with pytest.raises(CompatibilityError, match="invalid SemVer"):
+        ReleaseCoordinates("urn:publisher:acme", "support", "v1.2.3",
+                           "efs-jcs-sha256-v1", "SHA-256", "a" * 64, "1.0.0")
+    with pytest.raises(CompatibilityError, match="invalid SemVer"):
+        ReleaseCoordinates("urn:publisher:acme", "support", "1.2.3",
+                           "efs-jcs-sha256-v1", "SHA-256", "a" * 64, "1.0")
+
+
 def test_specification_uses_psi47_range_evaluator_and_fails_closed():
     supported = assess_efs_specification(
         subject_efs_version="1.4.0", supported_range=">=1.0.0 <2.0.0",
