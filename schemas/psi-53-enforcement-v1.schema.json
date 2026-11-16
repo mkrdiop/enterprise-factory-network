@@ -87,7 +87,25 @@
                   ],
                   "properties": {
                     "action": {
-                      "type": "string"
+                      "type": "string",
+                      "enum": [
+                        "publisher.read",
+                        "publisher.manage",
+                        "factory.discover",
+                        "factory.read",
+                        "factory.register",
+                        "factory.publish",
+                        "release.read",
+                        "release.publish",
+                        "capability.invoke",
+                        "registry.policy.read",
+                        "registry.policy.manage",
+                        "publisher.key.manage",
+                        "release.suspend",
+                        "release.deprecate",
+                        "release.revoke",
+                        "release.archive"
+                      ]
                     },
                     "resource": {
                       "type": "object",
@@ -98,7 +116,15 @@
                       ],
                       "properties": {
                         "type": {
-                          "type": "string"
+                          "type": "string",
+                          "enum": [
+                            "publisher",
+                            "factory",
+                            "release",
+                            "capability",
+                            "registry",
+                            "execution_target"
+                          ]
                         },
                         "id": {
                           "type": "string"
@@ -145,13 +171,49 @@
                       ]
                     },
                     "obligations": {
-                      "type": "array"
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "parameters": {
+                            "type": "object"
+                          }
+                        }
+                      }
                     },
                     "obligations_fulfilled": {
                       "type": "boolean"
                     },
                     "fulfillment_evidence": {
-                      "type": "array"
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "obligation_id",
+                          "fulfilled",
+                          "evidence_ref"
+                        ],
+                        "properties": {
+                          "obligation_id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "fulfilled": {
+                            "type": "boolean"
+                          },
+                          "evidence_ref": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -177,7 +239,14 @@
                     "type": "string"
                   },
                   "status": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "trusted",
+                      "untrusted",
+                      "revoked",
+                      "unavailable",
+                      "not_required"
+                    ]
                   },
                   "evidence": {
                     "type": [
@@ -227,9 +296,50 @@
                           ]
                         },
                         "evidence": {
-                          "type": [
-                            "object",
-                            "null"
+                          "oneOf": [
+                            {
+                              "type": "null"
+                            },
+                            {
+                              "type": "object",
+                              "required": [
+                                "publisher_id",
+                                "key_id",
+                                "status",
+                                "observed_at",
+                                "expires_at",
+                                "version"
+                              ],
+                              "properties": {
+                                "publisher_id": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "key_id": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "status": {
+                                  "enum": [
+                                    "trusted",
+                                    "untrusted",
+                                    "revoked"
+                                  ]
+                                },
+                                "observed_at": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "expires_at": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "version": {
+                                  "type": "integer",
+                                  "minimum": 1
+                                }
+                              }
+                            }
                           ]
                         }
                       }
@@ -248,7 +358,16 @@
                     "type": "boolean"
                   },
                   "state": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "not_release_operation",
+                      "published",
+                      "deprecated",
+                      "suspended",
+                      "revoked",
+                      "archived",
+                      "unknown"
+                    ]
                   }
                 }
               },
