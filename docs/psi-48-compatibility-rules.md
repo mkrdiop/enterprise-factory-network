@@ -58,7 +58,7 @@ The grammar is intentionally small and deterministic:
 | `VERSION` | Candidate has equal SemVer precedence to the exact full SemVer token |
 | `OP VERSION [OP VERSION ...]` | All comparisons must match (logical AND); OP is `>`, `>=`, `<`, `<=` or `=` |
 
-MAJOR and MINOR wildcard components use canonical non-negative decimal integers (no leading zero except `0`); the wildcard token is lowercase `x`. Full VERSION tokens are strict SemVer 2.0.0 values, never partial versions. Comparison terms are separated by exactly one ASCII space. Empty terms, repeated spaces, tabs, newlines and leading/trailing whitespace are invalid.
+MAJOR and MINOR wildcard components use canonical non-negative decimal integers (no leading zero except `0`); the wildcard token is lowercase `x`. Full VERSION tokens are strict SemVer 2.0.0 values, never partial versions. Each comparison term concatenates its operator directly with its full SemVer bound (for example, `>=1.0.0`); terms are separated by exactly one ASCII space. Empty terms, repeated spaces, tabs, newlines and leading/trailing whitespace are invalid.
 
 The profile does not support OR, comma separators, hyphen ranges, tilde, caret, implicit comparator operators, shorthand/partial comparator versions, aliases or normalization. An unsupported expression is an invalid range, not an empty match and not a compatible result. The evaluator raises PSI-47 `VersionRangeError`; PSI-49 and product adapters must convert missing or invalid range evaluation to `unknown`, never `compatible`.
 
