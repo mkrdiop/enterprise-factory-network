@@ -21,7 +21,7 @@ The v1 profile identifier is `efs-ed25519-jcs-v1`.
 - Signature algorithm: Ed25519 as specified by RFC 8032.
 - Public key: exactly 32 raw octets.
 - Signature: exactly 64 raw octets.
-- Text encoding of public key and signature: unpadded Base64URL.
+- Text encoding of public key and signature: canonical unpadded Base64URL (RFC 4648 §5), decoded length exactly 32 and 64 octets respectively, and re-encoding the decoded octets MUST reproduce the input byte-for-byte. Padding, non-URL alphabet characters, invalid lengths and non-zero unused pad bits MUST be rejected.
 - Signed-object canonicalization: RFC 8785 JCS.
 - Signed-message prefix: the exact ASCII octets `EFS-SIGNATURE-V1\n`.
 - No algorithm fallback, negotiation, implicit parameter defaults or downgrade is permitted.
@@ -49,11 +49,11 @@ The envelope JSON object has exactly these top-level properties:
 The statement has exactly:
 
 - `purpose`: `efs.release.signature.v1`.
-- `publisher_id`: the exact canonical absolute URI from the manifest, validated under `efs-uri-c14n-1`.
+- `publisher_id`: the exact canonical absolute URI from the manifest, validated under `efs-uri-c14n-1`. Validation MUST apply the complete ADR-003 profile (absolute RFC 3986 ASCII URI; lowercase scheme and host; no query, fragment or userinfo; canonical percent-encoding; dot-segment removal; preserve all other components exactly). Generic JSON Schema `format: uri` is only a structural check and is not sufficient.
 - `factory_id`: exact decoded JSON string from the manifest; case-sensitive, with no normalization.
 - `release_version`: exact release version string from the immutable manifest; opaque and not parsed or normalized by this profile.
 - `efs_version`: exact EFS version string from the manifest.
-- `digest`: object with `profile_id` = `efs-jcs-sha256-v1`, `algorithm` = `sha-256`, and `value` equal to the verified unpadded Base64URL SHA-256 digest.
+- `digest`: object with `profile_id` = `efs-jcs-sha256-v1`, `algorithm` = `SHA-256`, and `value` equal to the verified unpadded Base64URL SHA-256 digest. The algorithm token is exactly `SHA-256` (uppercase), matching ADR-001 and PSI-40; `sha-256` is invalid.
 
 Each signer entry has exactly:
 
@@ -162,7 +162,7 @@ No signature result may be used as an authorization grant. No signature envelope
 
 ## 10. Conformance
 
-The language-neutral machine-readable vectors are in `tests/conformance/signatures-v1.json`. They include a deterministic Ed25519 known-answer vector, exact JCS preimage, expected verification result and negative mutation cases. Implementations MUST run these vectors before claiming conformance. The vector's public/private test key material is synthetic and MUST NOT be used outside testing.
+The language-neutral machine-readable vectors are in `tests/conformance/signatures-v1.json`. They include a deterministic Ed25519 known-answer vector, exact JCS preimage, canonical Base64URL boundary vectors, publisher URI canonicalization vectors and negative mutation cases. `tests/conformance/fixtures/psi50-release-interoperability-v1.json` binds a complete EFS manifest to its detached envelope and expected digest/preimage. `tests/conformance/verify_psi50_interop.mjs` independently verifies that fixture using Node.js built-in SHA-256 and Ed25519 APIs; it is intentionally independent of the Python reference KAT generation. Implementations MUST run the vectors and full fixture before claiming conformance. The vector's public/private test key material is synthetic and MUST NOT be used outside testing.
 
 ## 11. References
 
