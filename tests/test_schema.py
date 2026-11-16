@@ -56,7 +56,7 @@ def test_execution_branches_are_mutually_exclusive(tmp_path):
     path.write_text(json.dumps(doc), encoding="utf-8")
     report = validate_report(path, SCHEMA_PATH)
     assert not report["valid"]
-    assert any(d["code"] == "EFS_SCHEMA_INVALID" for d in report["diagnostics"])
+    assert any(d["code"] == "EFS_SCHEMA_CONSTRAINT" for d in report["diagnostics"])
 
 
 @pytest.mark.parametrize("bad_value", ["2026-13-40T25:61:61Z", "2026-11-16T05:30:00"])
@@ -194,7 +194,8 @@ def test_cli_json_report_contract():
         check=True, capture_output=True, text=True,
     )
     report = json.loads(result.stdout)
-    assert set(report) == {"conformanceProfile", "schemaDialect", "valid", "stages", "diagnostics"}
+    assert set(report) == {"reportVersion", "conformanceProfile", "schemaDialect", "valid", "stages", "diagnostics"}
+    assert report["reportVersion"] == "1.0"
     assert report["conformanceProfile"] == "efs-v1"
     assert report["valid"] is True
 
@@ -210,7 +211,7 @@ def test_cli_failure_exit_and_json_report_for_invalid_manifest():
     assert machine.returncode == 1
     report = json.loads(machine.stdout)
     assert report["valid"] is False
-    assert report["diagnostics"][0]["code"] == "EFS_SCHEMA_INVALID"
+    assert report["diagnostics"][0]["code"] == "EFS_SCHEMA_CONSTRAINT"
 
 
 def test_json_pointer_escaping_is_rfc6901():
