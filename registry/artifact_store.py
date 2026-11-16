@@ -114,6 +114,25 @@ class LocalFilesystemArtifactStore:
             raise ArtifactIntegrityError("stored artifact failed digest verification") from exc
         return raw
 
+    def describe(self, digest: DigestIdentity) -> StoredArtifact | None:
+        path = self._path(digest)
+        if not path.exists():
+            return None
+        if path.is_symlink() or not path.is_file():
+            raise ArtifactIntegrityError("digest object is not a regular file")
+        raw = path.read_bytes()
+        try:
+            verify_canonical_payload(raw, digest)
+        except ReleaseDigestError as exc:
+            raise ArtifactIntegrityError("existing digest object is corrupt") from exc
+        return StoredArtifact(
+            digest=digest,
+            byte_length=len(raw),
+            provider=self.provider,
+            object_key=path.relative_to(self.root).as_posix(),
+            generation=self._generation(path),
+        )
+
     def delete_if_match(self, artifact: StoredArtifact) -> bool:
         """Deletion is disabled until a portable conditional-unlink primitive exists."""
         self._validate_digest(artifact.digest)
