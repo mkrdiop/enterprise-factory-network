@@ -11,9 +11,10 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from sqlalchemy.orm import sessionmaker
 
 def main() -> int:
+    from sqlalchemy.orm import sessionmaker
+
     from registry.artifact_store import LocalFilesystemArtifactStore
     from registry.db import make_engine
     from registry.digests import EFSReleaseDigestService
