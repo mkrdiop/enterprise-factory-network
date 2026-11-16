@@ -6,7 +6,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-
 def make_engine(url=None,**kwargs):
     url=url or os.getenv("EFS_DATABASE_URL")
     if not url: raise RuntimeError("EFS_DATABASE_URL must be configured")
