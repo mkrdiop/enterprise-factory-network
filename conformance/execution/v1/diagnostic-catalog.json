@@ -37,11 +37,6 @@
       "meaning": "Error code is not declared by the selected capability contract."
     },
     {
-      "code": "EFS_EXECUTION_PAYLOAD_VALIDATOR_REQUIRED",
-      "stage": "execution",
-      "meaning": "Payload-bearing envelope requires the shared PSI-43 payload validator."
-    },
-    {
       "code": "EFS_EXECUTION_TRANSITION_INVALID",
       "stage": "execution",
       "meaning": "Observed message transition is not permitted by the mode contract."
