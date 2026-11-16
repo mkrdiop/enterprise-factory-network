@@ -54,7 +54,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -150,7 +154,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -267,7 +275,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -384,7 +396,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -501,7 +517,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -686,7 +706,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:58:00Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -853,7 +877,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -956,7 +984,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -1052,7 +1084,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -1148,7 +1184,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -1244,7 +1284,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -1350,7 +1394,11 @@
                 "status": "revoked",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -1446,7 +1494,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T12:00:01Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -1542,7 +1594,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:00:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -1638,7 +1694,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -1734,7 +1794,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             },
             {
@@ -1750,7 +1814,11 @@
                 "status": "revoked",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 8
+                "version": 8,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -1846,7 +1914,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -1942,7 +2014,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -2091,7 +2167,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -2200,7 +2280,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -2295,7 +2379,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -2391,7 +2479,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             },
             {
@@ -2407,7 +2499,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 8
+                "version": 8,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -2503,7 +2599,11 @@
                 "status": "trusted",
                 "observed_at": "2026-11-16T11:59:50Z",
                 "expires_at": "2026-11-16T12:05:00Z",
-                "version": 7
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
               }
             }
           ]
@@ -2545,6 +2645,306 @@
       "expected": {
         "result": "rejected",
         "reason": "AUDIT_DURABILITY_FAILURE"
+      }
+    },
+    {
+      "id": "psi53-026",
+      "scenario": "publisher key is not yet within its trusted validity interval",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T12:00:01Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "KEY_NOT_YET_VALID"
+      }
+    },
+    {
+      "id": "psi53-027",
+      "scenario": "publisher key trust validity interval has expired",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-16T12:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "KEY_EXPIRED"
+      }
+    },
+    {
+      "id": "psi53-028",
+      "scenario": "resolver evidence usage does not match required signing usage",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "other-usage",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "TRUST_UNAVAILABLE"
       }
     }
   ]
