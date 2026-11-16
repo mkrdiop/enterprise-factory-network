@@ -9,8 +9,17 @@ from scripts.validate_manifest import canonical_publisher_uri
 from .models import ArtifactBlob, ArtifactLocation, Factory, FactoryRelease, Publisher
 
 
-class RegistryConflict(Exception): pass
-class RegistryNotFound(Exception): pass
+class RegistryConflict(Exception):
+    """Deterministic registry conflict with a stable public error code."""
+
+    def __init__(self, message: str, code: str = "EFS_REGISTRY_CONFLICT"):
+        self.code = code
+        super().__init__(message)
+
+
+class RegistryNotFound(Exception):
+    """A publisher, Factory, release or operation does not exist."""
+
 
 def _flush(session,message):
     try: session.flush()
