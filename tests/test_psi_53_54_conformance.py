@@ -30,3 +30,32 @@ def test_psi54_vectors_validate_and_execute() -> None:
 def test_psi53_psi54_reference_oracle() -> None:
     runner = VECTOR_DIR / "run_psi_53_54_vectors.py"
     subprocess.run([sys.executable, str(runner)], cwd=ROOT, check=True)
+
+
+def test_psi54_schema_rejects_authoring_candidate_states() -> None:
+    schema = json.loads((SCHEMA_DIR / "psi-54-lifecycle-v1.schema.json").read_text())
+    vectors = json.loads((VECTOR_DIR / "psi-54-lifecycle-v1.json").read_text())
+    validator = Draft202012Validator(schema, format_checker=FormatChecker())
+    candidate = json.loads(json.dumps(vectors["vectors"][0]))
+    candidate["input"]["from"] = "draft"
+    candidate["input"]["to"] = "validated"
+    assert not validator.is_valid({**vectors, "vectors": [candidate]})
+
+
+def test_psi53_composite_publication_has_three_independent_checks() -> None:
+    vectors = json.loads((VECTOR_DIR / "psi-53-enforcement-v1.json").read_text())
+    vector = next(item for item in vectors["vectors"] if item["id"] == "psi53-021")
+    assert [check["action"] for check in vector["input"]["checks"]] == [
+        "factory.register", "factory.publish", "release.publish"
+    ]
+
+
+def test_psi54_initial_publication_event_is_complete() -> None:
+    vectors = json.loads((VECTOR_DIR / "psi-54-lifecycle-v1.json").read_text())
+    vector = next(item for item in vectors["vectors"] if item["id"] == "psi54-010")
+    event = vector["input"]["publication"]
+    assert event["event_id"] and event["event_type"] == "factory_release.published"
+    assert event["action"] == "release.publish" and event["revision"] == 1
+    assert event["from_state"] is None
+    assert event["coordinate_snapshot"] and event["digest_snapshot"]
+    assert event["same_database_transaction"]
