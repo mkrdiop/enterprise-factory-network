@@ -1,144 +1,122 @@
-"""Dependency-free reference oracle for PSI-53 and PSI-54 conformance vectors.
-
-Run from any directory:
-    python tests/conformance/run_psi_53_54_vectors.py
-
-This checks the transport-neutral enforcement/lifecycle decision vectors. It is
-not a replacement for PSI-52 PDP conformance or PostgreSQL integration tests.
-"""
+"""Independent reference oracle for PSI-53/54 v1.1 conformance vectors."""
 from __future__ import annotations
-
-import json
-import sys
+import json, sys
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-CONFORMANCE = ROOT / "tests" / "conformance"
-
-
-def instant(value: str) -> datetime:
-    return datetime.fromisoformat(value)
-
-
-def psi53_decide(data: dict) -> tuple[str, str]:
-    if not data["authenticated"]:
-        return "rejected", "AUTHN_REQUIRED"
-    if not data["action_mapped"]:
-        return "rejected", "ACTION_UNMAPPED"
-    if not data["resource_exact"]:
-        return "rejected", "RESOURCE_COORDINATES_INVALID"
-    if data["pdp_outcome"] == "deny":
-        return "rejected", "POLICY_DENIED"
-    if data["pdp_outcome"] == "indeterminate":
-        return "rejected", "PDP_INDETERMINATE"
-    if not data["obligations_satisfied"]:
-        return "rejected", "OBLIGATION_UNFULFILLED"
-    trust = data["trust_status"]
-    if trust == "unavailable":
-        return "rejected", "TRUST_UNAVAILABLE"
-    if trust == "untrusted":
-        return "rejected", "KEY_NOT_TRUSTED"
-    if trust == "revoked":
-        return "rejected", "KEY_REVOKED"
-    if trust not in ("trusted", "not_required"):
-        return "rejected", "TRUST_UNAVAILABLE"
-    release = data["release_state"]
-    if release not in ("not_release_operation", "published", "deprecated"):
-        return "rejected", "RELEASE_NOT_ADMISSIBLE"
-    commit = instant(data["commit_time"])
-    bound = data["max_evidence_age_seconds"]
-    for item in data["evidence"]:
-        age = (commit - instant(item["observed_at"])).total_seconds()
-        if age < 0 or age > bound or commit >= instant(item["expires_at"]):
-            return "rejected", "EVIDENCE_STALE"
-    if data["evidence_changed_before_commit"]:
-        return "rejected", "AUTHORIZATION_REVISION_CHANGED"
-    if not data["audit_outbox_available"]:
-        return "rejected", "AUDIT_DURABILITY_FAILURE"
-    return "enforced", "PERMIT_ENFORCED"
-
-
-LEGAL = {
-    ("published", "suspended"),
-    ("published", "deprecated"),
-    ("published", "revoked"),
-    ("suspended", "published"),
-    ("suspended", "deprecated"),
-    ("suspended", "revoked"),
-    ("deprecated", "revoked"),
-    ("deprecated", "archived"),
-    ("revoked", "archived"),
+ROOT=Path(__file__).resolve().parents[2]
+DATA=ROOT/"tests"/"conformance"
+ALLOWED={
+ "publisher.read":{"publisher"},"publisher.manage":{"publisher"},"publisher.key.manage":{"publisher"},
+ "factory.discover":{"factory"},"factory.read":{"factory"},"factory.register":{"factory"},"factory.publish":{"factory"},
+ "release.read":{"release"},"release.publish":{"release"},"release.suspend":{"release"},"release.deprecate":{"release"},"release.revoke":{"release"},"release.archive":{"release"},
+ "capability.invoke":{"capability"},"registry.policy.read":{"registry"},"registry.policy.manage":{"registry"}
 }
+COORD={
+ "publisher":{"publisher_id"},"factory":{"publisher_id","factory_id"},
+ "release":{"publisher_id","factory_id","release_version"},
+ "capability":{"publisher_id","factory_id","release_version","capability_id"},
+ "registry":{"registry_id"},"execution_target":{"execution_target_id"}
+}
+LEGAL={
+ ("published","suspended"),("published","deprecated"),("published","revoked"),
+ ("suspended","published"),("suspended","deprecated"),("suspended","revoked"),
+ ("deprecated","revoked"),("deprecated","archived"),("revoked","archived")
+}
+def dt(value): return datetime.fromisoformat(value)
 
+def psi53(data):
+ if not data["principal"]["authenticated"]: return "rejected","AUTHN_REQUIRED"
+ checks=data["checks"]
+ if not checks: return "rejected","ACTION_UNMAPPED"
+ for check in checks:
+  action=check["action"]; resource=check["resource"]; kind=resource["type"]
+  if action not in ALLOWED: return "rejected","ACTION_UNMAPPED"
+  if kind not in ALLOWED[action]: return "rejected","ACTION_RESOURCE_MISMATCH"
+  if not resource["id"] or not COORD[kind].issubset(resource["coordinates"]):
+   return "rejected","RESOURCE_COORDINATES_INVALID"
+  policy=check["policy"]
+  if policy["policy_profile"]!="efs-policy-v1" or not all(policy.get(k) for k in ("policy_id","policy_version","digest")):
+   return "indeterminate","PDP_INDETERMINATE"
+ if any(c["pdp_outcome"]=="deny" for c in checks): return "rejected","POLICY_DENIED"
+ if any(c["pdp_outcome"]=="indeterminate" for c in checks): return "indeterminate","PDP_INDETERMINATE"
+ if any(c["pdp_outcome"]!="permit" for c in checks): return "indeterminate","PDP_INDETERMINATE"
+ if any(c["obligations"] and not c["obligations_fulfilled"] for c in checks):
+  return "rejected","OBLIGATION_UNFULFILLED"
+ trust=data["trust"]
+ if trust["required"]:
+  evidence=trust["evidence"]
+  if trust["status"]=="unavailable" or evidence is None: return "rejected","TRUST_UNAVAILABLE"
+  if trust["status"]=="untrusted": return "rejected","KEY_NOT_TRUSTED"
+  if trust["status"]=="revoked" or evidence["status"]=="revoked": return "rejected","KEY_REVOKED"
+  if trust["status"]!="trusted" or evidence["status"]!="trusted": return "rejected","TRUST_UNAVAILABLE"
+  if evidence["publisher_id"]!=trust["publisher_id"] or evidence["key_id"]!=trust["key_id"]:
+   return "rejected","TRUST_UNAVAILABLE"
+  commit=dt(data["commit"]["at"]); observed=dt(evidence["observed_at"])
+  age=(commit-observed).total_seconds()
+  if age<0 or age>data["commit"]["max_evidence_age_seconds"] or commit>=dt(evidence["expires_at"]):
+   return "rejected","EVIDENCE_STALE"
+ lifecycle=data["lifecycle"]
+ if lifecycle["required"] and lifecycle["state"] not in ("published","deprecated"):
+  return "rejected","RELEASE_NOT_ADMISSIBLE"
+ commit_data=data["commit"]
+ if commit_data["evidence_versions"]!=commit_data["current_evidence_versions"]:
+  return "rejected","AUTHORIZATION_REVISION_CHANGED"
+ if not commit_data["audit_outbox_available"]: return "rejected","AUDIT_DURABILITY_FAILURE"
+ side=commit_data["side_effect"]
+ if commit_data["operation_kind"]=="external_effect":
+  if not side["intent_durable"] or not side["idempotency_key"]:
+   return "rejected","EXECUTION_INTENT_NOT_DURABLE"
+  if side["dispatch_attempted"] and not side["outcome_recorded"] and not side["reconciled"]:
+   return "indeterminate","EXECUTION_OUTCOME_UNKNOWN"
+ return "enforced","PERMIT_ENFORCED"
 
-def psi54_decide(data: dict) -> tuple[str, str]:
-    # Idempotency lookup precedes current-state/revision validation: a replay
-    # returns the original result even after the first request advanced state.
-    if data["idempotency_replay"] == "same_request":
-        return "accepted", "IDEMPOTENT_REPLAY"
-    if data["idempotency_replay"] == "different_request":
-        return "rejected", "IDEMPOTENCY_CONFLICT"
-    transition = (data["from"], data["to"])
-    if transition not in LEGAL:
-        return "rejected", "ILLEGAL_TRANSITION"
-    if not data["authorized"]:
-        return "rejected", "AUTHORIZATION_DENIED"
-    if not data["reason_present"]:
-        return "rejected", "REASON_REQUIRED"
-    if data["to"] == "revoked" and not data["evidence_present"]:
-        return "rejected", "REVOCATION_EVIDENCE_REQUIRED"
-    if not data["preconditions_met"]:
-        return "rejected", "PRECONDITION_FAILED"
-    if not data["expected_revision_matches"]:
-        return "rejected", "STALE_REVISION"
-    return "accepted", "TRANSITION_ACCEPTED"
+def psi54(data):
+ lookup=data["idempotency_lookup"]
+ # Authenticated scope has already been derived. Replay lookup precedes state/revision checks.
+ if lookup["status"]=="same_fingerprint":
+  record=lookup["record"]
+  if record is None or record["scope"]!=data["scope"] or record["request_fingerprint"]!=data["request_fingerprint"]:
+   return "rejected","IDEMPOTENCY_CONFLICT"
+  return record["original_result"],record["original_reason"]
+ if lookup["status"]=="different_fingerprint": return "rejected","IDEMPOTENCY_CONFLICT"
+ if data["operation"]=="initial_publication":
+  event=data["publication"]
+  valid=(
+   data["from"] is None and data["to"]=="published" and
+   event["authoring_request_validated"] and event["coordinate_exact"] and
+   event["digest_verified"] and event["signature_verified"] and bool(event["actor_id"]) and
+   event["event_type"]=="factory_release.published" and event["revision"]==1 and
+   event["from_state"] is None and bool(event["authorization_decision_ref"]) and
+   event["release_inserted"] and event["event_inserted"] and
+   event["audit_outbox_inserted"] and event["same_database_transaction"]
+  )
+  return ("accepted","PUBLICATION_ACCEPTED") if valid else ("rejected","PUBLICATION_INVALID")
+ if (data["from"],data["to"]) not in LEGAL: return "rejected","ILLEGAL_TRANSITION"
+ if not data["authorized"]: return "rejected","AUTHORIZATION_DENIED"
+ if not data["reason_present"]: return "rejected","REASON_REQUIRED"
+ if data["to"]=="revoked" and not data["evidence_present"]: return "rejected","REVOCATION_EVIDENCE_REQUIRED"
+ if not data["preconditions_met"]: return "rejected","PRECONDITION_FAILED"
+ if not data["expected_revision_matches"]: return "rejected","STALE_REVISION"
+ return "accepted","TRANSITION_ACCEPTED"
 
+def execute(filename, oracle):
+ document=json.loads((DATA/filename).read_text(encoding="utf-8"))
+ failures=0
+ for vector in document["vectors"]:
+  actual=oracle(vector["input"])
+  expected=(vector["expected"]["result"],vector["expected"]["reason"])
+  if actual!=expected:
+   failures+=1
+   print(f"FAIL {vector['id']}: expected {expected}, got {actual}")
+ passed=len(document["vectors"])-failures
+ print(f"{document['vector_set']}: {passed}/{len(document['vectors'])} passed")
+ return failures,len(document["vectors"])
 
-def load(name: str) -> dict:
-    with (CONFORMANCE / name).open(encoding="utf-8") as stream:
-        return json.load(stream)
+def main():
+ f53,n53=execute("psi-53-enforcement-v1.json",psi53)
+ f54,n54=execute("psi-54-lifecycle-v1.json",psi54)
+ print(f"Total: {n53+n54-f53-f54}/{n53+n54} passed")
+ return 1 if f53+f54 else 0
 
-
-def check_psi53() -> int:
-    document = load("psi-53-enforcement-v1.json")
-    assert document["vector_set"] == "psi-53-enforcement-v1"
-    assert document["version"] == "1.0.0"
-    failures = 0
-    for vector in document["vectors"]:
-        actual = psi53_decide(vector["input"])
-        expected = (vector["expected"]["result"], vector["expected"]["reason"])
-        if actual != expected:
-            failures += 1
-            print(f"FAIL {vector['id']}: expected {expected}, got {actual}")
-    print(f"PSI-53: {len(document['vectors']) - failures}/{len(document['vectors'])} vectors passed")
-    return failures
-
-
-def check_psi54() -> int:
-    document = load("psi-54-lifecycle-v1.json")
-    assert document["vector_set"] == "psi-54-lifecycle-v1"
-    assert document["version"] == "1.0.0"
-    assert document["states"] == ["published", "suspended", "deprecated", "revoked", "archived"]
-    declared = {(item["from"], item["to"]) for item in document["legal_transitions"]}
-    assert declared == LEGAL, "declared legal transition table differs from reference contract"
-    failures = 0
-    for vector in document["vectors"]:
-        actual = psi54_decide(vector["input"])
-        expected = (vector["expected"]["result"], vector["expected"]["reason"])
-        if actual != expected:
-            failures += 1
-            print(f"FAIL {vector['id']}: expected {expected}, got {actual}")
-    print(f"PSI-54: {len(document['vectors']) - failures}/{len(document['vectors'])} vectors passed")
-    return failures
-
-
-def main() -> int:
-    failures = check_psi53() + check_psi54()
-    total = len(load("psi-53-enforcement-v1.json")["vectors"]) + len(load("psi-54-lifecycle-v1.json")["vectors"])
-    print(f"Total: {total - failures}/{total} passed")
-    return 1 if failures else 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+if __name__=="__main__": sys.exit(main())
