@@ -163,7 +163,7 @@ def _remove_dot_segments(path: str) -> str:
     while source:
         if source.startswith("../"):
             source = source[3:]
-        elif source.startswith("./") or source.startswith("/./"):
+        elif source.startswith(("./", "/./")):
             source = source[2:]
         elif source == "/.":
             source = "/"
