@@ -90,7 +90,14 @@
           "minLength": 1
         },
         "expected": {
-          "type": "string"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
+            }
+          ]
         },
         "reason": {
           "type": "string"
