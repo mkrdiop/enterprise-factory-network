@@ -45,6 +45,8 @@ sorted deterministically. The validator does not fetch remote schemas: absolute/
 | `EFS_SCHEMA_REF_REMOTE` | Absolute or network schema reference prohibited |
 | `EFS_SCHEMA_REF_UNSUPPORTED` | Dynamic reference behavior is outside the EFS v1 subset |
 | `EFS_PROFILE_INVARIANT_FAILED` | A profiled EFS v1 invariant failed |
+| `EFS_PUBLISHER_URI_INVALID` | Publisher ID is not a valid absolute URI under `efs-uri-c14n-1` |
+| `EFS_PUBLISHER_URI_NON_CANONICAL` | Publisher ID is valid but not in canonical `efs-uri-c14n-1` form |
 
 Paths use RFC 6901 escaping (`~0` for tilde and `~1` for slash); the root path is
 the empty string.
@@ -57,7 +59,7 @@ Install development dependencies:
 python -m pip install -r requirements-dev.txt
 ```
 
-The machine-readable inventories are maintained under `conformance/efs/v1/`: `fixture-catalog.json`, `diagnostic-catalog.json`, `report-schema.json`, and `acceptance-criteria.json`. The catalogue-driven tests discover every manifest matching each fixture group and test it against the declared outcome. Raw parser vectors are stored under `fixtures/adversarial/parser/`; invalid UTF-8 is stored as Base64 so Git can preserve the fixture bytes. The acceptance registry maps every AC-01–AC-15 to real test functions and fixture groups, and CI executes these checks as part of pytest.
+The machine-readable inventories are maintained under `conformance/efs/v1/`: `fixture-catalog.json`, `diagnostic-catalog.json`, `report-schema.json`, `acceptance-criteria.json`, `publisher-identity-vectors.json`, and `publisher-identity-acceptance.json`. The publisher identity corpus defines `efs-uri-c14n-1` with positive, negative and canonicalization vectors. `tests/test_publisher_identity.py` executes every vector, verifies deterministic diagnostics, preserves the existing URN example, and checks publisher-scoped Factory identity semantics. The catalogue-driven tests discover every manifest matching each fixture group and test it against the declared outcome. Raw parser vectors are stored under `fixtures/adversarial/parser/`; invalid UTF-8 is stored as Base64 so Git can preserve the fixture bytes. The acceptance registry maps every AC-01–AC-15 to real test functions and fixture groups, and CI executes these checks as part of pytest.
 
 Run the full test corpus:
 
@@ -81,6 +83,7 @@ python scripts/validate_manifest.py fixtures/valid/manifest-minimal.json --json
 
 - Python is a reference consumer, not the normative definition of EFS.
 - JSON parsing rejects duplicate object members, invalid UTF-8, malformed JSON and non-standard numeric constants (NaN/Infinity).
+- `publisher.id` is an absolute URI and must already use the canonical `efs-uri-c14n-1` serialization; validation is local-only and never dereferences the identifier.
 - Draft 2020-12 `date-time` format assertion is explicitly enabled; timezone-less
   timestamps are invalid.
 - Embedded input, output and optional error schemas are meta-validated.

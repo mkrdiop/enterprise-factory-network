@@ -2,6 +2,16 @@
   "catalogVersion": "1.0",
   "diagnostics": [
     {
+      "code": "EFS_EMBEDDED_SCHEMA_INVALID",
+      "stage": "embedded_schemas",
+      "meaning": "Embedded contract schema is not valid Draft 2020-12."
+    },
+    {
+      "code": "EFS_JSON_DUPLICATE_MEMBER",
+      "stage": "parsing",
+      "meaning": "Duplicate JSON object member; parser cannot always identify the containing pointer, so root pointer is used when unavailable."
+    },
+    {
       "code": "EFS_JSON_INVALID",
       "stage": "parsing",
       "meaning": "Malformed JSON, unreadable input, or non-JSON numeric constant."
@@ -12,24 +22,24 @@
       "meaning": "Input is not strict UTF-8."
     },
     {
-      "code": "EFS_JSON_DUPLICATE_MEMBER",
-      "stage": "parsing",
-      "meaning": "Duplicate JSON object member; parser cannot always identify the containing pointer, so root pointer is used when unavailable."
+      "code": "EFS_PROFILE_INVARIANT_FAILED",
+      "stage": "profile",
+      "meaning": "A governed EFS v1 profile invariant failed."
     },
     {
-      "code": "EFS_SCHEMA_INVALID",
-      "stage": "structural",
-      "meaning": "Normative schema cannot be loaded or validated as Draft 2020-12."
+      "code": "EFS_PUBLISHER_URI_INVALID",
+      "stage": "profile",
+      "meaning": "Publisher identifier is not a valid absolute RFC 3986 URI under efs-uri-c14n-1."
     },
     {
-      "code": "EFS_SCHEMA_REQUIRED",
-      "stage": "structural",
-      "meaning": "Required property is absent."
+      "code": "EFS_PUBLISHER_URI_NON_CANONICAL",
+      "stage": "profile",
+      "meaning": "Publisher identifier is syntactically valid but not in canonical efs-uri-c14n-1 serialization."
     },
     {
-      "code": "EFS_SCHEMA_TYPE",
+      "code": "EFS_SCHEMA_CONSTRAINT",
       "stage": "structural",
-      "meaning": "Instance has an incorrect JSON type."
+      "meaning": "Instance violates another normative JSON Schema constraint."
     },
     {
       "code": "EFS_SCHEMA_ENUM",
@@ -42,14 +52,9 @@
       "meaning": "Instance violates an asserted JSON Schema format."
     },
     {
-      "code": "EFS_SCHEMA_CONSTRAINT",
+      "code": "EFS_SCHEMA_INVALID",
       "stage": "structural",
-      "meaning": "Instance violates another normative JSON Schema constraint."
-    },
-    {
-      "code": "EFS_EMBEDDED_SCHEMA_INVALID",
-      "stage": "embedded_schemas",
-      "meaning": "Embedded contract schema is not valid Draft 2020-12."
+      "meaning": "Normative schema cannot be loaded or validated as Draft 2020-12."
     },
     {
       "code": "EFS_SCHEMA_REF_REMOTE",
@@ -62,9 +67,14 @@
       "meaning": "Dynamic reference keyword is outside the profiled EFS v1 subset."
     },
     {
-      "code": "EFS_PROFILE_INVARIANT_FAILED",
-      "stage": "profile",
-      "meaning": "A governed EFS v1 profile invariant failed."
+      "code": "EFS_SCHEMA_REQUIRED",
+      "stage": "structural",
+      "meaning": "Required property is absent."
+    },
+    {
+      "code": "EFS_SCHEMA_TYPE",
+      "stage": "structural",
+      "meaning": "Instance has an incorrect JSON type."
     },
     {
       "code": "EFS_VALIDATOR_INTERNAL_ERROR",

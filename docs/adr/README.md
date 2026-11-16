@@ -17,7 +17,7 @@ This decision lifecycle is distinct from the Notion document lifecycle (Draft, P
 | --- | --- | --- | --- |
 | [ADR-001](ADR-001-efs-v1-release-digest-profile.md) | EFS v1 release digest profile | Accepted | PSI-34, PSI-35 |
 | [ADR-002](ADR-002-python-repository-quality-tooling.md) | Python repository lint/format tooling | Accepted | PSI-30 |
-| ADR-003 | Publisher namespace and issuer/trust model | Proposed | PSI-37, PSI-50 |
+| [ADR-003](ADR-003-publisher-namespace-and-issuer-trust-model.md) | Publisher namespace and issuer/trust model | **Accepted** | PSI-37, PSI-50 |
 | ADR-004 | Registry persistence and immutable artifact storage | Proposed | Registry / artifact workstream |
 | ADR-005 | Execution orchestration and messaging | Proposed | PSI-44, PSI-45 |
 | ADR-006 | Execution isolation and workload packaging | Proposed | Runtime security workstream |

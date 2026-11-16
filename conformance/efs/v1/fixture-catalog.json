@@ -65,5 +65,10 @@
       "encoding": "base64",
       "expectedCode": "EFS_JSON_INVALID_ENCODING"
     }
-  ]
+  ],
+  "publisherIdentity": {
+    "vectors": "conformance/efs/v1/publisher-identity-vectors.json",
+    "acceptance": "conformance/efs/v1/publisher-identity-acceptance.json",
+    "testModule": "tests/test_publisher_identity.py"
+  }
 }
