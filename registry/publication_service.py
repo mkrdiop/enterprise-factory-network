@@ -22,7 +22,6 @@ from .publication_contracts import (
 )
 from .repositories import RegistryConflict
 
-
 logger = logging.getLogger(__name__)
 
 
