@@ -1,0 +1,462 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:efs:schema:psi-54-lifecycle-v1:1",
+  "title": "psi-54-lifecycle-v1 Conformance Vector Set",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "vector_set",
+    "version",
+    "states",
+    "legal_transitions",
+    "vectors"
+  ],
+  "properties": {
+    "vector_set": {
+      "const": "psi-54-lifecycle-v1"
+    },
+    "version": {
+      "const": "1.1.0"
+    },
+    "vectors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "scenario",
+          "input",
+          "expected"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scenario": {
+            "type": "string",
+            "minLength": 1
+          },
+          "input": {
+            "type": "object",
+            "required": [
+              "operation",
+              "scope",
+              "request_fingerprint",
+              "idempotency_lookup",
+              "from",
+              "to",
+              "authorized",
+              "reason_present",
+              "evidence_present",
+              "preconditions_met",
+              "expected_revision_matches",
+              "publication"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "operation": {
+                "enum": [
+                  "transition",
+                  "initial_publication"
+                ]
+              },
+              "scope": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "tenant_id",
+                  "principal_id",
+                  "release_coordinate",
+                  "operation"
+                ],
+                "properties": {
+                  "tenant_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "principal_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "release_coordinate": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "publisher_id",
+                      "factory_id",
+                      "release_version",
+                      "digest"
+                    ],
+                    "properties": {
+                      "publisher_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "factory_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "release_version": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "digest": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_-]{43}$"
+                      }
+                    }
+                  },
+                  "operation": {
+                    "enum": [
+                      "transition",
+                      "initial_publication"
+                    ]
+                  }
+                }
+              },
+              "request_fingerprint": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^sha256:[A-Za-z0-9_-]{43}$"
+              },
+              "idempotency_lookup": {
+                "type": "object",
+                "required": [
+                  "status",
+                  "record"
+                ],
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "none",
+                      "same_fingerprint",
+                      "different_fingerprint",
+                      "other_scope_only"
+                    ]
+                  },
+                  "record": {
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "object",
+                        "required": [
+                          "scope",
+                          "request_fingerprint",
+                          "original_result",
+                          "original_reason",
+                          "response_ref"
+                        ],
+                        "properties": {
+                          "scope": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "tenant_id",
+                              "principal_id",
+                              "release_coordinate",
+                              "operation"
+                            ],
+                            "properties": {
+                              "tenant_id": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "principal_id": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "release_coordinate": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                  "publisher_id",
+                                  "factory_id",
+                                  "release_version",
+                                  "digest"
+                                ],
+                                "properties": {
+                                  "publisher_id": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "factory_id": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "release_version": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "digest": {
+                                    "type": "string",
+                                    "pattern": "^[A-Za-z0-9_-]{43}$"
+                                  }
+                                }
+                              },
+                              "operation": {
+                                "enum": [
+                                  "transition",
+                                  "initial_publication"
+                                ]
+                              }
+                            }
+                          },
+                          "request_fingerprint": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "^sha256:[A-Za-z0-9_-]{43}$"
+                          },
+                          "original_result": {
+                            "enum": [
+                              "accepted",
+                              "rejected"
+                            ]
+                          },
+                          "original_reason": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "response_ref": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "from": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "published",
+                  "suspended",
+                  "deprecated",
+                  "revoked",
+                  "archived",
+                  null
+                ]
+              },
+              "to": {
+                "enum": [
+                  "published",
+                  "suspended",
+                  "deprecated",
+                  "revoked",
+                  "archived"
+                ]
+              },
+              "authorized": {
+                "type": "boolean"
+              },
+              "reason_present": {
+                "type": "boolean"
+              },
+              "evidence_present": {
+                "type": "boolean"
+              },
+              "preconditions_met": {
+                "type": "boolean"
+              },
+              "expected_revision_matches": {
+                "type": "boolean"
+              },
+              "publication": {
+                "type": "object",
+                "required": [
+                  "authoring_request_validated",
+                  "coordinate_exact",
+                  "digest_verified",
+                  "signature_verified",
+                  "actor_id",
+                  "event_type",
+                  "revision",
+                  "from_state",
+                  "authorization_decision_ref",
+                  "committed_at",
+                  "release_inserted",
+                  "event_inserted",
+                  "audit_outbox_inserted",
+                  "same_database_transaction",
+                  "coordinate_snapshot",
+                  "digest_snapshot",
+                  "authorization_actions",
+                  "event_id",
+                  "action"
+                ],
+                "properties": {
+                  "authoring_request_validated": {
+                    "type": "boolean"
+                  },
+                  "coordinate_exact": {
+                    "type": "boolean"
+                  },
+                  "digest_verified": {
+                    "type": "boolean"
+                  },
+                  "signature_verified": {
+                    "type": "boolean"
+                  },
+                  "actor_id": {
+                    "type": "string"
+                  },
+                  "event_type": {
+                    "const": "factory_release.published"
+                  },
+                  "revision": {
+                    "const": 1
+                  },
+                  "from_state": {
+                    "type": "null"
+                  },
+                  "authorization_decision_ref": {
+                    "type": "string"
+                  },
+                  "committed_at": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "release_inserted": {
+                    "type": "boolean"
+                  },
+                  "event_inserted": {
+                    "type": "boolean"
+                  },
+                  "audit_outbox_inserted": {
+                    "type": "boolean"
+                  },
+                  "same_database_transaction": {
+                    "type": "boolean"
+                  },
+                  "coordinate_snapshot": {
+                    "type": "object",
+                    "required": [
+                      "publisher_id",
+                      "factory_id",
+                      "release_version"
+                    ],
+                    "properties": {
+                      "publisher_id": {
+                        "type": "string"
+                      },
+                      "factory_id": {
+                        "type": "string"
+                      },
+                      "release_version": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "digest_snapshot": {
+                    "type": "object",
+                    "required": [
+                      "profile_id",
+                      "algorithm",
+                      "value"
+                    ],
+                    "properties": {
+                      "profile_id": {
+                        "const": "efs-jcs-sha256-v1"
+                      },
+                      "algorithm": {
+                        "const": "SHA-256"
+                      },
+                      "value": {
+                        "type": "string",
+                        "minLength": 43,
+                        "maxLength": 43,
+                        "pattern": "^[A-Za-z0-9_-]{43}$"
+                      }
+                    }
+                  },
+                  "authorization_actions": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": {
+                      "enum": [
+                        "factory.register",
+                        "factory.publish",
+                        "release.publish"
+                      ]
+                    }
+                  },
+                  "event_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "action": {
+                    "const": "release.publish"
+                  }
+                }
+              }
+            }
+          },
+          "expected": {
+            "type": "object",
+            "required": [
+              "result",
+              "reason"
+            ],
+            "properties": {
+              "result": {
+                "enum": [
+                  "accepted",
+                  "rejected"
+                ]
+              },
+              "reason": {
+                "enum": [
+                  "TRANSITION_ACCEPTED",
+                  "ILLEGAL_TRANSITION",
+                  "AUTHORIZATION_DENIED",
+                  "REASON_REQUIRED",
+                  "REVOCATION_EVIDENCE_REQUIRED",
+                  "PRECONDITION_FAILED",
+                  "STALE_REVISION",
+                  "IDEMPOTENCY_CONFLICT",
+                  "PUBLICATION_ACCEPTED",
+                  "PUBLICATION_INVALID"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "states": {
+      "const": [
+        "published",
+        "suspended",
+        "deprecated",
+        "revoked",
+        "archived"
+      ]
+    },
+    "legal_transitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "from",
+          "to"
+        ],
+        "properties": {
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

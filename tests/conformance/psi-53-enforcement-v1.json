@@ -1,0 +1,3302 @@
+{
+  "vector_set": "psi-53-enforcement-v1",
+  "version": "1.1.0",
+  "vectors": [
+    {
+      "id": "psi53-001",
+      "scenario": "complete capability permit",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "enforced",
+        "reason": "PERMIT_ENFORCED"
+      }
+    },
+    {
+      "id": "psi53-002",
+      "scenario": "unauthenticated",
+      "input": {
+        "principal": {
+          "authenticated": false,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "request"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "AUTHN_REQUIRED"
+      }
+    },
+    {
+      "id": "psi53-003",
+      "scenario": "composite publication all checks permit",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "factory.publish",
+            "resource": {
+              "type": "factory",
+              "id": "factory-42",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          },
+          {
+            "action": "release.publish",
+            "resource": {
+              "type": "release",
+              "id": "release-7",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": false,
+          "state": "not_release_operation"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "enforced",
+        "reason": "PERMIT_ENFORCED"
+      }
+    },
+    {
+      "id": "psi53-004",
+      "scenario": "composite publication one check denies",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "factory.publish",
+            "resource": {
+              "type": "factory",
+              "id": "factory-42",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          },
+          {
+            "action": "release.publish",
+            "resource": {
+              "type": "release",
+              "id": "release-7",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "deny",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": false,
+          "state": "not_release_operation"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "POLICY_DENIED"
+      }
+    },
+    {
+      "id": "psi53-005",
+      "scenario": "composite publication one check indeterminate",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "factory.publish",
+            "resource": {
+              "type": "factory",
+              "id": "factory-42",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          },
+          {
+            "action": "release.publish",
+            "resource": {
+              "type": "release",
+              "id": "release-7",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "indeterminate",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": false,
+          "state": "not_release_operation"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "indeterminate",
+        "reason": "PDP_INDETERMINATE"
+      }
+    },
+    {
+      "id": "psi53-006",
+      "scenario": "required trust evidence missing",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": null
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "TRUST_UNAVAILABLE"
+      }
+    },
+    {
+      "id": "psi53-007",
+      "scenario": "required trust evidence stale",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:58:00Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "EVIDENCE_STALE"
+      }
+    },
+    {
+      "id": "psi53-008",
+      "scenario": "trust not required for factory read",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "factory.read",
+            "resource": {
+              "type": "factory",
+              "id": "factory-42",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": false,
+          "required_signers": []
+        },
+        "lifecycle": {
+          "required": false,
+          "state": "not_release_operation"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "policy": 3
+          },
+          "current_evidence_versions": {
+            "policy": 3
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "read_only",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "enforced",
+        "reason": "PERMIT_ENFORCED"
+      }
+    },
+    {
+      "id": "psi53-009",
+      "scenario": "action resource mismatch",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "factory",
+              "id": "factory-42",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "indeterminate",
+        "reason": "INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR"
+      }
+    },
+    {
+      "id": "psi53-010",
+      "scenario": "obligation unfulfilled",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [
+              {
+                "id": "audit.record",
+                "parameters": {
+                  "mode": "durable"
+                }
+              }
+            ],
+            "obligations_fulfilled": false,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "OBLIGATION_UNFULFILLED"
+      }
+    },
+    {
+      "id": "psi53-011",
+      "scenario": "commit evidence generation changed",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 8,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "AUTHORIZATION_REVISION_CHANGED"
+      }
+    },
+    {
+      "id": "psi53-012",
+      "scenario": "external effect without durable intent",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "external_effect",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "op-1",
+            "dispatch_attempted": true,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "EXECUTION_INTENT_NOT_DURABLE"
+      }
+    },
+    {
+      "id": "psi53-013",
+      "scenario": "external effect with durable intent and outcome",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "external_effect",
+          "side_effect": {
+            "intent_durable": true,
+            "idempotency_key": "op-key-1",
+            "operation_id": "inv-1",
+            "intent_record_id": "intent-1",
+            "audit_record_id": "audit-1",
+            "payload_fingerprint": "sha256:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            "dispatch_attempted": true,
+            "outcome_recorded": true,
+            "outcome_ref": "outcome-1",
+            "reconciled": false
+          },
+          "execution_state": {
+            "request_event": {
+              "eventVersion": "1.0",
+              "eventId": "event-request-1",
+              "invocationId": "inv-1",
+              "correlationId": "corr-1",
+              "causationId": null,
+              "source": "envelope",
+              "sourceMessageId": "msg-request-1",
+              "eventType": "request",
+              "fromState": "created",
+              "toState": "requested",
+              "expectedRevision": 0,
+              "reasonCode": "execution.request",
+              "occurredAt": "2026-11-16T11:59:51Z",
+              "context": {
+                "publisherId": "urn:example:publishers:acme",
+                "factoryId": "contract-sync",
+                "releaseVersion": "1.2.0",
+                "releaseDigest": {
+                  "profile": "efs-jcs-sha256-v1",
+                  "algorithm": "SHA-256",
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                },
+                "capabilityId": "sync-operation",
+                "contract": {
+                  "id": "https://schemas.example.org/contracts/operation",
+                  "version": "1.0.0"
+                },
+                "executionProfileId": "profile-sync",
+                "executionMode": "sync"
+              }
+            },
+            "initial_snapshot": {
+              "stateVersion": "1.0",
+              "invocationId": "inv-1",
+              "correlationId": "corr-1",
+              "context": {
+                "publisherId": "urn:example:publishers:acme",
+                "factoryId": "contract-sync",
+                "releaseVersion": "1.2.0",
+                "releaseDigest": {
+                  "profile": "efs-jcs-sha256-v1",
+                  "algorithm": "SHA-256",
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                },
+                "capabilityId": "sync-operation",
+                "contract": {
+                  "id": "https://schemas.example.org/contracts/operation",
+                  "version": "1.0.0"
+                },
+                "executionProfileId": "profile-sync",
+                "executionMode": "sync"
+              },
+              "state": "requested",
+              "revision": 1,
+              "lastEventId": "event-request-1"
+            },
+            "outcome_event": {
+              "eventVersion": "1.0",
+              "eventId": "event-succeeded-1",
+              "invocationId": "inv-1",
+              "correlationId": "corr-1",
+              "causationId": "msg-request-1",
+              "source": "envelope",
+              "sourceMessageId": "msg-result-1",
+              "eventType": "succeeded",
+              "fromState": "requested",
+              "toState": "succeeded",
+              "expectedRevision": 1,
+              "reasonCode": "execution.succeeded",
+              "occurredAt": "2026-11-16T12:00:00Z",
+              "context": {
+                "publisherId": "urn:example:publishers:acme",
+                "factoryId": "contract-sync",
+                "releaseVersion": "1.2.0",
+                "releaseDigest": {
+                  "profile": "efs-jcs-sha256-v1",
+                  "algorithm": "SHA-256",
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                },
+                "capabilityId": "sync-operation",
+                "contract": {
+                  "id": "https://schemas.example.org/contracts/operation",
+                  "version": "1.0.0"
+                },
+                "executionProfileId": "profile-sync",
+                "executionMode": "sync"
+              }
+            },
+            "current_snapshot": {
+              "stateVersion": "1.0",
+              "invocationId": "inv-1",
+              "correlationId": "corr-1",
+              "context": {
+                "publisherId": "urn:example:publishers:acme",
+                "factoryId": "contract-sync",
+                "releaseVersion": "1.2.0",
+                "releaseDigest": {
+                  "profile": "efs-jcs-sha256-v1",
+                  "algorithm": "SHA-256",
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                },
+                "capabilityId": "sync-operation",
+                "contract": {
+                  "id": "https://schemas.example.org/contracts/operation",
+                  "version": "1.0.0"
+                },
+                "executionProfileId": "profile-sync",
+                "executionMode": "sync"
+              },
+              "state": "succeeded",
+              "revision": 2,
+              "lastEventId": "event-succeeded-1"
+            },
+            "persisted_with_intent": true,
+            "revision_cas": true
+          }
+        }
+      },
+      "expected": {
+        "result": "enforced",
+        "reason": "PERMIT_ENFORCED"
+      }
+    },
+    {
+      "id": "psi53-014",
+      "scenario": "revoked key",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "revoked",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "revoked",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "KEY_REVOKED"
+      }
+    },
+    {
+      "id": "psi53-015",
+      "scenario": "trust evidence observed in the future",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T12:00:01Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "EVIDENCE_STALE"
+      }
+    },
+    {
+      "id": "psi53-016",
+      "scenario": "trust evidence expired at commit",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:00:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "EVIDENCE_STALE"
+      }
+    },
+    {
+      "id": "psi53-017",
+      "scenario": "required signer has invalid cryptographic signature",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "invalid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "SIGNATURE_INVALID"
+      }
+    },
+    {
+      "id": "psi53-018",
+      "scenario": "every policy-required signer is checked independently",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            },
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-2",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "revoked",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-2",
+                "status": "revoked",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 8,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 8,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 8,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "KEY_REVOKED"
+      }
+    },
+    {
+      "id": "psi53-019",
+      "scenario": "policy digest verification unavailable",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": false,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "indeterminate",
+        "reason": "PDP_INDETERMINATE"
+      }
+    },
+    {
+      "id": "psi53-020",
+      "scenario": "external effect dispatched but outcome remains unknown",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "external_effect",
+          "side_effect": {
+            "intent_durable": true,
+            "idempotency_key": "op-key-unknown",
+            "operation_id": "inv-unknown",
+            "intent_record_id": "intent-unknown",
+            "audit_record_id": "audit-unknown",
+            "payload_fingerprint": "sha256:BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "dispatch_attempted": true,
+            "outcome_recorded": false,
+            "outcome_ref": "",
+            "reconciled": false
+          },
+          "execution_state": {
+            "request_event": {
+              "eventVersion": "1.0",
+              "eventId": "event-request-unknown",
+              "invocationId": "inv-unknown",
+              "correlationId": "corr-unknown",
+              "causationId": null,
+              "source": "envelope",
+              "sourceMessageId": "msg-request-unknown",
+              "eventType": "request",
+              "fromState": "created",
+              "toState": "requested",
+              "expectedRevision": 0,
+              "reasonCode": "execution.request",
+              "occurredAt": "2026-11-16T11:59:51Z",
+              "context": {
+                "publisherId": "urn:example:publishers:acme",
+                "factoryId": "contract-sync",
+                "releaseVersion": "1.2.0",
+                "releaseDigest": {
+                  "profile": "efs-jcs-sha256-v1",
+                  "algorithm": "SHA-256",
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                },
+                "capabilityId": "sync-operation",
+                "contract": {
+                  "id": "https://schemas.example.org/contracts/operation",
+                  "version": "1.0.0"
+                },
+                "executionProfileId": "profile-sync",
+                "executionMode": "sync"
+              }
+            },
+            "initial_snapshot": {
+              "stateVersion": "1.0",
+              "invocationId": "inv-unknown",
+              "correlationId": "corr-unknown",
+              "context": {
+                "publisherId": "urn:example:publishers:acme",
+                "factoryId": "contract-sync",
+                "releaseVersion": "1.2.0",
+                "releaseDigest": {
+                  "profile": "efs-jcs-sha256-v1",
+                  "algorithm": "SHA-256",
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                },
+                "capabilityId": "sync-operation",
+                "contract": {
+                  "id": "https://schemas.example.org/contracts/operation",
+                  "version": "1.0.0"
+                },
+                "executionProfileId": "profile-sync",
+                "executionMode": "sync"
+              },
+              "state": "requested",
+              "revision": 1,
+              "lastEventId": "event-request-unknown"
+            },
+            "outcome_event": null,
+            "current_snapshot": {
+              "stateVersion": "1.0",
+              "invocationId": "inv-unknown",
+              "correlationId": "corr-unknown",
+              "context": {
+                "publisherId": "urn:example:publishers:acme",
+                "factoryId": "contract-sync",
+                "releaseVersion": "1.2.0",
+                "releaseDigest": {
+                  "profile": "efs-jcs-sha256-v1",
+                  "algorithm": "SHA-256",
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                },
+                "capabilityId": "sync-operation",
+                "contract": {
+                  "id": "https://schemas.example.org/contracts/operation",
+                  "version": "1.0.0"
+                },
+                "executionProfileId": "profile-sync",
+                "executionMode": "sync"
+              },
+              "state": "requested",
+              "revision": 1,
+              "lastEventId": "event-request-unknown"
+            },
+            "persisted_with_intent": true,
+            "revision_cas": true
+          }
+        }
+      },
+      "expected": {
+        "result": "indeterminate",
+        "reason": "EXECUTION_OUTCOME_UNKNOWN"
+      }
+    },
+    {
+      "id": "psi53-021",
+      "scenario": "new Factory publication evaluates factory.register, factory.publish and release.publish independently",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "factory.register",
+            "resource": {
+              "type": "factory",
+              "id": "factory-42",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          },
+          {
+            "action": "factory.publish",
+            "resource": {
+              "type": "factory",
+              "id": "factory-42",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          },
+          {
+            "action": "release.publish",
+            "resource": {
+              "type": "release",
+              "id": "release-7",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": false,
+          "state": "not_release_operation"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "enforced",
+        "reason": "PERMIT_ENFORCED"
+      }
+    },
+    {
+      "id": "psi53-022",
+      "scenario": "mandatory obligation has durable fulfillment evidence",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [
+              {
+                "id": "audit.record",
+                "parameters": {
+                  "mode": "durable"
+                }
+              }
+            ],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": [
+              {
+                "obligation_id": "audit.record",
+                "fulfilled": true,
+                "evidence_ref": "audit:evt-1"
+              }
+            ]
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "enforced",
+        "reason": "PERMIT_ENFORCED"
+      }
+    },
+    {
+      "id": "psi53-023",
+      "scenario": "capability resource missing exact capability coordinate",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "indeterminate",
+        "reason": "INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR"
+      }
+    },
+    {
+      "id": "psi53-024",
+      "scenario": "all policy-required signers trusted independently",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            },
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-2",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-2",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 8,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 8,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 8,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "enforced",
+        "reason": "PERMIT_ENFORCED"
+      }
+    },
+    {
+      "id": "psi53-025",
+      "scenario": "audit outbox unavailable blocks database mutation",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": false,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "AUDIT_DURABILITY_FAILURE"
+      }
+    },
+    {
+      "id": "psi53-026",
+      "scenario": "publisher key is not yet within its trusted validity interval",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T12:00:01Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "KEY_NOT_YET_VALID"
+      }
+    },
+    {
+      "id": "psi53-027",
+      "scenario": "publisher key trust validity interval has expired",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-16T12:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "KEY_EXPIRED"
+      }
+    },
+    {
+      "id": "psi53-028",
+      "scenario": "resolver evidence usage does not match required signing usage",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-policy-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "other-usage",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "TRUST_UNAVAILABLE"
+      }
+    },
+    {
+      "id": "psi53-029",
+      "scenario": "policy digest profile must match PSI-52",
+      "input": {
+        "principal": {
+          "authenticated": true,
+          "type": "publisher_principal",
+          "id": "acme",
+          "source": "oidc"
+        },
+        "checks": [
+          {
+            "action": "capability.invoke",
+            "resource": {
+              "type": "capability",
+              "id": "cap-render",
+              "coordinates": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "capability_id": "render"
+              }
+            },
+            "policy": {
+              "policy_id": "policy-prod",
+              "policy_version": "3",
+              "policy_profile": "efs-policy-v1",
+              "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "digest_verified": true,
+              "digest_profile_id": "efs-jcs-sha256-v1",
+              "digest_algorithm": "sha-256"
+            },
+            "pdp_outcome": "permit",
+            "obligations": [],
+            "obligations_fulfilled": true,
+            "fulfillment_evidence": []
+          }
+        ],
+        "trust": {
+          "required": true,
+          "required_signers": [
+            {
+              "publisher_id": "urn:publisher:acme",
+              "key_id": "key-1",
+              "algorithm": "Ed25519",
+              "usage": "efs-release-signing",
+              "crypto_status": "valid",
+              "status": "trusted",
+              "evidence": {
+                "publisher_id": "urn:publisher:acme",
+                "key_id": "key-1",
+                "status": "trusted",
+                "observed_at": "2026-11-16T11:59:50Z",
+                "expires_at": "2026-11-16T12:05:00Z",
+                "version": 7,
+                "algorithm": "Ed25519",
+                "usage": "efs-release-signing",
+                "valid_from": "2026-11-16T11:00:00Z",
+                "valid_until": "2026-11-17T00:00:00Z"
+              }
+            }
+          ]
+        },
+        "lifecycle": {
+          "required": true,
+          "state": "published"
+        },
+        "commit": {
+          "at": "2026-11-16T12:00:00Z",
+          "max_evidence_age_seconds": 30,
+          "evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "current_evidence_versions": {
+            "trust": 7,
+            "policy": 3,
+            "authorization": 4
+          },
+          "audit_outbox_available": true,
+          "operation_kind": "database_mutation",
+          "side_effect": {
+            "intent_durable": false,
+            "idempotency_key": "",
+            "dispatch_attempted": false,
+            "outcome_recorded": false,
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
+        }
+      },
+      "expected": {
+        "result": "indeterminate",
+        "reason": "PDP_INDETERMINATE"
+      }
+    }
+  ]
+}
