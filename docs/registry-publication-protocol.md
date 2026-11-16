@@ -78,6 +78,7 @@ The storage boundary is digest-only and publisher-agnostic. It SHOULD provide th
 
 - `put_if_absent(digest, canonical_payload, expected_length) -> StoredArtifact`
 - `read(digest) -> byte stream`
+- `describe(digest) -> StoredArtifact | None` (verified receipt for recovery; `None` only when the object is absent)
 - `delete_if_match(stored_artifact_generation) -> bool` (maintenance/GC only; never part of normal publication)
 
 `StoredArtifact` contains the digest identity, byte length, provider identifier, opaque object key and provider generation/version token where available.
