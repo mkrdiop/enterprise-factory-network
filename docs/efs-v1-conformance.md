@@ -15,7 +15,7 @@ or runtime execution authorized.
 
 The machine-readable report contains:
 
-- `conformanceProfile`: `efs-v1`
+- `reportVersion`: `1.0` (versioned report contract)\n- `conformanceProfile`: `efs-v1`
 - `schemaDialect`: the Draft 2020-12 dialect URI
 - `valid`: overall result
 - `stages`: `parsing`, `structural`, `embedded_schemas`, and `profile`, each
@@ -34,7 +34,7 @@ sorted deterministically. The validator does not fetch remote schemas: absolute/
 | `EFS_JSON_INVALID` | Malformed JSON or unreadable input |
 | `EFS_JSON_INVALID_ENCODING` | Input is not valid UTF-8 |
 | `EFS_JSON_DUPLICATE_MEMBER` | Duplicate JSON object member |
-| `EFS_SCHEMA_INVALID` | Manifest schema invalid or manifest violates it |
+| `EFS_SCHEMA_INVALID` | Normative manifest schema cannot be loaded or validated |\n| `EFS_SCHEMA_REQUIRED` | Required property is absent |\n| `EFS_SCHEMA_TYPE` | Incorrect JSON type |\n| `EFS_SCHEMA_ENUM` | Enum or const violation |\n| `EFS_SCHEMA_FORMAT` | Asserted format violation |\n| `EFS_SCHEMA_CONSTRAINT` | Other structural constraint violation |
 | `EFS_EMBEDDED_SCHEMA_INVALID` | Embedded Draft 2020-12 schema is invalid |
 | `EFS_SCHEMA_REF_REMOTE` | Absolute or network schema reference prohibited |
 | `EFS_SCHEMA_REF_UNSUPPORTED` | Dynamic reference behavior is outside the EFS v1 subset |
@@ -51,7 +51,7 @@ Install development dependencies:
 python -m pip install -r requirements-dev.txt
 ```
 
-Run the full test corpus:
+The machine-readable inventories are maintained under `conformance/efs/v1/`: `fixture-catalog.json`, `diagnostic-catalog.json`, `report-schema.json`, and `acceptance-criteria.json`. The catalogue-driven tests discover every manifest matching each fixture group and test it against the declared outcome. Raw parser vectors are stored under `fixtures/adversarial/parser/`; invalid UTF-8 is stored as Base64 so Git can preserve the fixture bytes. The acceptance registry maps every AC-01–AC-15 to real test functions and fixture groups, and CI executes these checks as part of pytest.\n\nRun the full test corpus:
 
 ```bash
 python -m pytest -q
