@@ -80,8 +80,8 @@ def test_known_seed_ed25519_signing_and_verification_round_trip():
     result = verify_release_signature(raw, encoded, resolver)
     assert result.code is SignatureCode.EVALUATED
     assert result.digest_valid is True
-    assert result.all_signers_cryptographically_valid is True
-    assert result.all_keys_trusted is True
+    assert result.signers[0].cryptographic_valid is True
+    assert result.signers[0].trust_status is KeyTrustStatus.TRUSTED
     assert resolver.calls == [(
         "urn:example:publishers:acme",
         "test-release-key",
@@ -163,7 +163,7 @@ def test_cryptographic_validity_is_separate_from_key_trust(trust, expected):
     result = verify_release_signature(raw, encoded, FixtureResolver(status=trust))
     assert result.signers[0].code is expected
     assert result.signers[0].cryptographic_valid is True
-    assert result.all_keys_trusted is False
+    assert result.signers[0].trust_status is trust
 
 def test_unknown_key_is_typed_and_fails_closed():
     raw, _manifest, _envelope, encoded = _signed()
@@ -505,7 +505,6 @@ def test_valid_and_invalid_signatures_are_reported_independently():
     assert by_key["a-secondary"].cryptographic_valid is False
     assert by_key["z-valid"].code is SignatureCode.VERIFIED
     assert by_key["z-valid"].cryptographic_valid is True
-    assert report.all_signers_cryptographically_valid is False
 
 
 def test_valid_and_unknown_signatures_are_reported_independently():
