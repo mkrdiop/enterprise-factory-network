@@ -280,8 +280,9 @@ def render_factory_passport_markdown(passport: dict[str, Any]) -> str:
         f"- **Factory ID:** `{factory['id']}`",
         f"- **Release:** `{source['releaseVersion']}`",
         f"- **EFS version:** `{source['efsVersion']}`",
-        f"- **Digest:** `{source['digest']['profile']}:{source['digest']['value']}`",
+        f"- **Digest:** `{source['digest']['profile']}:{source['digest']['algorithm']}:{source['digest']['value']}`",
         f"- **Registry release record:** `{source['registry']['releaseRecordId']}`",
+        f"- **Artifact bytes:** {source['registry']['artifactByteLength']}",
         f"- **Published at:** `{source['registry']['publishedAt']}`",
         "",
         "## Capabilities",
@@ -317,6 +318,8 @@ def render_factory_passport_markdown(passport: dict[str, Any]) -> str:
         lines[lines.index("## Capabilities"):lines.index("## Capabilities")] = [
             "## Description", "", factory["description"], ""
         ]
+    if "createdAt" in release:
+        lines.insert(9, f"- **Release created at:** `{release['createdAt']}`")
     lines.extend(
         [
             "## Execution",
@@ -337,6 +340,8 @@ def render_factory_passport_markdown(passport: dict[str, Any]) -> str:
                 f"- **External profile:** `{profile['id']}@{profile['version']}` "
                 f"({profile['digest']['algorithm']}:{profile['digest']['value']})"
             )
+    if "extensions" in passport:
+        lines.extend(["", "## Extensions", "", *_json_block(passport["extensions"])])
     lines.extend(
         [
             "",
