@@ -7,11 +7,11 @@
   "vectors": [
     {"id":"SPEC-001","dimension":"specification","case":"explicit-supported-range","range":"1.x","evaluatorResult":true,"evidence":true,"expected":"compatible"},
     {"id":"SPEC-002","dimension":"specification","case":"missing-range","range":"","evaluatorResult":true,"evidence":true,"expected":"unknown"},
-    {"id":"CONTRACT-001","dimension":"factory-release-capability-contract","case":"same-opaque-version-with-definition-evidence","previousVersion":"2026-Q4","selectedVersion":"2026-Q4","classification":null,"evidence":true,"expected":"compatible"},
+    {"id":"CONTRACT-001","dimension":"factory-release-capability-contract","case":"same-opaque-version-with-definition-evidence","previousVersion":"2026-Q4","selectedVersion":"2026-Q4","classification":"unchanged","evidence":true,"expected":"compatible"},
     {"id":"CONTRACT-002","dimension":"factory-release-capability-contract","case":"changed-opaque-version-no-change-evidence","previousVersion":"1.0.0","selectedVersion":"2.0.0","classification":null,"evidence":false,"expected":"unknown"},
     {"id":"CONTRACT-003","dimension":"factory-release-capability-contract","case":"explicit-breaking-definition-change","previousVersion":"vNext","selectedVersion":"2026-Q4","classification":"breaking","evidence":true,"expected":"breaking"},
-    {"id":"RUNTIME-001","dimension":"runtime-execution","case":"explicit-runtime-profile-mapping","subjectProfile":"runtime-v2","consumerProfile":"runtime-v2","mapping":"runtime-map-v1","evidence":true,"expected":"compatible"},
-    {"id":"PROTOCOL-001","dimension":"protocol","case":"protocol-name-without-mapping","subjectProfile":"https-json","consumerProfile":"https-json","mapping":null,"evidence":false,"expected":"unknown"},
+    {"id":"RUNTIME-001","dimension":"runtime-execution","case":"explicit-runtime-profile-mapping","subjectProfile":"runtime-v2","consumerProfile":"runtime-v2","mapping":"runtime-map-v1","mappingOutcome":"compatible","evidence":true,"expected":"compatible"},
+    {"id":"PROTOCOL-001","dimension":"protocol","case":"protocol-name-without-mapping","subjectProfile":"https-json","consumerProfile":"https-json","mapping":null,"mappingOutcome":null,"evidence":false,"expected":"unknown"},
     {"id":"GOV-001","dimension":"governance","case":"no-m5-authority","authority":null,"evidence":false,"expected":"unknown"},
     {"id":"GOV-002","dimension":"governance","case":"m5-conditional-with-action","authority":"M5","evidence":true,"classification":"conditional","conditions":["obtain-policy-attestation"],"expected":"conditional"}
   ]
