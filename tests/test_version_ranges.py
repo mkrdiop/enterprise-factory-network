@@ -27,6 +27,9 @@ VECTORS = json.loads((ROOT / "conformance/efs/v1/version-range-vectors.json").re
         ("1.0.0", ">1.0.0 <=2.0.0", False),
         ("1.0.1", ">1.0.0 <=2.0.0", True),
         ("1.5.0", ">=1.0.0 <=1.5.0", True),
+        ("1.5.0", ">=1.0.0", True),
+        ("1.5.0", "<2.0.0", True),
+        ("2.0.0", "<2.0.0", False),
     ],
 )
 def test_efs_supported_range_vectors(candidate, expression, expected):
