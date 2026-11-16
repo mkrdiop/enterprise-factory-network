@@ -1,0 +1,65 @@
+{
+  "catalogVersion": "1.0",
+  "diagnostics": [
+    {
+      "code": "EFS_EXECUTION_ENVELOPE_INVALID",
+      "stage": "execution",
+      "meaning": "Envelope does not conform to the versioned EFS execution envelope schema."
+    },
+    {
+      "code": "EFS_EXECUTION_CONTEXT_MISMATCH",
+      "stage": "execution",
+      "meaning": "Envelope release coordinates do not match the selected immutable release."
+    },
+    {
+      "code": "EFS_EXECUTION_CAPABILITY_NOT_UNIQUE",
+      "stage": "execution",
+      "meaning": "Capability identifier does not resolve exactly once in the selected release."
+    },
+    {
+      "code": "EFS_EXECUTION_CONTRACT_MISMATCH",
+      "stage": "execution",
+      "meaning": "Envelope contract identifier/version differs from the selected capability contract."
+    },
+    {
+      "code": "EFS_EXECUTION_PROFILE_UNRESOLVED",
+      "stage": "execution",
+      "meaning": "Execution profile is not explicitly and uniquely selected by the capability."
+    },
+    {
+      "code": "EFS_EXECUTION_MODE_UNDECLARED",
+      "stage": "execution",
+      "meaning": "Execution mode is not declared by the selected embedded execution profile."
+    },
+    {
+      "code": "EFS_EXECUTION_ERROR_UNDECLARED",
+      "stage": "execution",
+      "meaning": "Error code is not declared by the selected capability contract."
+    },
+    {
+      "code": "EFS_EXECUTION_PAYLOAD_VALIDATOR_REQUIRED",
+      "stage": "execution",
+      "meaning": "Payload-bearing envelope requires the shared PSI-43 payload validator."
+    },
+    {
+      "code": "EFS_EXECUTION_TRANSITION_INVALID",
+      "stage": "execution",
+      "meaning": "Observed message transition is not permitted by the mode contract."
+    },
+    {
+      "code": "EFS_EXECUTION_INVOCATION_MISMATCH",
+      "stage": "execution",
+      "meaning": "Invocation identifier changed during one interaction."
+    },
+    {
+      "code": "EFS_EXECUTION_CORRELATION_MISMATCH",
+      "stage": "execution",
+      "meaning": "Correlation identifier changed during one interaction."
+    },
+    {
+      "code": "EFS_EXECUTION_CAUSATION_MISMATCH",
+      "stage": "execution",
+      "meaning": "Causation identifier does not reference the preceding observed message."
+    }
+  ]
+}
