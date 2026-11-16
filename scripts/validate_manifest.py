@@ -27,6 +27,14 @@ class DuplicateMemberError(ValueError):
     """Raised when a JSON object contains a duplicate member name."""
 
 
+class InvalidJSONConstant(ValueError):
+    """Raised for JavaScript-only constants such as NaN and Infinity."""
+
+
+def reject_non_json_constant(value):
+    raise InvalidJSONConstant(f"non-JSON numeric constant: {value}")
+
+
 def reject_duplicate_members(pairs):
     result = {}
     for key, value in pairs:
@@ -40,7 +48,7 @@ def load_json(path: Path) -> Any:
     # read_bytes + strict decode distinguishes invalid UTF-8 from invalid JSON.
     raw = path.read_bytes()
     text = raw.decode("utf-8", errors="strict")
-    return json.loads(text, object_pairs_hook=reject_duplicate_members)
+    return json.loads(text, object_pairs_hook=reject_duplicate_members, parse_constant=reject_non_json_constant)
 
 
 def pointer(parts) -> str:
@@ -191,7 +199,7 @@ def validate_report(manifest_path: Path, schema_path: Path) -> dict:
             "Input is not valid UTF-8.", {"message": str(exc)},
         ))
         return report
-    except (json.JSONDecodeError, OSError) as exc:
+    except (json.JSONDecodeError, InvalidJSONConstant, OSError) as exc:
         stages["parsing"] = "failed"
         diagnostics.append(diagnostic(
             "EFS_JSON_INVALID", "parsing", "",
