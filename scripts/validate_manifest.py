@@ -211,7 +211,7 @@ def canonical_publisher_uri(value: str) -> str | None:
         return None
     if not _PATH_CHARS.fullmatch(parsed.path):
         return None
-    if _PCT.search(re.sub(r"%[0-9A-Fa-f]{2}", "", value)):
+    if re.search(r"%(?![0-9A-Fa-f]{2})", value):
         return None
 
     has_authority = remainder.startswith("//")
