@@ -55,8 +55,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -117,8 +122,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -179,8 +189,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -241,8 +256,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -303,8 +323,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -365,8 +390,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -375,8 +405,13 @@
             "scope": {
               "tenant_id": "tenant-a",
               "principal_id": "principal-a",
-              "release_record_id": "release-row-7",
-              "operation": "transition"
+              "operation": "transition",
+              "release_coordinate": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              }
             },
             "request_fingerprint": "sha256:req-1",
             "original_result": "accepted",
@@ -438,8 +473,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -448,8 +488,13 @@
             "scope": {
               "tenant_id": "tenant-a",
               "principal_id": "principal-a",
-              "release_record_id": "release-row-7",
-              "operation": "transition"
+              "operation": "transition",
+              "release_coordinate": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              }
             },
             "request_fingerprint": "sha256:req-1",
             "original_result": "rejected",
@@ -511,8 +556,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -521,8 +571,13 @@
             "scope": {
               "tenant_id": "tenant-a",
               "principal_id": "principal-a",
-              "release_record_id": "release-row-7",
-              "operation": "transition"
+              "operation": "transition",
+              "release_coordinate": {
+                "publisher_id": "urn:publisher:acme",
+                "factory_id": "factory-42",
+                "release_version": "7",
+                "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              }
             },
             "request_fingerprint": "sha256:other",
             "original_result": "accepted",
@@ -584,8 +639,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-b",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -646,8 +706,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "initial_publication"
+          "operation": "initial_publication",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -708,8 +773,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-8",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "8",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -770,8 +840,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "initial_publication"
+          "operation": "initial_publication",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -832,8 +907,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -894,8 +974,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -956,8 +1041,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -1018,8 +1108,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -1080,8 +1175,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -1142,8 +1242,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -1204,8 +1309,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -1266,8 +1376,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -1328,8 +1443,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -1390,8 +1510,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -1452,8 +1577,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "transition"
+          "operation": "transition",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
@@ -1514,8 +1644,13 @@
         "scope": {
           "tenant_id": "tenant-a",
           "principal_id": "principal-a",
-          "release_record_id": "release-row-7",
-          "operation": "initial_publication"
+          "operation": "initial_publication",
+          "release_coordinate": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7",
+            "digest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
         },
         "request_fingerprint": "sha256:req-1",
         "idempotency_lookup": {
