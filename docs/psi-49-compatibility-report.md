@@ -5,7 +5,7 @@
 
 ## Contract
 
-The engine consumes the shared `efs.compatibility` assessment primitives. It does not parse SemVer, interpret contract versions, evaluate trust, authorize execution, select releases, or redefine compatibility outcomes. Specification assessment accepts only the Boolean result of the PSI-47 range evaluator; an absent, malformed or non-Boolean result is `unknown`.
+The engine consumes the shared `efs.compatibility` assessment primitives and the PSI-47 versioning API. It does not implement SemVer parsing or range grammar, interpret contract versions, evaluate trust, authorize execution, select releases, or redefine compatibility outcomes. `assess_efs_specification` calls PSI-47 `evaluate_efs_version_range(subject_efs_version, supported_range)` and passes its Boolean result to the PSI-48 specification assessor. Missing or malformed candidate/range inputs fail closed to `unknown`; a valid non-match is `breaking` only when PSI-48 evidence requirements are met. `ReleaseCoordinates` validates both `releaseVersion` and `efsVersion` with PSI-47's field-aware parser while retaining the exact strings.
 
 A report binds the exact subject coordinate `(publisherId, factoryId, releaseVersion, digest profile, digest algorithm, digest value, efsVersion)` to the exact consumer identity/profile/version, declared EFS range, runtime profile and protocol profiles. It records all five PSI-48 dimensions, including explicit `unknown` assessments when evidence is absent.
 
