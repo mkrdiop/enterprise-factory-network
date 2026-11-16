@@ -272,7 +272,6 @@ def render_factory_passport_markdown(passport: dict[str, Any]) -> str:
     source = passport["source"]
     factory = passport["factory"]
     publisher = passport["publisher"]
-    release = passport["release"]
     lines = [
         f"# Factory Passport — {factory['name']}",
         "",
