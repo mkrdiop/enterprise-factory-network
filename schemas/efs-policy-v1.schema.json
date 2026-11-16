@@ -298,9 +298,6 @@
             ]
           },
           "then": {
-            "required": [
-              "coordinates"
-            ],
             "properties": {
               "coordinates": {
                 "required": [
@@ -323,9 +320,6 @@
             ]
           },
           "then": {
-            "required": [
-              "coordinates"
-            ],
             "properties": {
               "coordinates": {
                 "required": [
@@ -349,9 +343,6 @@
             ]
           },
           "then": {
-            "required": [
-              "coordinates"
-            ],
             "properties": {
               "coordinates": {
                 "required": [
@@ -530,7 +521,62 @@
       }
     },
     "resource": {
-      "$ref": "#/$defs/resourceSelector"
+      "allOf": [
+        {
+          "$ref": "#/$defs/resourceSelector"
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "factory"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "coordinates"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "release"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "coordinates"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "capability"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "coordinates"
+            ]
+          }
+        }
+      ]
     },
     "context": {
       "type": "object",
