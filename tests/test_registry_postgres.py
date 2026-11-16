@@ -80,6 +80,22 @@ def test_publisher_identity_is_immutable(session):
         )
 
 
+def test_artifact_digest_identity_is_immutable(session):
+    PublisherRepository(session).create("urn:example:publisher:artifact-immutable")
+    FactoryRepository(session).create("urn:example:publisher:artifact-immutable", "f")
+    ReleaseRepository(session).publish(
+        "urn:example:publisher:artifact-immutable", "f", "1.0",
+        "efs-jcs-sha256-v1", "SHA-256", "immutable-digest", 12,
+        "test", "artifact-key", datetime.now(UTC),
+    )
+    session.commit()
+
+    with pytest.raises(DBAPIError):
+        session.execute(
+            text("UPDATE artifact_blobs SET digest_value='changed' WHERE digest_value='immutable-digest'")
+        )
+
+
 def test_factory_identity_is_immutable(session):
     PublisherRepository(session).create("urn:example:publisher:factory-immutable")
     factory = FactoryRepository(session).create(
