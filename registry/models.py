@@ -7,6 +7,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     ForeignKeyConstraint,
+    Index,
     String,
     Text,
     UniqueConstraint,
@@ -61,6 +62,7 @@ class ArtifactLocation(Base):
     artifact_blob_id: Mapped[uuid.UUID]=mapped_column(Uuid,ForeignKey("artifact_blobs.artifact_blob_id",ondelete="RESTRICT"),nullable=False)
     provider: Mapped[str]=mapped_column(Text(collation="C"),nullable=False)
     object_key: Mapped[str]=mapped_column(Text(collation="C"),nullable=False)
+    generation: Mapped[str|None]=mapped_column(Text(collation="C"))
     location_state: Mapped[str]=mapped_column(String(16),nullable=False,default="active")
     created_at: Mapped[object]=mapped_column(DateTime(timezone=True),server_default=func.now(),nullable=False)
 
@@ -76,3 +78,51 @@ class FactoryRelease(Base):
     artifact_blob_id: Mapped[uuid.UUID]=mapped_column(Uuid,nullable=False)
     published_at: Mapped[object]=mapped_column(DateTime(timezone=True),nullable=False)
     created_at: Mapped[object]=mapped_column(DateTime(timezone=True),server_default=func.now(),nullable=False)
+
+
+class PublicationOperation(Base):
+    """Durable idempotency and recovery record for a cross-system publication."""
+
+    __tablename__ = "publication_operations"
+    __table_args__ = (
+        UniqueConstraint("idempotency_key", name="uq_publication_operations_idempotency_key"),
+        CheckConstraint(
+            "state IN ('pending','committed','conflict','failed')",
+            name="ck_publication_operations_state",
+        ),
+        CheckConstraint("payload_length >= 0", name="ck_publication_payload_length"),
+        CheckConstraint(
+            "(state = 'committed' AND release_record_id IS NOT NULL) OR "
+            "(state <> 'committed' AND release_record_id IS NULL)",
+            name="ck_publication_release_state",
+        ),
+        Index("ix_publication_operations_state_created", "state", "created_at"),
+        Index(
+            "ix_publication_operations_digest_state",
+            "digest_profile",
+            "digest_algorithm",
+            "digest_value",
+            "state",
+        ),
+    )
+
+    publication_operation_id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    idempotency_key: Mapped[str] = mapped_column(Text(collation="C"), nullable=False)
+    request_fingerprint: Mapped[str] = mapped_column(Text(collation="C"), nullable=False)
+    factory_record_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("factories.factory_record_id", ondelete="RESTRICT"), nullable=False
+    )
+    version: Mapped[str] = mapped_column(Text(collation="C"), nullable=False)
+    digest_profile: Mapped[str] = mapped_column(Text(collation="C"), nullable=False)
+    digest_algorithm: Mapped[str] = mapped_column(Text(collation="C"), nullable=False)
+    digest_value: Mapped[str] = mapped_column(Text(collation="C"), nullable=False)
+    payload_length: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    state: Mapped[str] = mapped_column(String(16), nullable=False, default="pending")
+    release_record_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid, ForeignKey("factory_releases.release_record_id", ondelete="RESTRICT")
+    )
+    failure_code: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[object] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[object] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
+    )
