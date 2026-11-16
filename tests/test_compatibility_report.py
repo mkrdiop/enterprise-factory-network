@@ -197,12 +197,31 @@ def test_breaking_and_conditional_outcomes_keep_diagnostics_in_report():
         mapping_id="adapter-v1", mapping_outcome=Outcome.CONDITIONAL,
         evidence=(EVIDENCE_B,), conditions=("install-adapter",),
     )
-    report = evaluate_compatibility(subject=SUBJECT, consumer=CONSUMER, assessments=(breaking, conditional),
+    consumer = ConsumerProfile("consumer-a", "profile-a", "1", "<1.0.0", "runtime-a", ("https-json",))
+    report = evaluate_compatibility(subject=SUBJECT, consumer=consumer, assessments=(breaking, conditional),
                                     ruleset_version="rules-1")
     payload = report.as_dict()
     assert report.outcome is Outcome.BREAKING
     assert payload["blockers"] == ["unsupported-efs-version"]
     assert "install-adapter" in payload["warnings"]
+
+
+def test_report_rejects_specification_assessed_against_different_coordinates():
+    assessment = assess_efs_specification(
+        subject_efs_version="1.0.0", supported_range="*",
+        consumer_profile_id="profile-a", evidence=(EVIDENCE_A,),
+    )
+    with pytest.raises(CompatibilityError, match="supportedEfsRange"):
+        evaluate_compatibility(subject=SUBJECT, consumer=CONSUMER, assessments=(assessment,),
+                               ruleset_version="rules-1")
+
+    mismatched_subject = assess_efs_specification(
+        subject_efs_version="2.0.0", supported_range=CONSUMER.supported_efs_range,
+        consumer_profile_id=CONSUMER.profile_id, evidence=(EVIDENCE_A,),
+    )
+    with pytest.raises(CompatibilityError, match="subjectEfsVersion"):
+        evaluate_compatibility(subject=SUBJECT, consumer=CONSUMER, assessments=(mismatched_subject,),
+                               ruleset_version="rules-1")
 
 
 def test_equal_precedence_release_labels_are_never_implicitly_selected():
