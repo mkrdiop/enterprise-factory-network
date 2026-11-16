@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:efs:schema:psi-53-enforcement:1",
+  "title": "PSI-53 Enforcement Vector Set",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "vector_set",
+    "version",
+    "vectors"
+  ],
+  "properties": {
+    "vector_set": {
+      "const": "psi-53-enforcement-v1"
+    },
+    "version": {
+      "const": "1.0.0"
+    },
+    "vectors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/vector"
+      }
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observed_at",
+        "expires_at",
+        "version"
+      ],
+      "properties": {
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authenticated",
+        "action_mapped",
+        "resource_exact",
+        "pdp_outcome",
+        "obligations_satisfied",
+        "trust_status",
+        "release_state",
+        "evidence",
+        "max_evidence_age_seconds",
+        "commit_time",
+        "audit_outbox_available",
+        "evidence_changed_before_commit"
+      ],
+      "properties": {
+        "authenticated": {
+          "type": "boolean"
+        },
+        "action_mapped": {
+          "type": "boolean"
+        },
+        "resource_exact": {
+          "type": "boolean"
+        },
+        "pdp_outcome": {
+          "enum": [
+            "permit",
+            "deny",
+            "indeterminate"
+          ]
+        },
+        "obligations_satisfied": {
+          "type": "boolean"
+        },
+        "trust_status": {
+          "enum": [
+            "not_required",
+            "trusted",
+            "untrusted",
+            "revoked",
+            "unavailable"
+          ]
+        },
+        "release_state": {
+          "enum": [
+            "not_release_operation",
+            "published",
+            "deprecated",
+            "suspended",
+            "revoked",
+            "archived",
+            "unknown"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "max_evidence_age_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "commit_time": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "audit_outbox_available": {
+          "type": "boolean"
+        },
+        "evidence_changed_before_commit": {
+          "type": "boolean"
+        }
+      }
+    },
+    "vector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "scenario",
+        "input",
+        "expected"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^psi53-[a-z0-9-]+$"
+        },
+        "scenario": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input": {
+          "$ref": "#/$defs/input"
+        },
+        "expected": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "result",
+            "reason"
+          ],
+          "properties": {
+            "result": {
+              "enum": [
+                "enforced",
+                "rejected"
+              ]
+            },
+            "reason": {
+              "enum": [
+                "PERMIT_ENFORCED",
+                "AUTHN_REQUIRED",
+                "ACTION_UNMAPPED",
+                "RESOURCE_COORDINATES_INVALID",
+                "POLICY_DENIED",
+                "PDP_INDETERMINATE",
+                "OBLIGATION_UNFULFILLED",
+                "TRUST_UNAVAILABLE",
+                "KEY_NOT_TRUSTED",
+                "KEY_REVOKED",
+                "RELEASE_NOT_ADMISSIBLE",
+                "EVIDENCE_STALE",
+                "AUDIT_DURABILITY_FAILURE",
+                "AUTHORIZATION_REVISION_CHANGED"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
