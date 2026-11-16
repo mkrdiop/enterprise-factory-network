@@ -277,7 +277,7 @@ def evaluate_efs_version_range(candidate: str, supported_range: str) -> bool:
     if supported_range == "*":
         return True
 
-    wildcard = re.fullmatch(r"(0|[1-9][0-9]*)\\.(?:(0|[1-9][0-9]*)\\.)?x", supported_range, re.ASCII)
+    wildcard = re.fullmatch(r"(0|[1-9][0-9]*)\.(?:(0|[1-9][0-9]*)\.)?x", supported_range, re.ASCII)
     if wildcard is not None:
         major = int(wildcard.group(1))
         minor_text = wildcard.group(2)
