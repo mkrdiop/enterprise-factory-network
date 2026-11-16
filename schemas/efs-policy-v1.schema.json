@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://enterprise-factory.example/schemas/efs-policy-v1.schema.json",
+  "$id": "urn:efs:schema:authorization-policy:1",
   "title": "EFS v1 Authorization Policy and Evaluation",
   "$defs": {
     "scalar": {
@@ -575,5 +575,16 @@
         }
       }
     }
-  }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/policy"
+    },
+    {
+      "$ref": "#/$defs/evaluationRequest"
+    },
+    {
+      "$ref": "#/$defs/evaluationResponse"
+    }
+  ]
 }
