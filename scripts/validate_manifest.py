@@ -9,8 +9,10 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import ipaddress
+import re
 from typing import Any
-from urllib.parse import urlparse
+from urllib.parse import urlsplit, urlparse
 
 from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError
@@ -138,6 +140,148 @@ def _embedded_schema_checks(manifest):
                     continue
                 _walk_schema(schema, base, diagnostics)
     return diagnostics
+
+
+_PCT = re.compile(r"%([0-9A-Fa-f]{2})")
+_SCHEME = re.compile(r"^[A-Za-z][A-Za-z0-9+.-]*$")
+_PATH_CHARS = re.compile(r"(?:[A-Za-z0-9._~!def _profile_checks(manifest):
+    diagnostics = []
+    publisher = manifest.get("publisher")
+    if isinstance(publisher, dict) and isinstance(publisher.get("id"), str):
+        publisher_id = publisher["id"]
+        canonical = canonical_publisher_uri(publisher_id)
+        if canonical is None:
+            diagnostics.append(diagnostic(
+                "EFS_PUBLISHER_URI_INVALID", "profile", "/publisher/id",
+                "Publisher identifier must be a valid absolute RFC 3986 URI under efs-uri-c14n-1.",
+            ))
+        elif canonical != publisher_id:
+            diagnostics.append(diagnostic(
+                "EFS_PUBLISHER_URI_NON_CANONICAL", "profile", "/publisher/id",
+                "Publisher identifier is not in canonical efs-uri-c14n-1 serialization.",
+                {"canonical": canonical},
+            ))
+'()*+,;=:@/-]|%[0-9A-Fa-f]{2})*\\Z")
+_REG_NAME_CHARS = re.compile(r"(?:[A-Za-z0-9._~!def _profile_checks(manifest):
+    diagnostics = []
+'()*+,;=-]|%[0-9A-Fa-f]{2})*\\Z")
+_UNRESERVED = frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~")
+
+
+def _normalize_percent_encoding(component: str) -> str:
+    """Decode only RFC 3986 unreserved octets and uppercase other triplets."""
+    def replace(match):
+        value = int(match.group(1), 16)
+        char = chr(value)
+        return char if char in _UNRESERVED else f"%{value:02X}"
+    return _PCT.sub(replace, component)
+
+
+def _remove_dot_segments(path: str) -> str:
+    """RFC 3986 section 5.2.4 dot-segment removal algorithm."""
+    source = path
+    output = ""
+    while source:
+        if source.startswith("../"):
+            source = source[3:]
+        elif source.startswith("./"):
+            source = source[2:]
+        elif source.startswith("/./"):
+            source = source[2:]
+        elif source == "/.":
+            source = "/"
+        elif source.startswith("/../"):
+            source = source[3:]
+            output = output[:output.rfind("/")] if "/" in output else ""
+        elif source == "/..":
+            source = "/"
+            output = output[:output.rfind("/")] if "/" in output else ""
+        elif source in (".", ".."):
+            source = ""
+        else:
+            start = 1 if source.startswith("/") else 0
+            next_slash = source.find("/", start)
+            if next_slash == -1:
+                output += source
+                source = ""
+            else:
+                output += source[:next_slash]
+                source = source[next_slash:]
+    return output
+
+
+def canonical_publisher_uri(value: str) -> str | None:
+    """Return efs-uri-c14n-1 serialization, or None for an invalid URI.
+
+    This is a local syntax operation only: it performs no dereferencing,
+    DNS resolution, redirects, scheme handlers or key discovery.
+    """
+    if not value or not value.isascii() or any(ord(ch) <= 0x20 or ord(ch) == 0x7f for ch in value):
+        return None
+    if "?" in value or "#" in value or any(ch.isspace() for ch in value):
+        return None
+    match = re.match(r"^([A-Za-z][A-Za-z0-9+.-]*):(.*)\\Z", value, re.DOTALL)
+    if not match:
+        return None
+    scheme, remainder = match.groups()
+    try:
+        parsed = urlsplit(value)
+    except ValueError:
+        return None
+    if parsed.scheme.lower() != scheme.lower() or parsed.query or parsed.fragment:
+        return None
+    if not _PATH_CHARS.fullmatch(parsed.path):
+        return None
+    if _PCT.search(re.sub(r"%[0-9A-Fa-f]{2}", "", value)):
+        return None
+
+    authority = ""
+    has_authority = remainder.startswith("//")
+    if has_authority:
+        raw_authority = remainder[2:].split("/", 1)[0]
+        if "@" in raw_authority:
+            return None
+        try:
+            # Accessing .port validates numeric syntax and the 0..65535 range.
+            _ = parsed.port
+        except ValueError:
+            return None
+        if raw_authority.startswith("["):
+            close = raw_authority.find("]")
+            if close < 0:
+                return None
+            literal = raw_authority[1:close]
+            suffix = raw_authority[close + 1:]
+            if suffix and not re.fullmatch(r":[0-9]*", suffix):
+                return None
+            if literal.lower().startswith("v"):
+                if not re.fullmatch(r"v[0-9A-Fa-f]+\\.[A-Za-z0-9._~!def _profile_checks(manifest):
+    diagnostics = []
+'()*+,;=:-]+", literal):
+                    return None
+            else:
+                try:
+                    ipaddress.IPv6Address(literal)
+                except ValueError:
+                    return None
+            authority = "[" + literal.lower() + "]" + suffix
+        else:
+            if raw_authority.count(":") > 1:
+                return None
+            if ":" in raw_authority:
+                host, port_suffix = raw_authority.rsplit(":", 1)
+                if not port_suffix.isdigit() and port_suffix != "":
+                    return None
+                suffix = ":" + port_suffix
+            else:
+                host, suffix = raw_authority, ""
+            if not _REG_NAME_CHARS.fullmatch(host):
+                return None
+            authority = _normalize_percent_encoding(host.lower()) + suffix
+
+    path = _normalize_percent_encoding(parsed.path)
+    path = _remove_dot_segments(path) if path else path
+    return scheme.lower() + ":" + ("//" + authority if has_authority else "") + path
 
 
 def _profile_checks(manifest):
