@@ -39,8 +39,7 @@ def test_execution_envelope_schema_and_examples_conform():
     for item in examples:
         validator.validate(item["envelope"])
         report = validate_execution_envelope(
-            item["envelope"], _manifest(item["manifestPath"]),
-            payload_validator=_valid_payload_port,
+            item["envelope"], _manifest(item["manifestPath"])
         )
         assert report["valid"], (item["id"], report)
 
@@ -73,12 +72,19 @@ def test_envelope_binds_exact_manifest_and_contract_coordinates():
     }
 
 
-def test_payload_bearing_messages_require_and_use_shared_validator_port():
+def test_payload_bearing_messages_use_the_canonical_psi43_validator_by_default():
     item = _example("request-sync")
     manifest = _manifest(item["manifestPath"])
-    missing = validate_execution_envelope(item["envelope"], manifest)
-    assert not missing["valid"]
-    assert missing["diagnostics"][0]["code"] == "EFS_EXECUTION_PAYLOAD_VALIDATOR_REQUIRED"
+    default_report = validate_execution_envelope(item["envelope"], manifest)
+    assert default_report["valid"], default_report
+
+    invalid = json.loads(json.dumps(item["envelope"]))
+    invalid["payload"]["requestId"] = 123
+    rejected = validate_execution_envelope(invalid, manifest)
+    assert not rejected["valid"]
+    assert "EFS_CONTRACT_PAYLOAD_INVALID" in {
+        item["code"] for item in rejected["diagnostics"]
+    }
 
     calls = []
     def port(manifest_arg, context, direction, payload, error_code=None):
@@ -185,7 +191,7 @@ def test_execution_acceptance_registry_maps_to_executable_tests():
     tests = {
         "test_execution_envelope_schema_and_examples_conform",
         "test_envelope_binds_exact_manifest_and_contract_coordinates",
-        "test_payload_bearing_messages_require_and_use_shared_validator_port",
+        "test_payload_bearing_messages_use_the_canonical_psi43_validator_by_default",
         "test_error_messages_require_declared_contract_error_codes",
         "test_causal_transition_propagates_correlation_and_causation",
         "test_mode_specific_envelopes_and_transition_rules",
