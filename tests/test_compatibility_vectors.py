@@ -9,6 +9,7 @@ from efs.compatibility import (
     assess_profile_mapping,
     assess_specification,
 )
+from efs.versioning import VersionRangeError, evaluate_efs_version_range
 
 ROOT = Path(__file__).resolve().parents[1]
 VECTORS = json.loads((ROOT / "conformance/efs/v1/compatibility-vectors.json").read_text(encoding="utf-8"))
@@ -19,9 +20,13 @@ def test_machine_readable_compatibility_vectors():
     for vector in VECTORS["vectors"]:
         dimension = vector["dimension"]
         if dimension == "specification":
+            try:
+                evaluator_result = evaluate_efs_version_range(vector["candidateVersion"], vector["range"]) if vector["range"] else None
+            except VersionRangeError:
+                evaluator_result = None
             result = assess_specification(
                 supported_range=vector["range"], consumer_profile_id="consumer-profile",
-                range_evaluator_result=vector["evaluatorResult"], evidence=EVIDENCE if vector["evidence"] else (),
+                range_evaluator_result=evaluator_result, evidence=EVIDENCE if vector["evidence"] else (),
             )
         elif dimension == "factory-release-capability-contract":
             result = assess_contract_change(
