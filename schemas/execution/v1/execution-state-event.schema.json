@@ -20,7 +20,7 @@
     "reasonCode": {"type": "string", "pattern": "^[a-z][a-z0-9._-]{0,127}$"},
     "governanceRef": {"type": "string", "minLength": 1, "maxLength": 2048},
     "occurredAt": {"type": "string", "format": "date-time"},
-    "context": {"$ref": "execution-envelope.schema.json#/$defs/context"}
+    "context": {"$ref": "envelope.schema.json#/$defs/context"}
   },
   "allOf": [
     {"if": {"properties": {"eventType": {"const": "cancelled"}}, "required": ["eventType"]},
