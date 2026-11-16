@@ -1,6 +1,6 @@
 # ADR-004 — Registry persistence backend and relational data model
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-11-16
 - **Decision owners:** Founder / Enterprise Factory architecture
 - **Related Linear issues:** [PSI-38](https://linear.app/getpsi/issue/PSI-38/design-registry-persistence-model), [PSI-39](https://linear.app/getpsi/issue/PSI-39/implement-manifest-registry-api), [PSI-40](https://linear.app/getpsi/issue/PSI-40/implement-immutable-release-storage)
@@ -99,7 +99,7 @@ Database uniqueness constraints, not preflight SELECTs, arbitrate concurrent cla
 
 ### Follow-up work
 
-- [ ] Founder approval of ADR-004.
+- [x] Founder approval of ADR-004 (2026-11-16).
 - [ ] Implement SQLAlchemy domain/repository interfaces and PostgreSQL adapter.
 - [ ] Add Alembic baseline migration and clean-database initialization.
 - [ ] Add PostgreSQL constraints, immutable-field triggers and tombstone protections.
