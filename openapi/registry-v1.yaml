@@ -34,7 +34,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: https://schemas.enterprise-factory.network/efs/v1/factory-manifest.schema.json
+              $ref: ../schemas/efs/v1/factory-manifest.schema.json
       responses:
         '201':
           description: Release committed and durably retrievable.
