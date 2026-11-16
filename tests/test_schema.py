@@ -8,7 +8,7 @@ from jsonschema import Draft202012Validator
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "schemas/efs/v1/factory-manifest.schema.json"
 sys.path.insert(0, str(ROOT / "scripts"))
-from validate_manifest import load_json, validate_report, DIALECT
+from validate_manifest import DIALECT, load_json, validate_report
 
 SCHEMA = load_json(SCHEMA_PATH)
 Draft202012Validator.check_schema(SCHEMA)
@@ -209,10 +209,10 @@ def test_cli_failure_exit_and_json_report_for_invalid_manifest():
     import subprocess
     command = [sys.executable, str(ROOT / "scripts/validate_manifest.py"),
                str(ROOT / "fixtures/invalid/manifest-invalid-digest-length.json")]
-    human = subprocess.run(command, capture_output=True, text=True)
+    human = subprocess.run(command, check=False, capture_output=True, text=True)
     assert human.returncode == 1
     assert "EFS v1 NOT CONFORMANT" in human.stdout
-    machine = subprocess.run(command + ["--json"], capture_output=True, text=True)
+    machine = subprocess.run(command + ["--json"], check=False, capture_output=True, text=True)
     assert machine.returncode == 1
     report = json.loads(machine.stdout)
     assert report["valid"] is False
