@@ -1,0 +1,23 @@
+{
+  "catalogVersion": "1.0",
+  "schema": "schemas/execution/v1/execution-envelope.schema.json",
+  "examples": "conformance/execution/v1/examples.json",
+  "vectors": "conformance/execution/v1/vectors.json",
+  "acceptance": "conformance/execution/v1/acceptance.json",
+  "diagnostics": "conformance/execution/v1/diagnostic-catalog.json",
+  "testModule": "tests/test_execution_contract.py",
+  "modes": [
+    "sync",
+    "async",
+    "streaming",
+    "event"
+  ],
+  "messageTypes": [
+    "request",
+    "event",
+    "accepted",
+    "progress",
+    "result",
+    "error"
+  ]
+}
