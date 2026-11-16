@@ -8,6 +8,7 @@ from scripts.validate_manifest import canonical_publisher_uri
 
 from .models import ArtifactBlob, ArtifactLocation, Factory, FactoryRelease, Publisher
 
+
 class RegistryConflict(Exception): pass
 class RegistryNotFound(Exception): pass
 
@@ -39,7 +40,7 @@ class FactoryRepository:
     def retire(self,uri,factory_id):
         row=self.get(uri,factory_id)
         if row is None: raise RegistryNotFound(f"{uri}/{factory_id}")
-        if row.lifecycle_state=="active": row.lifecycle_state="retired"; row.retired_at=datetime.now(timezone.utc); self.s.flush()
+        if row.lifecycle_state=="active": row.lifecycle_state="retired"; row.retired_at=datetime.now(UTC); self.s.flush()
         return row
 
 class ReleaseRepository:
