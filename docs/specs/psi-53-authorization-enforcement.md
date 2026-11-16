@@ -1,77 +1,59 @@
 # PSI-53 — Authorization, trust and revocation enforcement
 
-- **Status:** Normative specification proposal; pending owner and independent review
-- **Version:** 1.0.0
-- **Date:** 2026-11-16
-- **Dependencies:** PSI-37, PSI-40, PSI-50, PSI-51, PSI-52
-- **Conformance:** `schemas/psi-53-enforcement-v1.schema.json`; `tests/conformance/psi-53-enforcement-v1.json`
+- **Status:** Normative specification proposal; pending explicit acceptance and independent review
+- **Version:** 1.1.0
+- **Dependencies:** PSI-37, PSI-40, PSI-45, PSI-50, PSI-51, PSI-52
 
-## 1. Settled enforcement contract
+## 1. Enforcement invariant
+One mandatory server-side Policy Enforcement Point (PEP) guards every protected API route, job, administrative command, Runtime entry point and internal service call. UI checks are not enforcement. The PDP remains the pure, deterministic PSI-52 evaluator.
 
-PSI-53 adopts one mandatory server-side Policy Enforcement Point (PEP) and one deterministic, side-effect-free Policy Decision Point (PDP). The PEP is the only authorization boundary for registry, administrative and Runtime protected operations. Every API handler and internal service path MUST call it; UI-only checks are not enforcement.
+A protected operation is allowed only when the authenticated principal is established by a trusted identity boundary; every required authorization check is derived from server-side context and has an exact PSI-52 action/resource pair; every exact policy reference is digest-verified; every PDP result is `permit`; all returned obligations are fulfilled; required publisher/key trust is current; required PSI-54 lifecycle admission succeeds; consumed evidence generations remain unchanged and fresh at commit; and the applicable durable audit/intent protocol succeeds.
 
-A protected operation is permitted if and only if: (1) the principal is authenticated by a trusted authentication boundary; (2) the PEP derives the subject, action and exact resource from trusted server-side context; (3) all required pinned policies are available and their PSI-52 profile/digest verified; (4) the PDP outcome is exactly `permit`; (5) every obligation is recognized and durably fulfilled; (6) required publisher/key trust evidence is current and acceptable; (7) release operations pass PSI-54 lifecycle admission; (8) all consumed evidence remains fresh at commit; and (9) the protected mutation and audit outbox commit atomically.
+## 2. Authorization check-set semantics
+An operation maps to an ordered, immutable set of one or more authorization checks, not necessarily one action. Each check contains exactly one PSI-52 finite action, one authoritative resource, one exact policy bundle reference and one PDP result. **Every required check MUST return permit.** A deny rejects the operation; absent deny, any indeterminate check makes the composite result indeterminate; otherwise every check must permit. No check may be omitted because another check permitted.
 
-Missing, malformed, unknown, stale, unavailable or conflicting required evidence means **no protected operation**. Preserve `deny` and `indeterminate` as distinct PDP outcomes. Never convert outage or uncertainty into allow.
+The PEP derives subject, action and resource coordinates from authenticated identity, route metadata and authoritative records. Client-supplied role, publisher, Factory, release or capability coordinates are not trusted. The route-to-check-set mapping is versioned and tested.
 
-## 2. Component boundaries
+### Normative action/resource map
 
-### Authenticated principal adapter
-Accepts a principal established by the configured identity boundary, never a subject/role object supplied by the request. Emits the PSI-52 subject shape. Every attribute retains value, source, observed_at and expires_at. Reject missing/ambiguous principals and unverified privilege claims.
-
-### Trusted attribute provider
-Returns provenance-bearing attributes. Enforce `observed_at <= evaluation_time < expires_at`. Required missing/invalid attributes and provider errors are indeterminate, never silently defaulted.
-
-### Immutable policy bundle resolver
-Resolves exact configured policy ID/version/profile/digest references. Verify PSI-52 digest before use. No “latest” substitution and no omission of a required unavailable policy. Cache immutable bundles by exact digest.
-
-### Reference PDP
-Pure deterministic evaluation of the complete PSI-52 request and exact bundle. No DB, network, ambient clock, identity-provider or filesystem dependency. Evaluation time is explicit. Preserve PSI-52 deny-overrides, indeterminate-overrides-permit, default-deny, order independence, exact selectors, finite actions and obligation aggregation.
-
-### Trust authority / PSI-51 resolver adapter
-PSI-53 owns publisher/key trust and revocation evidence, and implements the existing `PublisherKeyResolver.resolve(publisher_id, key_id, required_algorithm, required_usage)` seam. Preserve publisher/key binding, algorithm/usage, public key, `KeyTrustStatus`, validity interval and monotonic `evidence_version`. PSI-51 remains responsible for cryptographic verification using verifier UTC time. A valid signature does not imply trusted publisher/key; trust does not imply valid signature. Publisher namespace retirement, publisher distrust, key revocation and release revocation are separate facts. PSI-53 MUST NOT persist a competing release lifecycle state.
-
-### Policy Enforcement Point
-Maps every route and internal operation to exactly one PSI-52 action/resource, derives exact coordinates from validated input and authoritative registry records, evaluates PDP, fulfills obligations, composes trust and PSI-54 admission, rechecks freshness at commit, and emits durable audit. Unknown route/action, incomplete coordinates or cross-tenant mismatch fail closed.
-
-Capability invocation uses `capability.invoke` against the exact capability resource including publisher URI, Factory ID, opaque release version and capability ID. Do not add a new `execution_target` action to PSI-52 v1.
-
-### Audit sink
-For PostgreSQL-backed mutations, write an append-only logical audit/outbox record in the same transaction as the protected mutation. If outbox insertion fails, roll back the mutation. External immutable-store delivery may be asynchronous after the durable outbox commit. Record actor, exact resource/action, policy IDs/versions/digests, outcome/reason, trust/lifecycle evidence versions, obligation outcomes, correlation/idempotency IDs and timestamps. Never record private keys, bearer tokens or raw sensitive attribute values. Cryptographic tamper-evidence is not claimed by a normal append-only table.
-
-## 3. Minimum route/action/resource map
-
-| Operation | Action(s) | Resource |
+| Operation | Required PSI-52 checks | Exact resource coordinates |
 |---|---|---|
-| Factory registration | `factory.register` | prospective exact Factory under authenticated publisher |
-| Release publication | `factory.publish` AND `release.publish` (separate decisions) | exact Factory and exact release |
-| Factory read/discovery | `factory.read` / `factory.discover` | exact publisher + Factory |
-| Release / Passport read | `release.read` | exact release |
-| Capability invocation | `capability.invoke` | exact capability within exact release |
-| Suspend / deprecate / revoke / archive | matching `release.*` action | exact persisted release |
-| Publisher key management | `publisher.key.manage` | exact publisher |
-| Policy read/manage | `registry.policy.read` / `registry.policy.manage` | registry |
+| Publisher read/manage | `publisher.read` / `publisher.manage` | publisher; `publisher_id` |
+| Publisher key management | `publisher.key.manage` | publisher; `publisher_id` |
+| Factory discovery/read | `factory.discover` / `factory.read` | factory; `publisher_id`, `factory_id` |
+| Factory registration | `factory.register` | prospective factory; `publisher_id`, `factory_id` |
+| Release publication | `factory.publish` AND `release.publish` | separate factory resource (`publisher_id`, `factory_id`) and release resource (`publisher_id`, `factory_id`, `release_version`) |
+| Release/passport read | `release.read` | release; `publisher_id`, `factory_id`, `release_version` |
+| Capability invocation | `capability.invoke` | capability; `publisher_id`, `factory_id`, `release_version`, `capability_id` |
+| Lifecycle transition | exactly one of `release.suspend`, `release.deprecate`, `release.revoke`, `release.archive` matching the requested transition | exact release coordinates above |
+| Policy read/manage | `registry.policy.read` / `registry.policy.manage` | registry; `registry_id` |
 
-Composite operations evaluate every listed action. A permit for one action does not imply another. The inventory MUST include HTTP routes, jobs, admin commands and internal service entry points; tests MUST prove no alternate path bypasses the PEP.
+This table is exhaustive for PSI-52 v1. Unknown actions and action/resource type mismatches are invalid input and fail closed. PSI-53 MUST NOT extend the PSI-52 vocabulary. The implementation MUST maintain a machine-testable inventory covering HTTP routes, jobs, admin commands, Runtime adapters and internal service entry points. Every protected entry point maps to a check set and is tested for PEP invocation; unlisted protected entry points fail closed. This is a required implementation artifact, not an assertion that this specification enumerates repository-specific route paths.
 
-## 4. Publication and commit race
+## 3. PSI-52 policy evaluation and obligations
+Each check pins `policy_id`, `policy_version`, `policy_profile=efs-policy-v1` and the exact JCS/SHA-256 digest. No latest-version substitution is permitted. The PEP supplies the complete PSI-52 evaluation request, including authenticated subject provenance, exact resource coordinates, finite action and trusted evaluation context. PSI-52 owns policy syntax, action vocabulary, resource compatibility, combination semantics and PDP result. PSI-53 owns check-set composition and enforcement.
 
-Before side effects, canonicalize manifest identity, authenticate publisher binding, construct prospective exact resource coordinates and authorize registration/publication. Persist immutable artifact bytes outside the DB transaction. At finalization, open the DB transaction, re-read authoritative identity and policy/trust/lifecycle evidence versions, verify freshness, then commit release + initial PSI-54 event + audit outbox atomically. If evidence changed, re-evaluate; never commit on stale preflight permit. Do not hold a DB transaction across object-store I/O. Apply the same commit-boundary recheck to lifecycle transitions.
+Every obligation returned by every permit result is retained. Identical obligation IDs with identical parameters are deduplicated; conflicting parameters, unsupported obligations or unfulfilled obligations reject the operation. Audit captures obligation IDs and fulfillment outcomes, not secret values.
 
-## 5. Revocation freshness and cache
+## 4. Publisher/key trust evidence
+Trust is explicit per operation: `trust.required` is determined by the server-side operation contract, never by the caller. If false, no trust evidence is required or inferred. If true, evidence MUST be present and bind exact publisher ID and key ID; status MUST be trusted; evidence version MUST be monotonic; `observed_at <= commit_time < expires_at`; and age MUST not exceed configured `max_evidence_age_seconds`. Missing/unavailable evidence rejects; untrusted and revoked evidence retain distinct stable reasons.
 
-The required deployment setting is positive integer `max_evidence_age_seconds`. There is no universal numeric default. Production startup MUST fail if unset; no bounded-staleness production claim may be made without it. At commit, every consumed evidence item must satisfy `0 <= commit_time - observed_at <= max_evidence_age_seconds` and `commit_time < expires_at`. Permit cache TTL is capped by the earliest evidence expiry and configured bound. Use monotonic evidence generations; reordered/duplicate invalidations cannot roll back a newer generation. Lost/uncertain invalidation requires bounded revalidation. Source outage before commit fails closed. Test delayed/lost/reordered invalidations, expiry, source outage, concurrent revocation and policy updates. Caller-supplied signing timestamps never extend key trust.
+PSI-53 implements the PSI-51 `PublisherKeyResolver.resolve(publisher_id, key_id, required_algorithm, required_usage)` seam. PSI-51 remains responsible for cryptographic verification using verifier UTC time. Signature validity, publisher/key trust, policy authorization and release lifecycle are separate decisions. Caller signing timestamps never extend key trust.
+
+## 5. Commit-time freshness and atomicity
+The positive integer `max_evidence_age_seconds` is required deployment configuration. No default is invented; production startup fails if unset. Every consumed policy, trust, authorization and lifecycle evidence generation is captured during evaluation and compared with authoritative current generations at commit. A mismatch requires re-evaluation; stale preflight permits cannot commit.
+
+For a database-backed protected mutation, state mutation and append-only audit outbox row MUST commit in one database transaction. Outbox failure rolls back the mutation. Object-store I/O is outside that transaction.
+
+### External side effects and PSI-45 boundary
+A capability invocation or other external effect cannot be described as transactionally atomic with a local database. Before dispatch, the PEP/Runtime integration MUST durably commit an operation intent and audit record containing a stable operation ID, scoped idempotency key, exact release/capability coordinate, authorization decision reference and payload fingerprint. Dispatch MUST use that stable idempotency identity. The execution adapter records outcome and audit event durably; uncertain outcomes remain `indeterminate` and enter retry/reconciliation using the same operation ID. It MUST NOT blindly issue a second non-idempotent effect. If durable intent cannot be written, dispatch is forbidden.
+
+PSI-45 continues to own execution lifecycle, scheduling, retries and execution result semantics. PSI-53 defines only the authorization/audit gate and durable hand-off contract; it creates no competing execution state machine and promises no cross-system atomicity. Implementation MUST adapt the intent/outcome protocol to PSI-45's existing execution record and idempotency model.
 
 ## 6. Stable enforcement reasons
+`AUTHN_REQUIRED`, `ACTION_UNMAPPED`, `RESOURCE_COORDINATES_INVALID`, `ACTION_RESOURCE_MISMATCH`, `POLICY_DENIED`, `PDP_INDETERMINATE`, `OBLIGATION_UNFULFILLED`, `TRUST_UNAVAILABLE`, `KEY_NOT_TRUSTED`, `KEY_REVOKED`, `RELEASE_NOT_ADMISSIBLE`, `EVIDENCE_STALE`, `AUDIT_DURABILITY_FAILURE`, `AUTHORIZATION_REVISION_CHANGED`, `EXECUTION_INTENT_NOT_DURABLE`, `EXECUTION_OUTCOME_UNKNOWN`.
 
-`AUTHN_REQUIRED`, `ACTION_UNMAPPED`, `RESOURCE_COORDINATES_INVALID`, `POLICY_DENIED`, `PDP_INDETERMINATE`, `OBLIGATION_UNFULFILLED`, `TRUST_UNAVAILABLE`, `KEY_NOT_TRUSTED`, `KEY_REVOKED`, `RELEASE_NOT_ADMISSIBLE`, `EVIDENCE_STALE`, `AUDIT_DURABILITY_FAILURE`, `AUTHORIZATION_REVISION_CHANGED`.
+## 7. Conformance and acceptance
+The v1.1 vector package exercises exact action/resource compatibility, composite all-permit semantics, deny/indeterminate composition, trust-required and trust-not-required behavior, evidence freshness, obligations, commit-generation changes and external-effect intent/outcome handling. It is a composition oracle, not a replacement for PSI-52 PDP vectors.
 
-Transport adapters may map to HTTP status but preserve machine-readable reasons. Do not expose sensitive policy/trust internals to unauthenticated callers.
-
-## 7. Conformance and invariants
-
-Every vector in `tests/conformance/psi-53-enforcement-v1.json` MUST be consumed and validated against the adjacent schema. PSI-52 policy vectors remain independently mandatory; PSI-53 vectors test enforcement composition, not a replacement policy language.
-
-No protected operation without authenticated principal and exact server-derived resource/action. No allow on missing/stale/unavailable evidence. No conflation of signature validity, trust, authorization or lifecycle. No action outside PSI-52 vocabulary. No mutation without durable audit. No permit cached beyond earliest evidence expiry/configured bound. No stale authorization across commit.
-
-Implementation acceptance additionally requires exhaustive route coverage, alternate-path bypass tests, PostgreSQL atomicity, property-based tests and Python 3.11–3.13 CI.
+Implementation acceptance additionally requires exhaustive route inventory/bypass tests, PSI-45 integration tests, PostgreSQL mutation/outbox atomicity, external-effect crash/retry/reconciliation tests, property-based tests and the Python 3.11–3.13 CI matrix.
