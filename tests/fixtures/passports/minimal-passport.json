@@ -1,0 +1,51 @@
+{
+  "passportVersion": "1.0",
+  "source": {
+    "efsVersion": "1.0.0",
+    "publisherId": "urn:example:publishers:golden",
+    "factoryId": "golden-factory",
+    "releaseVersion": "1.0.0",
+    "digest": {
+      "profile": "efs-jcs-sha256-v1",
+      "algorithm": "SHA-256",
+      "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "registry": {
+      "releaseRecordId": "00000000-0000-4000-8000-000000000041",
+      "publishedAt": "2026-11-16T09:00:00+00:00",
+      "artifactByteLength": 42
+    }
+  },
+  "publisher": {
+    "id": "urn:example:publishers:golden",
+    "name": "Golden Publisher"
+  },
+  "factory": {
+    "id": "golden-factory",
+    "name": "Golden Factory"
+  },
+  "release": {},
+  "capabilities": [],
+  "execution": {
+    "source": "manifest",
+    "profiles": []
+  },
+  "dependencies": [],
+  "policies": {},
+  "assurance": {
+    "artifactIntegrity": "verified",
+    "publisherAuthentication": "not_evaluated",
+    "publisherTrust": "not_evaluated",
+    "signatureVerification": "not_evaluated",
+    "authorization": "not_evaluated",
+    "signatureMaterial": "not_part_of_digest_artifact"
+  },
+  "summary": {
+    "capabilityCount": 0,
+    "dependencyCount": 0,
+    "policyDeclarationCount": 0,
+    "policyReferenceCount": 0,
+    "endpointCount": 0
+  },
+  "provenance": []
+}
