@@ -478,9 +478,18 @@ def evaluate_compatibility(
         ))
     specification = by_dimension[CompatibilityDimension.SPECIFICATION]
     specification_coordinates = dict(specification.coordinates)
-    specification_coordinates.setdefault("subjectEfsVersion", subject.efs_version)
-    specification_coordinates.setdefault("consumerProfileId", consumer.profile_id)
-    specification_coordinates.setdefault("supportedEfsRange", consumer.supported_efs_range)
+    expected_specification_coordinates = {
+        "subjectEfsVersion": subject.efs_version,
+        "consumerProfileId": consumer.profile_id,
+        "supportedEfsRange": consumer.supported_efs_range,
+    }
+    for key, expected_value in expected_specification_coordinates.items():
+        supplied_value = specification_coordinates.get(key)
+        if supplied_value is not None and supplied_value != expected_value:
+            raise CompatibilityError(
+                f"specification assessment {key} does not match the report's exact subject/consumer coordinates"
+            )
+        specification_coordinates[key] = expected_value
     by_dimension[CompatibilityDimension.SPECIFICATION] = replace(
         specification, coordinates=tuple(sorted(specification_coordinates.items()))
     )
