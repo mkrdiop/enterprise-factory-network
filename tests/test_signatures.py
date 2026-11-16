@@ -183,7 +183,7 @@ def test_resolver_exception_is_unavailable_and_fails_closed():
 
     result = verify_release_signature(raw, encoded, BrokenResolver())
     assert result.code is SignatureCode.RESOLVER_UNAVAILABLE
-    assert result.admission_eligible is False
+    assert result.trusted_signature_evidence is False
 
 
 def test_cross_publisher_key_substitution_is_binding_failure():
@@ -247,3 +247,43 @@ def test_malformed_signature_encoding_is_rejected():
     # Schema rejects padded and non-canonical Base64URL before key lookup.
     result = verify_release_signature(raw, json.dumps(envelope).encode(), FixtureResolver())
     assert result.code is SignatureCode.ENVELOPE_INVALID
+
+
+def test_unknown_signature_profile_fails_without_resolver_lookup():
+    raw, _manifest, envelope, _encoded = _signed()
+    envelope["profile_id"] = "efs-rsa-jcs-v1"
+    resolver = FixtureResolver()
+    result = verify_release_signature(raw, json.dumps(envelope).encode(), resolver)
+    assert result.code is SignatureCode.UNSUPPORTED_PROFILE
+    assert resolver.calls == []
+
+
+def test_unsupported_signing_algorithm_is_not_downgraded():
+    _raw, _manifest = _manifest_bytes()
+    statement = {
+        "purpose": "efs.release.signature.v1",
+        "publisher_id": "urn:example:publishers:acme",
+        "factory_id": "customer-support",
+        "release_version": "1.2.0",
+        "efs_version": "1.0.0",
+        "digest": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": DIGEST_VECTOR["expectedDigest"],
+        },
+    }
+    with pytest.raises(SignatureEnvelopeError) as error:
+        signing_input(statement, "test-release-key", "RSA-PSS")
+    assert error.value.code is SignatureCode.UNSUPPORTED_PROFILE
+
+
+def test_resolver_unknown_status_fails_closed():
+    raw, _manifest, _envelope, encoded = _signed()
+
+    class InvalidResolver:
+        def resolve(self, *_args):
+            return {"status": "trusted", "public_key": PUBLIC}
+
+    result = verify_release_signature(raw, encoded, InvalidResolver())
+    assert result.code is SignatureCode.RESOLVER_UNAVAILABLE
+    assert result.trusted_signature_evidence is False
