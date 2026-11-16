@@ -63,6 +63,8 @@ def psi53(data):
    if evidence is None: return "rejected","TRUST_UNAVAILABLE"
    if evidence["publisher_id"]!=signer["publisher_id"] or evidence["key_id"]!=signer["key_id"]:
     return "rejected","TRUST_UNAVAILABLE"
+   if evidence["version"]>data["commit"]["evidence_versions"].get("trust",0):
+    return "rejected","EVIDENCE_STALE"
    if evidence["status"]=="revoked": return "rejected","KEY_REVOKED"
    if evidence["status"]!="trusted": return "rejected","KEY_NOT_TRUSTED"
    now=dt(data["commit"]["at"]); observed=dt(evidence["observed_at"])
