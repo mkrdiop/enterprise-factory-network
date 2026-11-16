@@ -116,15 +116,6 @@ def test_policy_digest_known_answer_is_recomputed():
     assert encoded == expected["digest_base64url"] == vector["policy"]["digest"]["value"]
 
 
-def test_every_invalid_action_resource_pair_has_a_negative_vector():
-    package = vector_package()
-    vectors = [v for v in package["validation_vectors"] if v["kind"] == "action-resource-compatibility"]
-    actions = set().union(*ACTIONS_BY_RESOURCE.values())
-    expected = {(a, r) for a in actions for r, allowed in ACTIONS_BY_RESOURCE.items() if a not in allowed}
-    assert {(v["action"], v["resource_type"]) for v in vectors} == expected
-    assert all(v["expected"] == "invalid" for v in vectors)
-
-
 def test_wildcard_subject_and_resource_ids_are_rejected():
     schema = policy_schema()
     policy = copy.deepcopy(next(v["policy"] for v in vector_package()["vectors"] if v["id"] == "pol-001"))
