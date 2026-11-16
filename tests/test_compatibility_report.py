@@ -16,7 +16,11 @@ from efs.compatibility import (
     evaluate_compatibility,
     validate_compatibility_report,
 )
-from efs.versioning import ReleaseCoordinate, VersionError, require_exact_release_selection
+from efs.versioning import (
+    ReleaseCoordinate,
+    VersionError,
+    require_exact_release_selection,
+)
 
 
 EVIDENCE_A = EvidenceReference("evidence-a", "https://evidence.example/a", "sha256:aaa", "PSI-47")
