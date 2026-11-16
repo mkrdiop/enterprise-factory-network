@@ -12,6 +12,7 @@ from typing import Any
 import rfc8785
 
 
+
 PASSPORT_VERSION = "1.0"
 
 
