@@ -171,7 +171,7 @@ def test_unknown_key_is_typed_and_fails_closed():
     )
     assert result.code is SignatureCode.KEY_NOT_FOUND
     assert result.cryptographic_valid is False
-    assert result.admission_eligible is False
+    assert result.trusted_signature_evidence is False
 
 
 def test_resolver_exception_is_unavailable_and_fails_closed():
@@ -188,8 +188,6 @@ def test_resolver_exception_is_unavailable_and_fails_closed():
 
 def test_cross_publisher_key_substitution_is_binding_failure():
     raw, _manifest, _envelope, encoded = _signed()
-    resolver = FixtureResolver()
-
     class WrongPublisherResolver:
         def resolve(self, publisher_id, key_id, algorithm, usage):
             return KeyResolution(
