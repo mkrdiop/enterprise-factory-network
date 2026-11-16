@@ -35,7 +35,8 @@ The validator runs a fail-fast dependency pipeline:
 
 A failed prerequisite marks dependent stages `not_run`. The report is deterministic and contains:
 
-- `reportVersion`: `1.0` (versioned report contract)\n- `conformanceProfile`: `efs-v1`
+- `reportVersion`: `1.0` (versioned report contract)
+- `conformanceProfile`: `efs-v1`
 - `schemaDialect`: Draft 2020-12 URI
 - `valid`: overall conformance result
 - `stages`: `passed`, `failed` or `not_run`
@@ -48,7 +49,12 @@ A failed prerequisite marks dependent stages `not_run`. The report is determinis
 | `EFS_JSON_INVALID` | Malformed JSON, unreadable input or non-JSON numeric constant |
 | `EFS_JSON_INVALID_ENCODING` | Input is not strict UTF-8 |
 | `EFS_JSON_DUPLICATE_MEMBER` | Duplicate JSON object member |
-| `EFS_SCHEMA_INVALID` | Normative schema invalid or cannot be loaded |\n| `EFS_SCHEMA_REQUIRED` | Required property absent |\n| `EFS_SCHEMA_TYPE` | Incorrect JSON type |\n| `EFS_SCHEMA_ENUM` | Enum or const violation |\n| `EFS_SCHEMA_FORMAT` | Asserted format violation |\n| `EFS_SCHEMA_CONSTRAINT` | Other structural constraint violation |
+| `EFS_SCHEMA_INVALID` | Normative schema invalid or cannot be loaded |
+| `EFS_SCHEMA_REQUIRED` | Required property absent |
+| `EFS_SCHEMA_TYPE` | Incorrect JSON type |
+| `EFS_SCHEMA_ENUM` | Enum or const violation |
+| `EFS_SCHEMA_FORMAT` | Asserted format violation |
+| `EFS_SCHEMA_CONSTRAINT` | Other structural constraint violation |
 | `EFS_EMBEDDED_SCHEMA_INVALID` | Embedded Draft 2020-12 schema is invalid |
 | `EFS_SCHEMA_REF_REMOTE` | Absolute or network schema reference prohibited |
 | `EFS_SCHEMA_REF_UNSUPPORTED` | Dynamic reference keyword outside the EFS v1 profile |
@@ -70,7 +76,9 @@ All exit paths pass through one report finalizer, which sorts diagnostics by sta
 
 Fixtures use synthetic identities and digest-shaped placeholders. A fixture digest is not a computed or verified release digest. The canonical inventory is `conformance/efs/v1/fixture-catalog.json`; catalogue-driven tests enumerate every manifest in each declared group. Exact parser inputs are stored under `fixtures/adversarial/parser/`, with invalid UTF-8 represented as Base64 to preserve raw bytes in Git.
 
-The machine-readable source of truth is `conformance/efs/v1/acceptance-criteria.json`. CI verifies that AC-01 through AC-15 are present in order, every referenced test function exists, every referenced fixture group exists, and every catalogue path resolves. The table below is the human-readable view of that registry.\n\n## 4. Acceptance criteria traceability
+The machine-readable source of truth is `conformance/efs/v1/acceptance-criteria.json`. CI verifies that AC-01 through AC-15 are present in order, every referenced test function exists, every referenced fixture group exists, and every catalogue path resolves. The table below is the human-readable view of that registry.
+
+## 4. Acceptance criteria traceability
 
 | AC | Requirement | Evidence |
 | --- | --- | --- |
@@ -116,7 +124,9 @@ Those concerns remain separate workstreams. PSI-36 does not introduce unrestrict
 
 ## 7. Definition of done
 
-- Every manifest fixture discovered by the machine-readable catalogue is executed and checked against its declared expected outcome.\n- Every raw parser input is decoded exactly as catalogued and checked against its expected diagnostic code.\n- AC-01–AC-15 registry references resolve to real tests and fixture groups.
+- Every manifest fixture discovered by the machine-readable catalogue is executed and checked against its declared expected outcome.
+- Every raw parser input is decoded exactly as catalogued and checked against its expected diagnostic code.
+- AC-01–AC-15 registry references resolve to real tests and fixture groups.
 - All P0 acceptance criteria pass in the Python 3.11/3.12/3.13 CI matrix.
 - Diagnostics and JSON report are deterministic and documented.
 - No test silently skips a fixture.
