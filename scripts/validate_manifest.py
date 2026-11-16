@@ -1,67 +1,274 @@
 #!/usr/bin/env python3
-import argparse, json
+"""Layered, deterministic EFS v1 manifest conformance validator.
+
+Conformance is structural/profile validation only. It does not verify release
+digests or signatures, retrieve external artifacts, evaluate policies, resolve
+dependencies, or authorize runtime execution.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
 from pathlib import Path
+from typing import Any
 from urllib.parse import urlparse
+
 from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError
+
+DIALECT = "https://json-schema.org/draft/2020-12/schema"
+PROFILE = "efs-v1"
+STAGES = ("parsing", "structural", "embedded_schemas", "profile")
+FORMAT_CHECKER = FormatChecker()
+
+
+class DuplicateMemberError(ValueError):
+    """Raised when a JSON object contains a duplicate member name."""
+
 
 def reject_duplicate_members(pairs):
     result = {}
     for key, value in pairs:
-        if key in result: raise ValueError(f"duplicate JSON object member: {key}")
+        if key in result:
+            raise DuplicateMemberError(f"duplicate JSON object member: {key}")
         result[key] = value
     return result
 
-def load(path):
-    return json.loads(Path(path).read_text(encoding="utf-8"), object_pairs_hook=reject_duplicate_members)
 
-def check_local_refs(value, path="$"):
+def load_json(path: Path) -> Any:
+    # read_bytes + strict decode distinguishes invalid UTF-8 from invalid JSON.
+    raw = path.read_bytes()
+    text = raw.decode("utf-8", errors="strict")
+    return json.loads(text, object_pairs_hook=reject_duplicate_members)
+
+
+def pointer(parts) -> str:
+    if not parts:
+        return ""
+    return "/" + "/".join(str(p).replace("~", "~0").replace("/", "~1") for p in parts)
+
+
+def diagnostic(code: str, stage: str, path: str, message: str, details=None):
+    item = {"code": code, "stage": stage, "path": path, "message": message}
+    if details is not None:
+        item["details"] = details
+    return item
+
+
+def _walk_schema(value, path, diagnostics):
+    """Enforce the EFS v1 local-only reference subset without network access."""
     if isinstance(value, dict):
+        for keyword in ("$dynamicRef", "$dynamicAnchor"):
+            if keyword in value:
+                diagnostics.append(diagnostic(
+                    "EFS_SCHEMA_REF_UNSUPPORTED", "embedded_schemas",
+                    pointer(path + [keyword]),
+                    f"{keyword} is outside the profiled EFS v1 reference subset.",
+                ))
         ref = value.get("$ref")
         if isinstance(ref, str):
             parsed = urlparse(ref)
-            if parsed.scheme or parsed.netloc:
-                raise ValueError(f"{path}: absolute/network $ref prohibited by the local-only v1 validator; use a bundled relative or fragment reference")
-        if "$dynamicRef" in value or "$dynamicAnchor" in value:
-            raise ValueError(f"{path}: dynamic-reference behavior is not part of the unprofiled EFS v1 subset")
-        for key, child in value.items(): check_local_refs(child, f"{path}/{key}")
+            if parsed.scheme or parsed.netloc or ref.startswith("//"):
+                diagnostics.append(diagnostic(
+                    "EFS_SCHEMA_REF_REMOTE", "embedded_schemas",
+                    pointer(path + ["$ref"]),
+                    "Absolute and network schema references are prohibited; bundle schema resources with the immutable release.",
+                ))
+        for key, child in value.items():
+            _walk_schema(child, path + [key], diagnostics)
     elif isinstance(value, list):
-        for index, child in enumerate(value): check_local_refs(child, f"{path}/{index}")
+        for index, child in enumerate(value):
+            _walk_schema(child, path + [index], diagnostics)
+
+
+def _embedded_schema_checks(manifest):
+    diagnostics = []
+    capabilities = manifest.get("capabilities", [])
+    if not isinstance(capabilities, list):
+        return diagnostics
+    for i, capability in enumerate(capabilities):
+        if not isinstance(capability, dict):
+            continue
+        contract = capability.get("contract")
+        if not isinstance(contract, dict):
+            continue
+        for direction in ("inputs", "outputs"):
+            schema = contract.get(direction)
+            if not isinstance(schema, dict):
+                continue
+            base = ["capabilities", i, "contract", direction]
+            try:
+                Draft202012Validator.check_schema(schema)
+            except SchemaError as exc:
+                diagnostics.append(diagnostic(
+                    "EFS_EMBEDDED_SCHEMA_INVALID", "embedded_schemas",
+                    pointer(base), "Embedded contract schema is not valid Draft 2020-12.",
+                    {"validator": str(exc.validator), "message": exc.message},
+                ))
+                continue
+            if schema.get("type") != "object":
+                diagnostics.append(diagnostic(
+                    "EFS_PROFILE_INVARIANT_FAILED", "profile", pointer(base + ["type"]),
+                    "Contract input/output payload schemas must declare top-level type=object.",
+                ))
+            _walk_schema(schema, base, diagnostics)
+        errors = contract.get("errors", [])
+        if isinstance(errors, list):
+            for j, error in enumerate(errors):
+                if not isinstance(error, dict) or "schema" not in error:
+                    continue
+                schema = error["schema"]
+                base = ["capabilities", i, "contract", "errors", j, "schema"]
+                if not isinstance(schema, dict):
+                    diagnostics.append(diagnostic(
+                        "EFS_EMBEDDED_SCHEMA_INVALID", "embedded_schemas", pointer(base),
+                        "Contract error schema must be a JSON object.",
+                    ))
+                    continue
+                try:
+                    Draft202012Validator.check_schema(schema)
+                except SchemaError as exc:
+                    diagnostics.append(diagnostic(
+                        "EFS_EMBEDDED_SCHEMA_INVALID", "embedded_schemas",
+                        pointer(base), "Embedded error schema is not valid Draft 2020-12.",
+                        {"validator": str(exc.validator), "message": exc.message},
+                    ))
+                    continue
+                _walk_schema(schema, base, diagnostics)
+    return diagnostics
+
+
+def _profile_checks(manifest):
+    diagnostics = []
+    execution = manifest.get("execution")
+    if isinstance(execution, dict):
+        source = execution.get("source")
+        if source == "manifest" and not execution.get("profiles"):
+            diagnostics.append(diagnostic(
+                "EFS_PROFILE_INVARIANT_FAILED", "profile", "/execution/profiles",
+                "Manifest-sourced execution requires at least one embedded profile.",
+            ))
+        elif source == "external" and not execution.get("profileReferences"):
+            diagnostics.append(diagnostic(
+                "EFS_PROFILE_INVARIANT_FAILED", "profile", "/execution/profileReferences",
+                "Externally sourced execution requires at least one profile reference.",
+            ))
+    return diagnostics
+
+
+def _sort_diagnostics(items):
+    return sorted(items, key=lambda d: (
+        d["stage"], d["path"], d["code"], d["message"],
+        json.dumps(d.get("details", {}), sort_keys=True, ensure_ascii=False),
+    ))
+
+
+def validate_report(manifest_path: Path, schema_path: Path) -> dict:
+    stages = {name: "not_run" for name in STAGES}
+    diagnostics = []
+    report = {
+        "conformanceProfile": PROFILE,
+        "schemaDialect": DIALECT,
+        "valid": False,
+        "stages": stages,
+        "diagnostics": diagnostics,
+    }
+
+    try:
+        manifest = load_json(manifest_path)
+    except DuplicateMemberError as exc:
+        stages["parsing"] = "failed"
+        diagnostics.append(diagnostic(
+            "EFS_JSON_DUPLICATE_MEMBER", "parsing", "",
+            "JSON object contains a duplicate member name.", {"message": str(exc)},
+        ))
+        return report
+    except UnicodeDecodeError as exc:
+        stages["parsing"] = "failed"
+        diagnostics.append(diagnostic(
+            "EFS_JSON_INVALID_ENCODING", "parsing", "",
+            "Input is not valid UTF-8.", {"message": str(exc)},
+        ))
+        return report
+    except (json.JSONDecodeError, OSError) as exc:
+        stages["parsing"] = "failed"
+        diagnostics.append(diagnostic(
+            "EFS_JSON_INVALID", "parsing", "",
+            "Input could not be read as valid JSON.", {"message": str(exc)},
+        ))
+        return report
+    stages["parsing"] = "passed"
+
+    try:
+        schema = load_json(schema_path)
+        Draft202012Validator.check_schema(schema)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError, SchemaError) as exc:
+        stages["structural"] = "failed"
+        diagnostics.append(diagnostic(
+            "EFS_SCHEMA_INVALID", "structural", "",
+            "The normative manifest schema could not be loaded or is not valid Draft 2020-12.",
+            {"message": str(exc)},
+        ))
+        return report
+
+    errors = sorted(
+        Draft202012Validator(schema, format_checker=FORMAT_CHECKER).iter_errors(manifest),
+        key=lambda e: (pointer(list(e.absolute_path)), e.validator or "", e.message),
+    )
+    if errors:
+        stages["structural"] = "failed"
+        for error in errors:
+            diagnostics.append(diagnostic(
+                "EFS_SCHEMA_INVALID", "structural", pointer(list(error.absolute_path)),
+                error.message, {"keyword": error.validator},
+            ))
+        return report
+    stages["structural"] = "passed"
+
+    embedded = _embedded_schema_checks(manifest)
+    if embedded:
+        stages["embedded_schemas"] = "failed"
+        diagnostics.extend(embedded)
+        return report
+    stages["embedded_schemas"] = "passed"
+
+    profile = _profile_checks(manifest)
+    if profile:
+        stages["profile"] = "failed"
+        diagnostics.extend(profile)
+        return report
+    stages["profile"] = "passed"
+
+    report["valid"] = True
+    report["diagnostics"] = _sort_diagnostics(diagnostics)
+    return report
+
 
 def validate(manifest_path, schema_path):
-    manifest, schema = load(manifest_path), load(schema_path)
-    Draft202012Validator.check_schema(schema)
-    errors = sorted(Draft202012Validator(schema, format_checker=FormatChecker()).iter_errors(manifest), key=lambda e:list(map(str,e.absolute_path)))
-    if errors: return [f"{'/'.join(map(str,e.absolute_path)) or '$'}: {e.message}" for e in errors]
-    for i, capability in enumerate(manifest["capabilities"]):
-        contract = capability["contract"]
-        for direction in ("inputs","outputs"):
-            payload_schema = contract[direction]
-            try:
-                Draft202012Validator.check_schema(payload_schema)
-                if payload_schema.get("type") != "object": raise ValueError("top-level payload schema must declare type=object")
-                check_local_refs(payload_schema, f"capabilities/{i}/contract/{direction}")
-            except (SchemaError,ValueError) as exc:
-                return [f"capabilities/{i}/contract/{direction}: {exc}"]
-        for j, error in enumerate(contract["errors"]):
-            if "schema" in error:
-                try:
-                    Draft202012Validator.check_schema(error["schema"])
-                    check_local_refs(error["schema"], f"capabilities/{i}/contract/errors/{j}/schema")
-                except (SchemaError,ValueError) as exc:
-                    return [f"capabilities/{i}/contract/errors/{j}/schema: {exc}"]
-    return []
+    """Compatibility helper retained for callers expecting a list of messages."""
+    report = validate_report(Path(manifest_path), Path(schema_path))
+    return [f'{d["code"]} {d["path"]}: {d["message"]}' for d in report["diagnostics"]]
+
 
 def main():
-    parser=argparse.ArgumentParser()
-    parser.add_argument("manifest",type=Path)
-    parser.add_argument("--schema",type=Path,default=Path(__file__).resolve().parents[1]/"schemas/efs/v1/factory-manifest.schema.json")
-    args=parser.parse_args()
-    try: errors=validate(args.manifest,args.schema)
-    except (ValueError,json.JSONDecodeError) as exc:
-        print(f"INVALID: {exc}"); raise SystemExit(1)
-    if errors:
-        print("INVALID"); print("\n".join("- "+e for e in errors)); raise SystemExit(1)
-    print("STRUCTURALLY VALID (EFS v1 Draft 2020-12)")
-    print("Semantic/reference, digest/signature, policy, compatibility and runtime admission remain separate.")
-if __name__=="__main__": main()
+    parser = argparse.ArgumentParser(description="Validate an EFS v1 Factory Manifest.")
+    parser.add_argument("manifest", type=Path)
+    parser.add_argument("--schema", type=Path, default=Path(__file__).resolve().parents[1] / "schemas/efs/v1/factory-manifest.schema.json")
+    parser.add_argument("--json", action="store_true", help="Emit the deterministic machine-readable conformance report.")
+    args = parser.parse_args()
+    report = validate_report(args.manifest, args.schema)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=False, sort_keys=True, indent=2))
+    elif report["valid"]:
+        print("EFS v1 CONFORMANT (parsing, Draft 2020-12 structure, embedded schemas, profile checks)")
+        print("Digest/signature verification, external retrieval, policy evaluation, compatibility and runtime admission are separate.")
+    else:
+        print("EFS v1 NOT CONFORMANT")
+        for item in report["diagnostics"]:
+            print(f'- {item["code"]} {item["path"]}: {item["message"]}')
+    raise SystemExit(0 if report["valid"] else 1)
+
+
+if __name__ == "__main__":
+    main()
