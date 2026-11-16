@@ -129,8 +129,7 @@
         "resolver": {
           "type": "string"
         }
-      },
-      "additionalProperties": false
+      }
     },
     "validationVector": {
       "oneOf": [
