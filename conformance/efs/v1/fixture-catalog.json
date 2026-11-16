@@ -81,5 +81,13 @@
       "fixtures/valid/capability-contract-streaming.json",
       "fixtures/valid/capability-contract-event.json"
     ]
+  },
+  "capabilityContractValidation": {
+    "vectors": "conformance/efs/v1/capability-contract-validator-vectors.json",
+    "acceptance": "conformance/efs/v1/capability-contract-validator-acceptance.json",
+    "testModule": "tests/test_capability_contract_validator.py",
+    "examples": [
+      "fixtures/valid/capability-contract-sync.json"
+    ]
   }
 }

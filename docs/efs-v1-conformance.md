@@ -93,3 +93,17 @@ python scripts/validate_manifest.py fixtures/valid/manifest-minimal.json --json
 - Unknown core fields and extension namespace grammar remain open as governed in PSI-34/35.
 - The release digest is shape-validated by the manifest schema; digest computation and
   verification are separate work.
+
+
+## PSI-43 capability contract validation
+
+The normative capability and contract semantics are defined by `docs/efs-v1-capability-contract-model.md`. The reference validator extends the existing `profile` stage without changing the report schema or `reportVersion: 1.0`.
+
+- Capability IDs are unique within one exact release; duplicate contract error codes are invalid and compared exactly/case-sensitively.
+- Capability execution-profile IDs must resolve to exactly one item in the selected manifest or external execution source.
+- Inputs, outputs and optional error-detail schemas are Draft 2020-12 meta-validated. Local references resolve only within the immutable schema resource graph embedded in the release. Absolute/network, dynamic, unresolved and duplicate resource identifiers fail deterministically; no retrieval occurs.
+- `registry.capability_contracts.validate_contract_payload` validates inputs, outputs and declared error details against the exact publisher, Factory, release version, release digest, capability and contract ID/version coordinate. It does not query a registry or resolve “latest”.
+- RegistryPublicationService reuses the canonical manifest validator before digest processing, operation reservation or artifact storage. A semantic contract failure therefore cannot create a publication operation or release artifact.
+- Payload diagnostics use a separate `payload` stage and never include concrete payload values. They do not alter the established manifest conformance report structure.
+
+The PSI-43 vectors and acceptance map are registered in `conformance/efs/v1/fixture-catalog.json` and exercised by `tests/test_capability_contract_validator.py`.
