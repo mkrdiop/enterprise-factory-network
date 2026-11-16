@@ -22,9 +22,10 @@ def upgrade():
       IF TG_OP='DELETE' THEN RAISE EXCEPTION 'registry identity and release rows are permanent'; END IF;
       IF TG_TABLE_NAME='publishers' AND NEW.publisher_uri IS DISTINCT FROM OLD.publisher_uri THEN RAISE EXCEPTION 'publisher URI is immutable'; END IF;
       IF TG_TABLE_NAME='factories' AND (NEW.publisher_record_id IS DISTINCT FROM OLD.publisher_record_id OR NEW.factory_id IS DISTINCT FROM OLD.factory_id) THEN RAISE EXCEPTION 'Factory identity is immutable'; END IF;
+      IF TG_TABLE_NAME='artifact_blobs' AND (NEW.digest_profile IS DISTINCT FROM OLD.digest_profile OR NEW.digest_algorithm IS DISTINCT FROM OLD.digest_algorithm OR NEW.digest_value IS DISTINCT FROM OLD.digest_value OR NEW.byte_length IS DISTINCT FROM OLD.byte_length) THEN RAISE EXCEPTION 'artifact content identity is immutable'; END IF;
       IF TG_TABLE_NAME='factory_releases' THEN RAISE EXCEPTION 'published release is immutable'; END IF;
       IF TG_TABLE_NAME IN ('publishers','factories') AND OLD.lifecycle_state='retired' AND NEW.lifecycle_state<>'retired' THEN RAISE EXCEPTION 'retired identity cannot be reactivated'; END IF;
-      IF TG_TABLE_NAME IN ('publishers','factories') AND NEW.lifecycle_state IS DISTINCT FROM OLD.lifecycle_state AND NOT (OLD.lifecycle_state='active' AND NEW.lifecycle_state='retired' AND NEW.retired_at IS NOT NULL) THEN RAISE EXCEPTION 'only active-to-retired transition is permitted'; END IF;
+      IF TG_TABLE_NAME IN ('publishers','factories') AND (NEW.lifecycle_state IS DISTINCT FROM OLD.lifecycle_state OR NEW.retired_at IS DISTINCT FROM OLD.retired_at) AND NOT (OLD.lifecycle_state='active' AND NEW.lifecycle_state='retired' AND OLD.retired_at IS NULL AND NEW.retired_at IS NOT NULL) THEN RAISE EXCEPTION 'only one active-to-retired transition is permitted'; END IF;
       RETURN NEW;
     END; $$ LANGUAGE plpgsql;
     """)
@@ -32,8 +33,8 @@ def upgrade():
     CREATE FUNCTION efs_guard_parent_active() RETURNS trigger AS $$
     DECLARE state text;
     BEGIN
-      IF TG_TABLE_NAME='factories' THEN SELECT lifecycle_state INTO state FROM publishers WHERE publisher_record_id=NEW.publisher_record_id;
-      ELSE SELECT lifecycle_state INTO state FROM factories WHERE factory_record_id=NEW.factory_record_id; END IF;
+      IF TG_TABLE_NAME='factories' THEN SELECT lifecycle_state INTO state FROM publishers WHERE publisher_record_id=NEW.publisher_record_id FOR KEY SHARE;
+      ELSE SELECT lifecycle_state INTO state FROM factories WHERE factory_record_id=NEW.factory_record_id FOR KEY SHARE; END IF;
       IF state IS DISTINCT FROM 'active' THEN RAISE EXCEPTION 'cannot register under missing or retired parent'; END IF;
       RETURN NEW;
     END; $$ LANGUAGE plpgsql;
