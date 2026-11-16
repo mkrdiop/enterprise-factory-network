@@ -5,6 +5,7 @@ verified EFS release artifact remain authoritative for identity and content.
 """
 from __future__ import annotations
 
+import json
 from copy import deepcopy
 from typing import Any
 
@@ -12,6 +13,10 @@ import rfc8785
 
 
 PASSPORT_VERSION = "1.0"
+
+
+class PassportSourceMismatch(RuntimeError):
+    """Registry release coordinates disagree with the verified manifest."""
 
 
 def _pointer(parent: str, token: str | int) -> str:
@@ -102,7 +107,7 @@ def build_factory_passport(
         or registry_record["version"] != version
         or registry_record["digest"] != expected_digest
     ):
-        raise ValueError("registry release coordinates do not match verified manifest")
+        raise PassportSourceMismatch("registry release coordinates do not match verified manifest")
 
     provenance: list[dict[str, str]] = [
         {
@@ -254,6 +259,11 @@ def canonical_passport_json(passport: dict[str, Any]) -> bytes:
     return rfc8785.dumps(passport)
 
 
+def _json_block(value: Any) -> list[str]:
+    rendered = json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2)
+    return ["\x60\x60\x60json", rendered, "\x60\x60\x60"]
+
+
 def render_factory_passport_markdown(passport: dict[str, Any]) -> str:
     """Render a deterministic human-readable view of the same Passport object."""
     source = passport["source"]
@@ -292,13 +302,30 @@ def render_factory_passport_markdown(passport: dict[str, Any]) -> str:
                 f"- **Endpoints:** {len(capability['endpoints'])}",
                 f"- **Declared execution profiles:** {', '.join(capability.get('executionProfiles', [])) or 'None'}",
                 "",
+                "**Contract details**",
+                "",
+                *_json_block(contract),
+                "",
+                "**Endpoint declarations**",
+                "",
+                *_json_block(capability["endpoints"]),
+                "",
             ]
         )
     if factory.get("description"):
         lines[lines.index("## Capabilities"):lines.index("## Capabilities")] = [
             "## Description", "", factory["description"], ""
         ]
-    lines.extend(["## Execution", "", f"- **Profile source:** `{passport['execution']['source']}`"])
+    lines.extend(
+        [
+            "## Execution",
+            "",
+            f"- **Profile source:** `{passport['execution']['source']}`",
+            "",
+            *_json_block(passport["execution"]),
+            "",
+        ]
+    )
     if passport["execution"]["source"] == "manifest":
         for profile in passport["execution"]["profiles"]:
             lines.append(
@@ -317,10 +344,14 @@ def render_factory_passport_markdown(passport: dict[str, Any]) -> str:
             "",
             f"{passport['summary']['dependencyCount']} dependency declaration(s).",
             "",
+            *_json_block(passport["dependencies"]),
+            "",
             "## Policies",
             "",
             f"{passport['summary']['policyDeclarationCount']} embedded declaration(s); "
             f"{passport['summary']['policyReferenceCount']} external reference(s).",
+            "",
+            *_json_block(passport["policies"]),
             "",
             "## Assurance",
             "",
