@@ -84,10 +84,14 @@ def test_offset_datetime_is_accepted():
     assert report["valid"], report["diagnostics"]
 
 
-def test_embedded_input_output_and_error_schemas_are_meta_validated(tmp_path):
+@pytest.mark.parametrize("location", ["inputs", "outputs", "errors"])
+def test_embedded_input_output_and_error_schemas_are_meta_validated(tmp_path, location):
     doc = load_json(ROOT / "fixtures/valid/manifest-minimal.json")
-    doc["capabilities"][0]["contract"]["errors"][0]["schema"] = {"type": "string", "minLength": "bad"}
-    path = tmp_path / "invalid-error-schema.json"
+    if location == "errors":
+        doc["capabilities"][0]["contract"]["errors"][0]["schema"] = {"type": "string", "minLength": "bad"}
+    else:
+        doc["capabilities"][0]["contract"][location]["minLength"] = "bad"
+    path = tmp_path / f"invalid-{location}-schema.json"
     path.write_text(json.dumps(doc), encoding="utf-8")
     report = validate_report(path, SCHEMA_PATH)
     assert not report["valid"]
@@ -105,9 +109,13 @@ def test_remote_and_dynamic_refs_are_rejected(tmp_path, ref_keyword):
     assert any(d["code"] in {"EFS_SCHEMA_REF_REMOTE", "EFS_SCHEMA_REF_UNSUPPORTED"} for d in report["diagnostics"])
 
 
-def test_duplicate_json_members_are_rejected(tmp_path):
+@pytest.mark.parametrize("raw", [
+    '{"efsVersion":"1","efsVersion":"2"}',
+    '{"factory":{"id":"one","id":"two"}}',
+])
+def test_duplicate_json_members_at_root_and_nested_levels_are_rejected(tmp_path, raw):
     path = tmp_path / "duplicate.json"
-    path.write_text('{"efsVersion":"1","efsVersion":"2"}', encoding="utf-8")
+    path.write_text(raw, encoding="utf-8")
     report = validate_report(path, SCHEMA_PATH)
     assert not report["valid"]
     assert report["stages"]["parsing"] == "failed"
