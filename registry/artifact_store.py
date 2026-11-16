@@ -116,9 +116,11 @@ class LocalFilesystemArtifactStore:
 
     def describe(self, digest: DigestIdentity) -> StoredArtifact | None:
         path = self._path(digest)
+        if path.is_symlink():
+            raise ArtifactIntegrityError("digest object is a symbolic link")
         if not path.exists():
             return None
-        if path.is_symlink() or not path.is_file():
+        if not path.is_file():
             raise ArtifactIntegrityError("digest object is not a regular file")
         raw = path.read_bytes()
         try:
