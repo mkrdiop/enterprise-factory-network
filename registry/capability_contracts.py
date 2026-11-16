@@ -254,3 +254,21 @@ def validate_contract_payload(
         item.stage, item.path, item.code, item.message,
     ))
     return {"valid": not diagnostics, "diagnostics": [item.as_dict() for item in diagnostics]}
+
+
+def validate_schema_references(
+    schema: dict,
+    schema_resources: Mapping[str, dict] | None = None,
+) -> list[dict]:
+    """Return deterministic diagnostics for references in one local schema graph."""
+    try:
+        registry, root_uri, resources = _resource_registry(schema, schema_resources)
+        diagnostics = _reference_diagnostics(schema, registry, root_uri, resources)
+    except (SchemaError, ValueError, Unresolvable) as exc:
+        diagnostics = [PayloadDiagnostic(
+            "EFS_CONTRACT_SCHEMA_INVALID", "embedded_schemas", "",
+            "Schema resource graph is invalid.",
+            {"reason": type(exc).__name__},
+        )]
+    diagnostics.sort(key=lambda item: (item.stage, item.path, item.code, item.message))
+    return [item.as_dict() for item in diagnostics]
