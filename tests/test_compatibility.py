@@ -32,6 +32,9 @@ def test_specification_requires_explicit_range_and_evidence():
                               range_evaluator_result=True, evidence=EVIDENCE)
     assert ok.outcome is Outcome.COMPATIBLE
     assert ok.rule_id == "EFC-SPEC-003"
+    malformed = assess_specification(supported_range=">=1.0.0 <2.0.0", consumer_profile_id="p",
+                                         range_evaluator_result="false", evidence=EVIDENCE)
+    assert malformed.outcome is Outcome.UNKNOWN
 
 
 def test_specification_range_mismatch_is_breaking_not_unknown():
