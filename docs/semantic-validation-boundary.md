@@ -1,6 +1,9 @@
 # EFS v1 semantic validation boundary — PSI-36 handoff
 
 Rules requiring semantic conformance tests:
+- `publisher.id` is an absolute RFC 3986 URI satisfying `efs-uri-c14n-1`; input must already be canonical, and validation performs no dereferencing, DNS lookup or network access.
+- Publisher identity is distinct from namespace-ownership proof, issuer authentication, signing-key identity, trust and authorization. Publisher and Factory identities are immutable; retired identifiers are tombstoned and never reassigned.
+- Factory identity is the exact pair `(canonical publisher.id, factory.id)`; `factory.id` is opaque and case-sensitive.
 - (publisher.id, factory.id) is the stable logical Factory identity pair.
 - Capability IDs are unique; endpoint IDs are unique within each capability.
 - Execution profile IDs are unique; capability profile references resolve to root profiles.
