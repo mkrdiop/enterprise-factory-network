@@ -1,21 +1,21 @@
 """PSI-51 signing/verifier security and interoperability tests."""
 import base64
 import json
-from pathlib import Path
 from datetime import UTC, datetime
+from pathlib import Path
 
 import pytest
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 from registry.digests import canonicalize_and_verify
 from registry.signatures import (
-    EFSReleaseSignatureVerifier,
     Ed25519Signer,
-    add_signature,
+    EFSReleaseSignatureVerifier,
     KeyResolution,
     KeyTrustStatus,
     SignatureCode,
     SignatureEnvelopeError,
+    add_signature,
     create_signature_envelope,
     serialize_signature_envelope,
     signing_input,
