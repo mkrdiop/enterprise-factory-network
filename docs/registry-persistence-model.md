@@ -1,6 +1,6 @@
 # Registry persistence model — PSI-38
 
-- **Status:** Design baseline; backend decision ADR-004 is Proposed.
+- **Status:** Approved design and implementation baseline; ADR-004 Accepted on 2026-11-16.
 - **Date:** 2026-11-16
 - **Controlling identity decision:** [ADR-003 — Publisher namespace and issuer/trust model](adr/ADR-003-publisher-namespace-and-issuer-trust-model.md)
 - **Related decision:** [ADR-004 — Registry persistence backend and relational data model](adr/ADR-004-registry-persistence-backend-and-data-model.md)
@@ -26,7 +26,7 @@ No Factory Studio, Factory Connect, Factory Runtime or Enterprise Factory Networ
 
 ## 2. Backend and implementation boundary
 
-Proposed initial operational stack (see ADR-004):
+Approved initial operational stack (see ADR-004):
 
 - PostgreSQL relational database.
 - SQLAlchemy 2.x persistence mapping and repository implementations.
