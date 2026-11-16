@@ -1,0 +1,487 @@
+{
+  "vector_set": "efs-signature-v1",
+  "specification": "docs/specs/efs-v1-signature-envelope.md",
+  "profile_id": "efs-ed25519-jcs-v1",
+  "canonicalization": "RFC8785",
+  "vectors": [
+    {
+      "id": "sig-kat-001",
+      "kind": "known-answer",
+      "description": "Ed25519 signature over exact EFS v1 domain-separated JCS signing object; synthetic test key only.",
+      "input": {
+        "statement": {
+          "purpose": "efs.release.signature.v1",
+          "publisher_id": "urn:example:publishers:acme",
+          "factory_id": "payments-risk",
+          "release_version": "1.4.2",
+          "efs_version": "1.0.0",
+          "digest": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
+        },
+        "signer": {
+          "key_id": "release-2026-01",
+          "algorithm": "Ed25519"
+        }
+      },
+      "expected": {
+        "jcs": "{\"domain\":\"efs.release.signature.v1\",\"signer\":{\"algorithm\":\"Ed25519\",\"key_id\":\"release-2026-01\"},\"statement\":{\"digest\":{\"algorithm\":\"SHA-256\",\"profile_id\":\"efs-jcs-sha256-v1\",\"value\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"},\"efs_version\":\"1.0.0\",\"factory_id\":\"payments-risk\",\"publisher_id\":\"urn:example:publishers:acme\",\"purpose\":\"efs.release.signature.v1\",\"release_version\":\"1.4.2\"}}",
+        "preimage_base64url": "RUZTLVNJR05BVFVSRS1WMQp7ImRvbWFpbiI6ImVmcy5yZWxlYXNlLnNpZ25hdHVyZS52MSIsInNpZ25lciI6eyJhbGdvcml0aG0iOiJFZDI1NTE5Iiwia2V5X2lkIjoicmVsZWFzZS0yMDI2LTAxIn0sInN0YXRlbWVudCI6eyJkaWdlc3QiOnsiYWxnb3JpdGhtIjoiU0hBLTI1NiIsInByb2ZpbGVfaWQiOiJlZnMtamNzLXNoYTI1Ni12MSIsInZhbHVlIjoiQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQSJ9LCJlZnNfdmVyc2lvbiI6IjEuMC4wIiwiZmFjdG9yeV9pZCI6InBheW1lbnRzLXJpc2siLCJwdWJsaXNoZXJfaWQiOiJ1cm46ZXhhbXBsZTpwdWJsaXNoZXJzOmFjbWUiLCJwdXJwb3NlIjoiZWZzLnJlbGVhc2Uuc2lnbmF0dXJlLnYxIiwicmVsZWFzZV92ZXJzaW9uIjoiMS40LjIifX0",
+        "public_key_base64url": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+        "signature_base64url": "K7Mg-P0PlWYibFA_vQ3xqt3DvO88XjCHGEcJJcF0_GNtHwjTtAEWUU6BlUiO6-3CCQW8dyw3T0G_jvEWJjgtCw",
+        "preimage_sha256": "32f44e821c247d8beff88dd0fa17e8c5f3ca9c745775fe56578d67a42d40a708",
+        "valid": true
+      }
+    },
+    {
+      "id": "sig-neg-001",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/statement/factory_id",
+          "value": "payroll-risk"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_BINDING_MISMATCH"
+    },
+    {
+      "id": "sig-neg-002",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/statement/publisher_id",
+          "value": "urn:example:publishers:other"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_BINDING_MISMATCH"
+    },
+    {
+      "id": "sig-neg-003",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/statement/release_version",
+          "value": "9.9.9"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_BINDING_MISMATCH"
+    },
+    {
+      "id": "sig-neg-004",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/signatures/0/key_id",
+          "value": "attacker-key"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_KEY_NOT_FOUND"
+    },
+    {
+      "id": "sig-neg-005",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/signatures/0/signature",
+          "value": "9T4C-SkaKlBiHp2ARkKjvf4QiBATOtbzeO2U1V6etVbmOXvZwDMzrlqLSGUkIps98yFhnQBRBUn4Uu9nh9SBD"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_ENCODING_INVALID"
+    },
+    {
+      "id": "sig-neg-006",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/signatures/0/signature",
+          "value": "9T4C-SkaKlBiHp2ARkKjvf4QiBATOtbzeO2U1V6etVbmOXvZwDMzrlqLSGUkIps98yFhnQBRBUn4Uu9nh9SBDw="
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_ENCODING_INVALID"
+    },
+    {
+      "id": "sig-neg-007",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "add",
+          "path": "/signatures/-",
+          "value": {
+            "key_id": "release-2026-01",
+            "algorithm": "Ed25519",
+            "signature": "9T4C-SkaKlBiHp2ARkKjvf4QiBATOtbzeO2U1V6etVbmOXvZwDMzrlqLSGUkIps98yFhnQBRBUn4Uu9nh9SBDw"
+          }
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_DUPLICATE_SIGNER"
+    },
+    {
+      "id": "sig-neg-008",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/profile_id",
+          "value": "efs-rsa-jcs-v1"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_UNSUPPORTED_PROFILE"
+    },
+    {
+      "id": "sig-neg-009",
+      "kind": "negative",
+      "target": "resolver",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/trust_state",
+          "value": "untrusted"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_KEY_NOT_TRUSTED"
+    },
+    {
+      "id": "sig-neg-010",
+      "kind": "negative",
+      "target": "resolver",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/publisher_id",
+          "value": "urn:example:publishers:other"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_KEY_BINDING_MISMATCH"
+    },
+    {
+      "id": "sig-neg-011",
+      "kind": "negative",
+      "target": "resolver",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/trust_state",
+          "value": "revoked"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_KEY_REVOKED"
+    },
+    {
+      "id": "sig-neg-012",
+      "kind": "negative",
+      "target": "manifest",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "add",
+          "path": "/release/signature",
+          "value": {
+            "algorithm": "Ed25519",
+            "keyId": "release-2026-01",
+            "value": "not-allowed"
+          }
+        }
+      ],
+      "expected_failure": "EFS_SCHEMA_CONSTRAINT"
+    },
+    {
+      "id": "sig-encoding-001",
+      "kind": "encoding",
+      "description": "Canonical 32-octet public-key Base64URL has 43 characters and zero unused pad bits.",
+      "input": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "expected": {
+        "decoded_octets": 32,
+        "canonical": true
+      }
+    },
+    {
+      "id": "sig-encoding-002",
+      "kind": "encoding",
+      "description": "Reject non-zero unused pad bits in a 32-octet Base64URL value.",
+      "input": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB",
+      "expected": {
+        "canonical": false
+      }
+    },
+    {
+      "id": "sig-encoding-003",
+      "kind": "encoding",
+      "description": "Canonical 64-octet signature Base64URL has 86 characters and zero unused pad bits.",
+      "input": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "expected": {
+        "decoded_octets": 64,
+        "canonical": true
+      }
+    },
+    {
+      "id": "sig-encoding-004",
+      "kind": "encoding",
+      "description": "Reject non-zero unused pad bits in a 64-octet Base64URL value.",
+      "input": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB",
+      "expected": {
+        "canonical": false
+      }
+    },
+    {
+      "id": "sig-uri-001",
+      "kind": "publisher-uri",
+      "input": "urn:example:publishers:acme",
+      "expected": {
+        "valid": true,
+        "canonical": "urn:example:publishers:acme"
+      }
+    },
+    {
+      "id": "sig-uri-002",
+      "kind": "publisher-uri",
+      "input": "URN:example:publishers:acme",
+      "expected": {
+        "valid": false,
+        "canonical": "urn:example:publishers:acme"
+      }
+    },
+    {
+      "id": "sig-uri-003",
+      "kind": "publisher-uri",
+      "input": "https://IDENTITY.example/publishers/acme",
+      "expected": {
+        "valid": false,
+        "canonical": "https://identity.example/publishers/acme"
+      }
+    },
+    {
+      "id": "sig-uri-004",
+      "kind": "publisher-uri",
+      "input": "https://identity.example/publishers/%7eacme",
+      "expected": {
+        "valid": false,
+        "canonical": "https://identity.example/publishers/~acme"
+      }
+    },
+    {
+      "id": "sig-uri-005",
+      "kind": "publisher-uri",
+      "input": "https://identity.example/a/../publishers/acme",
+      "expected": {
+        "valid": false,
+        "canonical": "https://identity.example/publishers/acme"
+      }
+    },
+    {
+      "id": "sig-uri-006",
+      "kind": "publisher-uri",
+      "input": "https://identity.example/publishers/acme?x=1",
+      "expected": {
+        "valid": false
+      }
+    },
+    {
+      "id": "sig-uri-007",
+      "kind": "publisher-uri",
+      "input": "https://user@identity.example/publishers/acme",
+      "expected": {
+        "valid": false
+      }
+    },
+    {
+      "id": "sig-uri-008",
+      "kind": "publisher-uri",
+      "input": "https://identity.example/publishers/%2f",
+      "expected": {
+        "valid": false,
+        "canonical": "https://identity.example/publishers/%2F"
+      }
+    },
+    {
+      "id": "sig-neg-013",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/statement/digest/algorithm",
+          "value": "sha-256"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_DIGEST_PROFILE_MISMATCH"
+    },
+    {
+      "id": "sig-neg-014",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/statement/efs_version",
+          "value": "2.0.0"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_BINDING_MISMATCH"
+    },
+    {
+      "id": "sig-neg-015",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/statement/digest/profile_id",
+          "value": "efs-other-digest-v1"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_DIGEST_PROFILE_MISMATCH"
+    },
+    {
+      "id": "sig-neg-016",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/statement/digest/value",
+          "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_BINDING_MISMATCH"
+    },
+    {
+      "id": "sig-neg-017",
+      "kind": "negative",
+      "target": "resolver",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/public_key_base64url",
+          "value": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHUR"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_ENCODING_INVALID"
+    },
+    {
+      "id": "sig-neg-018",
+      "kind": "negative",
+      "target": "resolver",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/trust_state",
+          "value": "expired"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_KEY_EXPIRED"
+    },
+    {
+      "id": "sig-neg-019",
+      "kind": "negative",
+      "target": "resolver",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/trust_state",
+          "value": "unavailable"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_RESOLVER_UNAVAILABLE"
+    },
+    {
+      "id": "sig-neg-020",
+      "kind": "negative",
+      "target": "resolver",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/key_id",
+          "value": "missing-key"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_KEY_NOT_FOUND"
+    }
+  ],
+  "interop_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+  "independent_verifier": "tests/conformance/verify_psi50_interop.mjs",
+  "jcs_vectors": [
+    {
+      "id": "jcs-number-001",
+      "kind": "jcs",
+      "input": {
+        "numbers": [
+          333333333.3333333,
+          1e+30,
+          4.5,
+          0.002,
+          1e-27
+        ]
+      },
+      "expected_canonical": "{\"numbers\":[333333333.3333333,1e+30,4.5,0.002,1e-27]}",
+      "valid": true
+    },
+    {
+      "id": "jcs-order-001",
+      "kind": "jcs",
+      "input": {
+        "": "bmp",
+        "😀": "astral"
+      },
+      "expected_canonical": "{\"😀\":\"astral\",\"\":\"bmp\"}",
+      "valid": true
+    },
+    {
+      "id": "jcs-escape-001",
+      "kind": "jcs",
+      "input": {
+        "value": "a\b\t\n\f\r\"\\\u0001"
+      },
+      "expected_canonical": "{\"value\":\"a\\b\\t\\n\\f\\r\\\"\\\\\\u0001\"}",
+      "valid": true
+    },
+    {
+      "id": "jcs-invalid-surrogate-001",
+      "kind": "jcs-invalid",
+      "raw_json": "{\"lone\":\"\\ud800\"}",
+      "expected_failure": "EFS_JCS_INVALID_UNICODE",
+      "valid": false
+    },
+    {
+      "id": "jcs-invalid-number-001",
+      "kind": "jcs-invalid",
+      "raw_json": "{\"n\":1e400}",
+      "expected_failure": "EFS_JCS_INVALID_NUMBER",
+      "valid": false
+    }
+  ]
+}
