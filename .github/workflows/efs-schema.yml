@@ -1,0 +1,19 @@
+name: EFS schema conformance
+on:
+  push:
+  pull_request:
+jobs:
+  schema-conformance:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python -m pytest -q
+      - run: python scripts/validate_manifest.py fixtures/valid/manifest-minimal.json
+      - run: python scripts/validate_manifest.py fixtures/valid/manifest-external-execution.json

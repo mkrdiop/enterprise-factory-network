@@ -1,0 +1,545 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.enterprise-factory.network/efs/v1/factory-manifest.schema.json",
+  "title": "Enterprise Factory Specification v1 Factory Manifest",
+  "description": "Structural schema for one immutable EFS v1 Factory Release. Unknown core properties are intentionally not closed pending separately governed unknown-field and extension policy.",
+  "type": "object",
+  "required": [
+    "efsVersion",
+    "publisher",
+    "factory",
+    "release",
+    "capabilities",
+    "execution",
+    "dependencies",
+    "policies"
+  ],
+  "properties": {
+    "efsVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "publisher": {
+      "$ref": "#/$defs/publisher"
+    },
+    "factory": {
+      "$ref": "#/$defs/factory"
+    },
+    "release": {
+      "$ref": "#/$defs/release"
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/capability"
+      }
+    },
+    "execution": {
+      "$ref": "#/$defs/execution"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dependency"
+      }
+    },
+    "policies": {
+      "$ref": "#/$defs/policies"
+    },
+    "extensions": {
+      "type": "object",
+      "description": "Optional namespace-keyed extension container; namespace grammar remains open."
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "absoluteUri": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:",
+      "format": "uri"
+    },
+    "publisher": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "factory": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "name": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "release": {
+      "type": "object",
+      "required": [
+        "version",
+        "digest"
+      ],
+      "properties": {
+        "version": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "digest": {
+          "$ref": "#/$defs/releaseDigest"
+        },
+        "signature": {
+          "$ref": "#/$defs/signature"
+        }
+      }
+    },
+    "releaseDigest": {
+      "type": "object",
+      "required": [
+        "profile",
+        "algorithm",
+        "value"
+      ],
+      "properties": {
+        "profile": {
+          "const": "efs-jcs-sha256-v1"
+        },
+        "algorithm": {
+          "const": "SHA-256"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{43}$",
+          "description": "Unpadded Base64URL encoding of a 32-byte SHA-256 digest."
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "required": [
+        "algorithm",
+        "keyId",
+        "value"
+      ],
+      "properties": {
+        "algorithm": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "keyId": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "value": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "signedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "profile": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "capability": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "contract",
+        "endpoints"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "name": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "description": {
+          "type": "string"
+        },
+        "contract": {
+          "$ref": "#/$defs/contract"
+        },
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/endpoint"
+          }
+        },
+        "executionProfiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "contract": {
+      "type": "object",
+      "required": [
+        "id",
+        "version",
+        "schemaDialect",
+        "inputs",
+        "outputs",
+        "errors"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/absoluteUri"
+        },
+        "version": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "schemaDialect": {
+          "const": "https://json-schema.org/draft/2020-12/schema"
+        },
+        "inputs": {
+          "$ref": "#/$defs/objectPayloadSchema"
+        },
+        "outputs": {
+          "$ref": "#/$defs/objectPayloadSchema"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/contractError"
+          }
+        },
+        "guarantees": {
+          "type": "object",
+          "description": "Governed machine-readable guarantees only; vocabulary is not invented by PSI-35."
+        }
+      }
+    },
+    "objectPayloadSchema": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "const": "object"
+        }
+      },
+      "description": "Draft 2020-12 schema resource; full meta-schema validation is performed by the conformance validator; top-level payload must be an object."
+    },
+    "contractError": {
+      "type": "object",
+      "required": [
+        "code",
+        "description"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "description": {
+          "type": "string"
+        },
+        "schema": {
+          "type": "object"
+        }
+      }
+    },
+    "endpoint": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "protocol"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "type": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "protocol": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "address": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      }
+    },
+    "execution": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "source",
+            "profiles"
+          ],
+          "properties": {
+            "source": {
+              "const": "manifest"
+            },
+            "profiles": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/executionProfile"
+              }
+            }
+          },
+          "not": {
+            "required": [
+              "profileReferences"
+            ]
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "source",
+            "profileReferences"
+          ],
+          "properties": {
+            "source": {
+              "const": "external"
+            },
+            "profileReferences": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/executionProfileReference"
+              }
+            }
+          },
+          "not": {
+            "required": [
+              "profiles"
+            ]
+          }
+        }
+      ]
+    },
+    "executionProfile": {
+      "type": "object",
+      "required": [
+        "id",
+        "modes"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "modes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "sync",
+              "async",
+              "streaming",
+              "event"
+            ]
+          }
+        },
+        "constraints": {
+          "type": "object"
+        },
+        "guarantees": {
+          "type": "object"
+        }
+      }
+    },
+    "executionProfileReference": {
+      "type": "object",
+      "required": [
+        "id",
+        "version",
+        "digest"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/absoluteUri"
+        },
+        "version": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "digest": {
+          "$ref": "#/$defs/artifactDigest"
+        },
+        "uri": {
+          "$ref": "#/$defs/absoluteUri"
+        }
+      }
+    },
+    "artifactDigest": {
+      "type": "object",
+      "required": [
+        "algorithm",
+        "value"
+      ],
+      "properties": {
+        "algorithm": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "value": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "target",
+        "required"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "kind": {
+          "enum": [
+            "factory",
+            "capability",
+            "service",
+            "external"
+          ]
+        },
+        "target": {
+          "type": "object",
+          "minProperties": 1,
+          "description": "Typed target representation remains open pending identity/dependency ADRs."
+        },
+        "versionConstraint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "policies": {
+      "type": "object",
+      "properties": {
+        "declarations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/policyDeclaration"
+          }
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/policyReference"
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "declarations"
+          ],
+          "properties": {
+            "declarations": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "required": [
+            "references"
+          ],
+          "properties": {
+            "references": {
+              "minItems": 1
+            }
+          }
+        }
+      ]
+    },
+    "policyDeclaration": {
+      "type": "object",
+      "required": [
+        "id",
+        "profile",
+        "version",
+        "content"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "profile": {
+          "$ref": "#/$defs/absoluteUri"
+        },
+        "version": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "content": {
+          "type": "object"
+        }
+      }
+    },
+    "policyReference": {
+      "type": "object",
+      "required": [
+        "id",
+        "profile",
+        "version",
+        "digest",
+        "uri",
+        "enforcement"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "profile": {
+          "$ref": "#/$defs/absoluteUri"
+        },
+        "version": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "digest": {
+          "$ref": "#/$defs/artifactDigest"
+        },
+        "uri": {
+          "$ref": "#/$defs/absoluteUri"
+        },
+        "enforcement": {
+          "enum": [
+            "mandatory",
+            "advisory"
+          ]
+        }
+      }
+    }
+  }
+}
