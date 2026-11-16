@@ -8,7 +8,12 @@ from fastapi.responses import JSONResponse, Response
 from .artifact_store import ArtifactIntegrityError
 from .digests import ReleaseDigestError, reconstruct_manifest
 from .publication_contracts import DigestIdentity
-from .publication_service import ManifestValidationError, RegistryPublicationService\nfrom .passports import (\n    build_factory_passport,\n    canonical_passport_json,\n    render_factory_passport_markdown,\n)
+from .publication_service import ManifestValidationError, RegistryPublicationService
+from .passports import (
+    build_factory_passport,
+    canonical_passport_json,
+    render_factory_passport_markdown,
+)
 from .query_repository import (
     ArtifactLocationUnavailable,
     RegistryQueryRepository,
