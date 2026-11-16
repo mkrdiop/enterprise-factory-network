@@ -13,9 +13,40 @@ function assertIJson(value, path="$") {
 const canonicalize=v=>{assertIJson(v);if(v===null||typeof v!=="object")return JSON.stringify(v);if(Array.isArray(v))return "["+v.map(canonicalize).join(",")+"]";return "{"+Object.keys(v).sort().map(k=>JSON.stringify(k)+":"+canonicalize(v[k])).join(",")+"}";};
 const b64url=b=>Buffer.from(b).toString("base64url");
 const decodeCanonical=(s,n)=>{if(!/^[A-Za-z0-9_-]+$/.test(s))throw Error("padded or non-Base64URL value");const b=Buffer.from(s,"base64url");if(b.length!==n||b64url(b)!==s)throw Error("non-canonical Base64URL or wrong decoded length");return b;};
+function pointerParts(path){return path.split("/").slice(1).map(x=>x.replace(/~1/g,"/").replace(/~0/g,"~"));}
+function applyPatch(document, operations){
+ const root=document;
+ for(const op of operations){
+  const parts=pointerParts(op.path);let parent=root;
+  for(const part of parts.slice(0,-1)) parent=parent[part];
+  const key=parts[parts.length-1];
+  if(op.op==="replace"){if(Array.isArray(parent))parent[Number(key)]=op.value;else parent[key]=op.value;}
+  else if(op.op==="add"){if(Array.isArray(parent)){if(key==="-")parent.push(op.value);else parent.splice(Number(key),0,op.value);}else parent[key]=op.value;}
+  else throw Error("unsupported vector patch operation "+op.op);
+ }
+ return root;
+}
+function testNegativeVectors(){
+ const set=JSON.parse(readFileSync(new URL("./signatures-v1.json",import.meta.url),"utf8"));
+ const base=JSON.parse(readFileSync(new URL("./fixtures/psi50-release-interoperability-v1.json",import.meta.url),"utf8"));
+ for(const v of set.vectors.filter(x=>x.kind==="negative")){
+  if(v.base_fixture!=="tests/conformance/fixtures/psi50-release-interoperability-v1.json"||!Array.isArray(v.patch)||!v.expected_failure)throw Error("incomplete executable negative vector "+v.id);
+  const target=v.target==="manifest"?base.manifest:v.target==="envelope"?base.envelope:v.target==="resolver"?base.resolver:null;
+  if(!target)throw Error("unknown mutation target "+v.target);
+  applyPatch(JSON.parse(JSON.stringify(target)),v.patch);
+ }
+}
+function testDetachedManifestProhibition(){
+ const schema=JSON.parse(readFileSync(new URL("../../schemas/efs/v1/factory-manifest.schema.json",import.meta.url),"utf8"));
+ const negative=JSON.parse(readFileSync(new URL("./fixtures/psi50-manifest-signature-forbidden-v1.json",import.meta.url),"utf8"));
+ if(schema.$defs.release.properties.signature!==false)throw Error("manifest schema does not forbid release.signature");
+ if(!Object.hasOwn(negative.manifest.release,"signature")||negative.expected.diagnostic_path!=="/release/signature"||negative.expected.diagnostic_code!=="EFS_SCHEMA_CONSTRAINT")throw Error("detached manifest negative fixture is incomplete");
+}
 function testJcsVectors(){const vectors=JSON.parse(readFileSync(new URL("./signatures-v1.json",import.meta.url),"utf8")).jcs_vectors;for(const v of vectors){if(v.kind==="jcs-invalid"){let parsed;try{parsed=JSON.parse(v.raw_json);}catch{continue;}let code="";try{canonicalize(parsed);}catch(e){code=e.message.split(" ")[0];}if(code!==v.expected_failure)throw Error("JCS negative vector "+v.id+" expected "+v.expected_failure+" got "+code);}else if(canonicalize(v.input)!==v.expected_canonical)throw Error("JCS vector mismatch: "+v.id);}}
 try {
  testJcsVectors();
+ testNegativeVectors();
+ testDetachedManifestProhibition();
  const m=JSON.parse(JSON.stringify(f.manifest)),s=f.envelope.statement,sig=f.envelope.signatures[0];
  if(Object.hasOwn(m.release,"signature"))throw Error("release.signature must be absent");
  if(m.publisher.id!==s.publisher_id||m.factory.id!==s.factory_id||m.release.version!==s.release_version||m.efsVersion!==s.efs_version)throw Error("manifest coordinate binding mismatch");
