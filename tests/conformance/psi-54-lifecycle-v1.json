@@ -99,7 +99,9 @@
             "factory.register",
             "factory.publish",
             "release.publish"
-          ]
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
         }
       },
       "expected": {
@@ -159,7 +161,9 @@
             "factory.register",
             "factory.publish",
             "release.publish"
-          ]
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
         }
       },
       "expected": {
@@ -219,7 +223,9 @@
             "factory.register",
             "factory.publish",
             "release.publish"
-          ]
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
         }
       },
       "expected": {
@@ -279,7 +285,9 @@
             "factory.register",
             "factory.publish",
             "release.publish"
-          ]
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
         }
       },
       "expected": {
@@ -339,7 +347,9 @@
             "factory.register",
             "factory.publish",
             "release.publish"
-          ]
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
         }
       },
       "expected": {
@@ -410,7 +420,9 @@
             "factory.register",
             "factory.publish",
             "release.publish"
-          ]
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
         }
       },
       "expected": {
@@ -481,7 +493,9 @@
             "factory.register",
             "factory.publish",
             "release.publish"
-          ]
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
         }
       },
       "expected": {
@@ -552,7 +566,9 @@
             "factory.register",
             "factory.publish",
             "release.publish"
-          ]
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
         }
       },
       "expected": {
@@ -612,7 +628,9 @@
             "factory.register",
             "factory.publish",
             "release.publish"
-          ]
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
         }
       },
       "expected": {
@@ -672,7 +690,9 @@
             "factory.register",
             "factory.publish",
             "release.publish"
-          ]
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
         }
       },
       "expected": {
@@ -732,7 +752,9 @@
             "factory.register",
             "factory.publish",
             "release.publish"
-          ]
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
         }
       },
       "expected": {
@@ -792,7 +814,9 @@
             "factory.register",
             "factory.publish",
             "release.publish"
-          ]
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
         }
       },
       "expected": {
