@@ -38,86 +38,178 @@
     {
       "id": "sig-neg-001",
       "kind": "negative",
-      "mutation": "Change factory_id from payments-risk to payroll-risk without resigning.",
-      "expected": "binding-mismatch-or-invalid-signature",
-      "valid": false
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/statement/factory_id",
+          "value": "payroll-risk"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_BINDING_MISMATCH"
     },
     {
       "id": "sig-neg-002",
       "kind": "negative",
-      "mutation": "Change publisher_id to another canonical publisher URI.",
-      "expected": "binding-mismatch-or-invalid-signature",
-      "valid": false
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/statement/publisher_id",
+          "value": "urn:example:publishers:other"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_BINDING_MISMATCH"
     },
     {
       "id": "sig-neg-003",
       "kind": "negative",
-      "mutation": "Change release_version, efs_version, digest profile, digest algorithm or digest value.",
-      "expected": "binding-mismatch-or-invalid-signature",
-      "valid": false
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/statement/release_version",
+          "value": "9.9.9"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_BINDING_MISMATCH"
     },
     {
       "id": "sig-neg-004",
       "kind": "negative",
-      "mutation": "Change key_id or algorithm after signing.",
-      "expected": "invalid-signature-or-key-resolution-failure",
-      "valid": false
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/signatures/0/key_id",
+          "value": "attacker-key"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_INVALID"
     },
     {
       "id": "sig-neg-005",
       "kind": "negative",
-      "mutation": "Truncate or append octets to signature or public key.",
-      "expected": "malformed-encoding",
-      "valid": false
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/signatures/0/signature",
+          "value": "9T4C-SkaKlBiHp2ARkKjvf4QiBATOtbzeO2U1V6etVbmOXvZwDMzrlqLSGUkIps98yFhnQBRBUn4Uu9nh9SBD"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_ENCODING_INVALID"
     },
     {
       "id": "sig-neg-006",
       "kind": "negative",
-      "mutation": "Supply Base64URL padding or standard Base64 characters + or /.",
-      "expected": "malformed-encoding",
-      "valid": false
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/signatures/0/signature",
+          "value": "9T4C-SkaKlBiHp2ARkKjvf4QiBATOtbzeO2U1V6etVbmOXvZwDMzrlqLSGUkIps98yFhnQBRBUn4Uu9nh9SBDw="
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_ENCODING_INVALID"
     },
     {
       "id": "sig-neg-007",
       "kind": "negative",
-      "mutation": "Duplicate a JSON member name or duplicate (key_id, algorithm) entry.",
-      "expected": "malformed-envelope",
-      "valid": false
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "add",
+          "path": "/signatures/-",
+          "value": {
+            "key_id": "release-2026-01",
+            "algorithm": "Ed25519",
+            "signature": "9T4C-SkaKlBiHp2ARkKjvf4QiBATOtbzeO2U1V6etVbmOXvZwDMzrlqLSGUkIps98yFhnQBRBUn4Uu9nh9SBDw"
+          }
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_DUPLICATE_SIGNER"
     },
     {
       "id": "sig-neg-008",
       "kind": "negative",
-      "mutation": "Use an unknown algorithm/profile or request automatic fallback.",
-      "expected": "unsupported-profile-or-algorithm",
-      "valid": false
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/profile_id",
+          "value": "efs-rsa-jcs-v1"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_UNSUPPORTED_PROFILE"
     },
     {
       "id": "sig-neg-009",
       "kind": "negative",
-      "mutation": "Embed an attacker public key and assert it is trusted without resolver evidence.",
-      "expected": "key-not-trusted",
-      "valid": false
+      "target": "resolver",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/trust_state",
+          "value": "untrusted"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_KEY_NOT_TRUSTED"
     },
     {
       "id": "sig-neg-010",
       "kind": "negative",
-      "mutation": "Resolve a key under publisher A and attempt to use it for publisher B.",
-      "expected": "key-binding-mismatch",
-      "valid": false
+      "target": "resolver",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/publisher_id",
+          "value": "urn:example:publishers:other"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_KEY_BINDING_MISMATCH"
     },
     {
       "id": "sig-neg-011",
       "kind": "negative",
-      "mutation": "Resolver returns expired, revoked, untrusted or unavailable.",
-      "expected": "fail-closed-trust-outcome",
-      "valid": false
+      "target": "resolver",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/trust_state",
+          "value": "revoked"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_TRUST_UNAVAILABLE"
     },
     {
       "id": "sig-neg-012",
       "kind": "negative",
-      "mutation": "Manifest contains release.signature or non-canonical publisher URI.",
-      "expected": "manifest-semantic-validation-failure",
-      "valid": false
+      "target": "manifest",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "add",
+          "path": "/release/signature",
+          "value": {
+            "algorithm": "Ed25519",
+            "keyId": "release-2026-01",
+            "value": "not-allowed"
+          }
+        }
+      ],
+      "expected_failure": "EFS_SCHEMA_CONSTRAINT"
     },
     {
       "id": "sig-encoding-001",
@@ -230,11 +322,68 @@
     {
       "id": "sig-neg-013",
       "kind": "negative",
-      "mutation": "Change the digest algorithm identifier from the exact ADR-001 token SHA-256 to sha-256.",
-      "expected": "malformed-envelope-or-digest-profile-mismatch",
-      "valid": false
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/statement/digest/algorithm",
+          "value": "sha-256"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_DIGEST_PROFILE_MISMATCH"
     }
   ],
   "interop_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
-  "independent_verifier": "tests/conformance/verify_psi50_interop.mjs"
+  "independent_verifier": "tests/conformance/verify_psi50_interop.mjs",
+  "jcs_vectors": [
+    {
+      "id": "jcs-number-001",
+      "kind": "jcs",
+      "input": {
+        "numbers": [
+          333333333.3333333,
+          1e+30,
+          4.5,
+          0.002,
+          1e-27
+        ]
+      },
+      "expected_canonical": "{\"numbers\":[333333333.3333333,1e+30,4.5,0.002,1e-27]}",
+      "valid": true
+    },
+    {
+      "id": "jcs-order-001",
+      "kind": "jcs",
+      "input": {
+        "": "bmp",
+        "😀": "astral"
+      },
+      "expected_canonical": "{\"😀\":\"astral\",\"\":\"bmp\"}",
+      "valid": true
+    },
+    {
+      "id": "jcs-escape-001",
+      "kind": "jcs",
+      "input": {
+        "value": "a\b\t\n\f\r\"\\\u0001"
+      },
+      "expected_canonical": "{\"value\":\"a\\b\\t\\n\\f\\r\\\"\\\\\\u0001\"}",
+      "valid": true
+    },
+    {
+      "id": "jcs-invalid-surrogate-001",
+      "kind": "jcs-invalid",
+      "raw_json": "{\"lone\":\"\\ud800\"}",
+      "expected_failure": "EFS_JCS_INVALID_UNICODE",
+      "valid": false
+    },
+    {
+      "id": "jcs-invalid-number-001",
+      "kind": "jcs-invalid",
+      "raw_json": "{\"n\":1e400}",
+      "expected_failure": "EFS_JCS_INVALID_NUMBER",
+      "valid": false
+    }
+  ]
 }
