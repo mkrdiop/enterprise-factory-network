@@ -16,6 +16,7 @@ from efs.versioning import (
     validate_manifest_versions,
     validate_release_transition,
 )
+
 from registry.publication_service import ManifestValidationError, RegistryPublicationService
 
 
