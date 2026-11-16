@@ -172,10 +172,42 @@ def _sort_diagnostics(items):
     ))
 
 
+def _finalize(report: dict) -> dict:
+    """Apply the canonical diagnostic ordering on every success and failure path."""
+    report["diagnostics"] = _sort_diagnostics(report["diagnostics"])
+    report["valid"] = all(value == "passed" for value in report["stages"].values())
+    return report
+
+
+def _structural_code(error) -> str:
+    """Map JSON Schema keywords to stable public diagnostic identifiers."""
+    if error.validator == "required":
+        return "EFS_SCHEMA_REQUIRED"
+    if error.validator == "type":
+        return "EFS_SCHEMA_TYPE"
+    if error.validator in {"enum", "const"}:
+        return "EFS_SCHEMA_ENUM"
+    if error.validator == "format":
+        return "EFS_SCHEMA_FORMAT"
+    return "EFS_SCHEMA_CONSTRAINT"
+
+
+def _structural_path(error) -> str:
+    """Point to the missing/invalid property where jsonschema exposes its name."""
+    parts = list(error.absolute_path)
+    if error.validator == "required" and isinstance(error.validator_value, list):
+        missing = [name for name in error.validator_value
+                   if isinstance(error.instance, dict) and name not in error.instance]
+        if len(missing) == 1:
+            parts.append(missing[0])
+    return pointer(parts)
+
+
 def validate_report(manifest_path: Path, schema_path: Path) -> dict:
     stages = {name: "not_run" for name in STAGES}
     diagnostics = []
     report = {
+        "reportVersion": "1.0",
         "conformanceProfile": PROFILE,
         "schemaDialect": DIALECT,
         "valid": False,
@@ -191,7 +223,7 @@ def validate_report(manifest_path: Path, schema_path: Path) -> dict:
             "EFS_JSON_DUPLICATE_MEMBER", "parsing", "",
             "JSON object contains a duplicate member name.", {"message": str(exc)},
         ))
-        return report
+        return _finalize(report)
     except UnicodeDecodeError as exc:
         stages["parsing"] = "failed"
         diagnostics.append(diagnostic(
@@ -228,7 +260,7 @@ def validate_report(manifest_path: Path, schema_path: Path) -> dict:
         stages["structural"] = "failed"
         for error in errors:
             diagnostics.append(diagnostic(
-                "EFS_SCHEMA_INVALID", "structural", pointer(list(error.absolute_path)),
+                _structural_code(error), "structural", _structural_path(error),
                 error.message, {"keyword": error.validator},
             ))
         return report
@@ -249,8 +281,7 @@ def validate_report(manifest_path: Path, schema_path: Path) -> dict:
     stages["profile"] = "passed"
 
     report["valid"] = True
-    report["diagnostics"] = _sort_diagnostics(diagnostics)
-    return report
+    return _finalize(report)
 
 
 def validate(manifest_path, schema_path):
