@@ -20,9 +20,10 @@ def check_local_refs(value, path="$"):
         ref = value.get("$ref")
         if isinstance(ref, str):
             parsed = urlparse(ref)
-            if parsed.scheme in ("http","https") and parsed.netloc:
-                raise ValueError(f"{path}: remote $ref prohibited; bundle and pin the resource")
-            if ref.startswith("//"): raise ValueError(f"{path}: network-path $ref prohibited")
+            if parsed.scheme or parsed.netloc:
+                raise ValueError(f"{path}: absolute/network $ref prohibited by the local-only v1 validator; use a bundled relative or fragment reference")
+        if "$dynamicRef" in value or "$dynamicAnchor" in value:
+            raise ValueError(f"{path}: dynamic-reference behavior is not part of the unprofiled EFS v1 subset")
         for key, child in value.items(): check_local_refs(child, f"{path}/{key}")
     elif isinstance(value, list):
         for index, child in enumerate(value): check_local_refs(child, f"{path}/{index}")
@@ -30,7 +31,7 @@ def check_local_refs(value, path="$"):
 def validate(manifest_path, schema_path):
     manifest, schema = load(manifest_path), load(schema_path)
     Draft202012Validator.check_schema(schema)
-    errors = sorted(Draft202012Validator(schema).iter_errors(manifest), key=lambda e:list(map(str,e.absolute_path)))
+    errors = sorted(Draft202012Validator(schema, format_checker=FormatChecker()).iter_errors(manifest), key=lambda e:list(map(str,e.absolute_path)))
     if errors: return [f"{'/'.join(map(str,e.absolute_path)) or '$'}: {e.message}" for e in errors]
     for i, capability in enumerate(manifest["capabilities"]):
         contract = capability["contract"]
