@@ -19,9 +19,9 @@ from .models import (
     ArtifactLocation,
     Factory,
     FactoryRelease,
-    PublicationOperation as PublicationOperationRow,
     Publisher,
 )
+from .models import PublicationOperation as PublicationOperationRow
 from .publication_contracts import (
     DigestIdentity,
     PublicationOperation,
