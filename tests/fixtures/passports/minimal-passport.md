@@ -15,13 +15,28 @@
 
 - **Profile source:** `manifest`
 
+```json
+{
+  "profiles": [],
+  "source": "manifest"
+}
+```
+
 ## Dependencies
 
 0 dependency declaration(s).
 
+```json
+[]
+```
+
 ## Policies
 
 0 embedded declaration(s); 0 external reference(s).
+
+```json
+{}
+```
 
 ## Assurance
 
