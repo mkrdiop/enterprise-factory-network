@@ -237,3 +237,35 @@ def test_declared_error_details_are_validated_by_the_contract_error_schema():
     )
     assert not undeclared["valid"]
     assert undeclared["diagnostics"][0]["code"] == "EFS_CONTRACT_ERROR_CODE_UNDECLARED"
+
+
+def test_definition_reference_graph_resolves_only_prebundled_resources(tmp_path):
+    manifest = _manifest()
+    inputs = manifest["capabilities"][0]["contract"]["inputs"]
+    outputs = manifest["capabilities"][0]["contract"]["outputs"]
+    inputs["$id"] = "https://schemas.example.test/input.json"
+    inputs["properties"]["requestId"] = {
+        "$ref": "shared.json#/$defs/requestId"
+    }
+    outputs["$id"] = "https://schemas.example.test/shared.json"
+    outputs["$defs"] = {"requestId": {"type": "string", "minLength": 1}}
+    report = _report(tmp_path, manifest)
+    assert report["valid"], report
+
+    outputs["$id"] = "https://schemas.example.test/different.json"
+    report = _report(tmp_path, manifest)
+    assert "EFS_SCHEMA_REF_UNRESOLVED" in {
+        item["code"] for item in report["diagnostics"]
+    }
+
+
+def test_duplicate_schema_resource_ids_are_rejected(tmp_path):
+    manifest = _manifest()
+    inputs = manifest["capabilities"][0]["contract"]["inputs"]
+    outputs = manifest["capabilities"][0]["contract"]["outputs"]
+    inputs["$id"] = "https://schemas.example.test/shared.json"
+    outputs["$id"] = "https://schemas.example.test/shared.json"
+    report = _report(tmp_path, manifest)
+    assert "EFS_SCHEMA_RESOURCE_ID_DUPLICATE" in {
+        item["code"] for item in report["diagnostics"]
+    }
