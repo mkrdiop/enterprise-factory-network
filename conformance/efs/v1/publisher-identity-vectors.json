@@ -147,8 +147,14 @@
       "canonical": null
     },
     {
-      "id": "invalid-port",
+      "id": "numeric-port-is-syntax-only",
       "input": "https://example.com:99999/publisher",
+      "valid": true,
+      "canonical": "https://example.com:99999/publisher"
+    },
+    {
+      "id": "non-numeric-port",
+      "input": "https://example.com:abc/publisher",
       "valid": false,
       "canonical": null
     }
