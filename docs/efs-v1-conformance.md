@@ -59,7 +59,7 @@ Install development dependencies:
 python -m pip install -r requirements-dev.txt
 ```
 
-The machine-readable inventories are maintained under `conformance/efs/v1/`: `fixture-catalog.json`, `diagnostic-catalog.json`, `report-schema.json`, `acceptance-criteria.json`, `publisher-identity-vectors.json`, and `publisher-identity-acceptance.json`. The publisher identity corpus defines `efs-uri-c14n-1` with positive, negative and canonicalization vectors. `tests/test_publisher_identity.py` executes every vector, verifies deterministic diagnostics, preserves the existing URN example, and checks publisher-scoped Factory identity semantics. The catalogue-driven tests discover every manifest matching each fixture group and test it against the declared outcome. Raw parser vectors are stored under `fixtures/adversarial/parser/`; invalid UTF-8 is stored as Base64 so Git can preserve the fixture bytes. The acceptance registry maps every AC-01–AC-15 to real test functions and fixture groups, and CI executes these checks as part of pytest.
+The machine-readable inventories are maintained under `conformance/efs/v1/`: `fixture-catalog.json`, `diagnostic-catalog.json`, `report-schema.json`, `acceptance-criteria.json`, `publisher-identity-vectors.json`, `publisher-identity-acceptance.json`, and `capability-contract-model-vectors.json` / `capability-contract-model-acceptance.json`. The normative capability/contract semantics and four interaction-mode examples are defined in `docs/efs-v1-capability-contract-model.md` and `fixtures/valid/capability-contract-*.json`. The publisher identity corpus defines `efs-uri-c14n-1` with positive, negative and canonicalization vectors. `tests/test_publisher_identity.py` executes every vector, verifies deterministic diagnostics, preserves the existing URN example, and checks publisher-scoped Factory identity semantics. The catalogue-driven tests discover every manifest matching each fixture group and test it against the declared outcome. Raw parser vectors are stored under `fixtures/adversarial/parser/`; invalid UTF-8 is stored as Base64 so Git can preserve the fixture bytes. The acceptance registry maps every AC-01–AC-15 to real test functions and fixture groups, and CI executes these checks as part of pytest.
 
 Run the full test corpus:
 
@@ -86,7 +86,9 @@ python scripts/validate_manifest.py fixtures/valid/manifest-minimal.json --json
 - `publisher.id` is an absolute URI and must already use the canonical `efs-uri-c14n-1` serialization; validation is local-only and never dereferences the identifier.
 - Draft 2020-12 `date-time` format assertion is explicitly enabled; timezone-less
   timestamps are invalid.
-- Embedded input, output and optional error schemas are meta-validated.
+- Embedded input, output and optional error schemas are meta-validated as Draft 2020-12 resources; each top-level payload schema is an object schema. Optional error schemas use the same object-payload definition.
+- Contract error codes follow the EFS v1 ASCII token grammar and are compared exactly; duplicate codes within a contract are a semantic violation implemented by PSI-43.
+- Capability and contract identity semantics, execution-profile binding and interaction-mode/transport separation are defined in `docs/efs-v1-capability-contract-model.md`.
 - External/network schema retrieval is never attempted.
 - Unknown core fields and extension namespace grammar remain open as governed in PSI-34/35.
 - The release digest is shape-validated by the manifest schema; digest computation and
