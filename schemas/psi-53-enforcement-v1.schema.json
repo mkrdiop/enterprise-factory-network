@@ -282,7 +282,11 @@
                                 "status",
                                 "observed_at",
                                 "expires_at",
-                                "version"
+                                "version",
+                                "algorithm",
+                                "usage",
+                                "valid_from",
+                                "valid_until"
                               ],
                               "properties": {
                                 "publisher_id": {
@@ -311,6 +315,20 @@
                                 "version": {
                                   "type": "integer",
                                   "minimum": 1
+                                },
+                                "algorithm": {
+                                  "const": "Ed25519"
+                                },
+                                "usage": {
+                                  "const": "efs-release-signing"
+                                },
+                                "valid_from": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "valid_until": {
+                                  "type": "string",
+                                  "format": "date-time"
                                 }
                               }
                             }
@@ -526,7 +544,9 @@
                   "AUTHORIZATION_REVISION_CHANGED",
                   "EXECUTION_INTENT_NOT_DURABLE",
                   "EXECUTION_OUTCOME_UNKNOWN",
-                  "INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR"
+                  "INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR",
+                  "KEY_NOT_YET_VALID",
+                  "KEY_EXPIRED"
                 ]
               }
             }
