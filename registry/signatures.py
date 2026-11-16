@@ -488,7 +488,9 @@ def verify_release_signature(
 
     results: list[SignerVerification] = []
     publisher_id = expected_statement["publisher_id"]
-    for entry in envelope["signatures"]:
+    for entry in sorted(
+        envelope["signatures"], key=lambda item: item["key_id"].encode("ascii")
+    ):
         key_id = entry["key_id"]
         try:
             signature = _decode_signature(entry["signature"])
