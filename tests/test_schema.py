@@ -114,6 +114,13 @@ def test_duplicate_json_members_are_rejected(tmp_path):
     assert report["diagnostics"][0]["code"] == "EFS_JSON_DUPLICATE_MEMBER"
 
 
+@pytest.mark.parametrize("fixture", sorted((ROOT / "fixtures/adversarial").glob("*.json")))
+def test_adversarial_parser_fixture_corpus(fixture):
+    report = validate_report(fixture, SCHEMA_PATH)
+    assert not report["valid"]
+    assert report["stages"]["parsing"] == "failed"
+
+
 def test_malformed_json_is_rejected(tmp_path):
     path = tmp_path / "malformed.json"
     path.write_text('{"efsVersion":', encoding="utf-8")
@@ -152,7 +159,27 @@ def test_report_marks_dependent_stages_not_run_after_parse_failure(tmp_path):
     }
 
 
+def test_local_fragment_schema_reference_is_accepted(tmp_path):
+    doc = load_json(ROOT / "fixtures/valid/manifest-minimal.json")
+    doc["capabilities"][0]["contract"]["inputs"] = {
+        "type": "object",
+        "$defs": {"question": {"type": "string"}},
+        "properties": {"question": {"$ref": "#/$defs/question"}},
+    }
+    path = tmp_path / "local-ref.json"
+    path.write_text(json.dumps(doc), encoding="utf-8")
+    report = validate_report(path, SCHEMA_PATH)
+    assert report["valid"], report["diagnostics"]
+
+
 def test_cli_json_report_contract():
-    report = validate_report(ROOT / "fixtures/valid/manifest-minimal.json", SCHEMA_PATH)
+    import subprocess
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/validate_manifest.py"),
+         str(ROOT / "fixtures/valid/manifest-minimal.json"), "--json"],
+        check=True, capture_output=True, text=True,
+    )
+    report = json.loads(result.stdout)
     assert set(report) == {"conformanceProfile", "schemaDialect", "valid", "stages", "diagnostics"}
     assert report["conformanceProfile"] == "efs-v1"
+    assert report["valid"] is True
