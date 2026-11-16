@@ -133,7 +133,7 @@ def test_json_and_markdown_golden_fixtures():
     passport = json.loads((FIXTURES / "minimal-passport.json").read_text(encoding="utf-8"))
     expected_json = (FIXTURES / "minimal-passport.canonical.json").read_bytes()
     expected_markdown = (FIXTURES / "minimal-passport.md").read_text(encoding="utf-8")
-    assert canonical_passport_json(passport) + b"\\n" == expected_json
+    assert canonical_passport_json(passport) + b"\n" == expected_json
     assert render_factory_passport_markdown(passport) == expected_markdown
 
 
