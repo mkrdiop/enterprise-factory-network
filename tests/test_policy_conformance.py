@@ -5,8 +5,8 @@ import hashlib
 import json
 from pathlib import Path
 
-import rfc8785
 import pytest
+import rfc8785
 from jsonschema import Draft202012Validator, FormatChecker, ValidationError
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -201,7 +201,6 @@ def test_contract_validation_does_not_claim_to_implement_a_pdp():
 def test_machine_readable_negative_vectors_are_executable():
     package = vector_package()
     schema = policy_schema()
-    validation_schema = load_json(VECTOR_SCHEMA_PATH)
     for vector in package["validation_vectors"]:
         kind = vector["kind"]
         if kind == "invalid-policy":
