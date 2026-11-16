@@ -175,11 +175,11 @@ def test_condition_depth_and_node_limits_are_fixed():
 
 
 def test_schema_enforces_condition_child_and_literal_array_limits():
-    schema = policy_schema()["$defs"]["condition"]
+    schema = policy_schema()
     with pytest.raises(ValidationError):
-        validate({"op": "all", "args": [{"op": "exists", "ref": "context.attributes.x"}] * 33}, schema)
+        validate({"op": "all", "args": [{"op": "exists", "ref": "context.attributes.x"}] * 33}, schema, "condition")
     with pytest.raises(ValidationError):
-        validate({"op": "in", "ref": "context.attributes.x", "values": list(range(65))}, schema)
+        validate({"op": "in", "ref": "context.attributes.x", "values": list(range(65))}, schema, "condition")
 
 
 def test_rfc3339_format_is_asserted_with_format_checker():
@@ -187,7 +187,7 @@ def test_rfc3339_format_is_asserted_with_format_checker():
     with pytest.raises(ValidationError):
         validate(attribute, policy_schema(), "attribute")
     attribute["observed_at"] = "2026-11-16T11:00:00Z"
-    validate(attribute, policy_schema()["$defs"]["attribute"])
+    validate(attribute, policy_schema(), "attribute")
 
 
 def test_expiry_equality_is_stale():
