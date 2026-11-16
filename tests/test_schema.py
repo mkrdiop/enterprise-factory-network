@@ -130,7 +130,7 @@ def test_malformed_json_is_rejected(tmp_path):
 
 def test_invalid_utf8_is_rejected(tmp_path):
     path = tmp_path / "invalid-utf8.json"
-    path.write_bytes(b'{"name":"\\xff"}')
+    path.write_bytes(b'{"name":"\xff"}')
     report = validate_report(path, SCHEMA_PATH)
     assert report["diagnostics"][0]["code"] == "EFS_JSON_INVALID_ENCODING"
 
