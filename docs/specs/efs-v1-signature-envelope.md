@@ -171,4 +171,4 @@ The language-neutral machine-readable vectors are in `tests/conformance/signatur
 - RFC 4648 §5 — Base64URL
 - ADR-001 — EFS v1 release digest profile
 - ADR-003 — Publisher namespace and issuer/trust model
-- ADR-004 — EFS v1 detached release-signature profile (Proposed)
+- ADR-004 — EFS v1 detached release-signature profile (Accepted)
