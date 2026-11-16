@@ -13,6 +13,8 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator, FormatChecker
 
+from registry.capability_contracts import ContractCoordinate, validate_contract_payload
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCHEMA = ROOT / "schemas/execution/v1/execution-envelope.schema.json"
 
@@ -54,6 +56,32 @@ def _schema_diagnostics(envelope, schema):
     ]
 
 
+def validate_psi43_contract_payload(
+    manifest: dict,
+    context: dict,
+    direction: str,
+    payload,
+    *,
+    error_code: str | None = None,
+) -> dict:
+    """Adapt the PSI-43 exact-coordinate validator to the PSI-44 envelope port."""
+    digest = context["releaseDigest"]
+    coordinate = ContractCoordinate(
+        publisher_id=context["publisherId"],
+        factory_id=context["factoryId"],
+        release_version=context["releaseVersion"],
+        release_digest_profile=digest["profile"],
+        release_digest_algorithm=digest["algorithm"],
+        release_digest_value=digest["value"],
+        capability_id=context["capabilityId"],
+        contract_id=context["contract"]["id"],
+        contract_version=context["contract"]["version"],
+    )
+    return validate_contract_payload(
+        manifest, coordinate, direction, payload, error_code=error_code
+    )
+
+
 def validate_execution_envelope(
     envelope: dict,
     manifest: dict,
@@ -72,6 +100,9 @@ def validate_execution_envelope(
     diagnostics = _schema_diagnostics(envelope, schema)
     if diagnostics:
         return {"valid": False, "diagnostics": diagnostics}
+
+    if payload_validator is None:
+        payload_validator = validate_psi43_contract_payload
 
     context = envelope["context"]
     publisher = manifest.get("publisher", {})
@@ -183,23 +214,17 @@ def validate_execution_envelope(
             direction, payload = "errors", envelope["error"]["details"]
 
     if direction is not None:
-        if payload_validator is None:
-            diagnostics.append(_diagnostic(
-                "EFS_EXECUTION_PAYLOAD_VALIDATOR_REQUIRED", "/payload",
-                "Payload-bearing envelope requires the shared PSI-43 contract payload validator.",
-            ))
-        else:
-            report = payload_validator(
-                manifest, context, direction, payload, error_code=error_code
-            )
-            if not report.get("valid", False):
-                for item in report.get("diagnostics", []):
-                    diagnostics.append(_diagnostic(
-                        item.get("code", "EFS_EXECUTION_PAYLOAD_INVALID"),
-                        item.get("path", ""),
-                        item.get("message", "Payload failed contract validation."),
-                        item.get("details"),
-                    ))
+        report = payload_validator(
+            manifest, context, direction, payload, error_code=error_code
+        )
+        if not report.get("valid", False):
+            for item in report.get("diagnostics", []):
+                diagnostics.append(_diagnostic(
+                    item.get("code", "EFS_EXECUTION_PAYLOAD_INVALID"),
+                    item.get("path", ""),
+                    item.get("message", "Payload failed contract validation."),
+                    item.get("details"),
+                ))
 
     diagnostics.sort(key=lambda item: (
         item["stage"], item["path"], item["code"], item["message"],
