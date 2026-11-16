@@ -1,0 +1,566 @@
+{
+  "vector_set": "psi-53-enforcement-v1",
+  "version": "1.0.0",
+  "vectors": [
+    {
+      "id": "psi53-001",
+      "scenario": "complete permit on exact published release",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "enforced",
+        "reason": "PERMIT_ENFORCED"
+      }
+    },
+    {
+      "id": "psi53-002",
+      "scenario": "missing authenticated principal",
+      "input": {
+        "authenticated": false,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "AUTHN_REQUIRED"
+      }
+    },
+    {
+      "id": "psi53-003",
+      "scenario": "unknown route has no action mapping",
+      "input": {
+        "authenticated": true,
+        "action_mapped": false,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "ACTION_UNMAPPED"
+      }
+    },
+    {
+      "id": "psi53-004",
+      "scenario": "client-supplied or incomplete resource coordinates",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": false,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "RESOURCE_COORDINATES_INVALID"
+      }
+    },
+    {
+      "id": "psi53-005",
+      "scenario": "policy deny is not permit",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "deny",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "POLICY_DENIED"
+      }
+    },
+    {
+      "id": "psi53-006",
+      "scenario": "PDP indeterminate remains distinct",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "indeterminate",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "PDP_INDETERMINATE"
+      }
+    },
+    {
+      "id": "psi53-007",
+      "scenario": "unfulfilled mandatory obligation",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": false,
+        "trust_status": "trusted",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "OBLIGATION_UNFULFILLED"
+      }
+    },
+    {
+      "id": "psi53-008",
+      "scenario": "trust source outage",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "unavailable",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "TRUST_UNAVAILABLE"
+      }
+    },
+    {
+      "id": "psi53-009",
+      "scenario": "untrusted key",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "untrusted",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "KEY_NOT_TRUSTED"
+      }
+    },
+    {
+      "id": "psi53-010",
+      "scenario": "revoked key",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "revoked",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "KEY_REVOKED"
+      }
+    },
+    {
+      "id": "psi53-011",
+      "scenario": "suspended release blocks invocation",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "suspended",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "RELEASE_NOT_ADMISSIBLE"
+      }
+    },
+    {
+      "id": "psi53-012",
+      "scenario": "revoked release is not admissible",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "revoked",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "RELEASE_NOT_ADMISSIBLE"
+      }
+    },
+    {
+      "id": "psi53-013",
+      "scenario": "archived release is not admissible",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "archived",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "RELEASE_NOT_ADMISSIBLE"
+      }
+    },
+    {
+      "id": "psi53-014",
+      "scenario": "deprecated release remains eligible subject to policy",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "deprecated",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "enforced",
+        "reason": "PERMIT_ENFORCED"
+      }
+    },
+    {
+      "id": "psi53-015",
+      "scenario": "evidence older than configured bound",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:00Z",
+            "expires_at": "2026-11-16T13:00:00Z",
+            "version": 1
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "EVIDENCE_STALE"
+      }
+    },
+    {
+      "id": "psi53-016",
+      "scenario": "evidence expiry at commit",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T12:00:00Z",
+            "expires_at": "2026-11-16T12:00:00Z",
+            "version": 1
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "EVIDENCE_STALE"
+      }
+    },
+    {
+      "id": "psi53-017",
+      "scenario": "audit outbox unavailable",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": false,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "AUDIT_DURABILITY_FAILURE"
+      }
+    },
+    {
+      "id": "psi53-018",
+      "scenario": "evidence changed before commit",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": true
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "AUTHORIZATION_REVISION_CHANGED"
+      }
+    },
+    {
+      "id": "psi53-019",
+      "scenario": "trust not required for a non-signature-protected operation",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "not_required",
+        "release_state": "published",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "enforced",
+        "reason": "PERMIT_ENFORCED"
+      }
+    },
+    {
+      "id": "psi53-020",
+      "scenario": "unknown release state",
+      "input": {
+        "authenticated": true,
+        "action_mapped": true,
+        "resource_exact": true,
+        "pdp_outcome": "permit",
+        "obligations_satisfied": true,
+        "trust_status": "trusted",
+        "release_state": "unknown",
+        "evidence": [
+          {
+            "observed_at": "2026-11-16T11:59:50Z",
+            "expires_at": "2026-11-16T12:05:00Z",
+            "version": 7
+          }
+        ],
+        "max_evidence_age_seconds": 30,
+        "commit_time": "2026-11-16T12:00:00Z",
+        "audit_outbox_available": true,
+        "evidence_changed_before_commit": false
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "RELEASE_NOT_ADMISSIBLE"
+      }
+    }
+  ]
+}
