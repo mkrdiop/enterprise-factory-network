@@ -1,6 +1,6 @@
 # PSI-53 — Authorization, trust and revocation enforcement
 
-- **Status:** Normative specification proposal; pending explicit acceptance and independent review
+- **Status:** Accepted by the Project Architect after cross-contract review on 2026-11-16. Runtime implementation remains subject to explicit implementation authorization and normal code review.
 - **Version:** 1.1.0
 - **Dependencies:** PSI-37, PSI-40, PSI-45, PSI-50, PSI-51, PSI-52, PSI-54
 
