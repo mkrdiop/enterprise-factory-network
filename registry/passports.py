@@ -5,8 +5,8 @@ verified EFS release artifact remain authoritative for identity and content.
 """
 from __future__ import annotations
 
-import json
 from copy import deepcopy
+import json
 from typing import Any
 
 import rfc8785
@@ -348,8 +348,10 @@ def render_factory_passport_markdown(passport: dict[str, Any]) -> str:
             "",
             "## Policies",
             "",
-            f"{passport['summary']['policyDeclarationCount']} embedded declaration(s); "
-            f"{passport['summary']['policyReferenceCount']} external reference(s).",
+            (
+                f"{passport['summary']['policyDeclarationCount']} embedded declaration(s); "
+                f"{passport['summary']['policyReferenceCount']} external reference(s)."
+            ),
             "",
             *_json_block(passport["policies"]),
             "",
