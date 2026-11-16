@@ -55,7 +55,211 @@
               "expected_revision_matches",
               "publication"
             ],
-            "additionalProperties": true
+            "additionalProperties": false,
+            "properties": {
+              "operation": {
+                "enum": [
+                  "transition",
+                  "initial_publication"
+                ]
+              },
+              "scope": {
+                "type": "object",
+                "required": [
+                  "tenant_id",
+                  "principal_id",
+                  "release_record_id",
+                  "operation"
+                ],
+                "properties": {
+                  "tenant_id": {
+                    "type": "string"
+                  },
+                  "principal_id": {
+                    "type": "string"
+                  },
+                  "release_record_id": {
+                    "type": "string"
+                  },
+                  "operation": {
+                    "enum": [
+                      "transition",
+                      "initial_publication"
+                    ]
+                  }
+                }
+              },
+              "request_fingerprint": {
+                "type": "string"
+              },
+              "idempotency_lookup": {
+                "type": "object",
+                "required": [
+                  "status",
+                  "record"
+                ],
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "none",
+                      "same_fingerprint",
+                      "different_fingerprint",
+                      "other_scope_only"
+                    ]
+                  },
+                  "record": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "from": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "to": {
+                "type": "string"
+              },
+              "authorized": {
+                "type": "boolean"
+              },
+              "reason_present": {
+                "type": "boolean"
+              },
+              "evidence_present": {
+                "type": "boolean"
+              },
+              "preconditions_met": {
+                "type": "boolean"
+              },
+              "expected_revision_matches": {
+                "type": "boolean"
+              },
+              "publication": {
+                "type": "object",
+                "required": [
+                  "authoring_request_validated",
+                  "coordinate_exact",
+                  "digest_verified",
+                  "signature_verified",
+                  "actor_id",
+                  "event_type",
+                  "revision",
+                  "from_state",
+                  "authorization_decision_ref",
+                  "committed_at",
+                  "release_inserted",
+                  "event_inserted",
+                  "audit_outbox_inserted",
+                  "same_database_transaction",
+                  "coordinate_snapshot",
+                  "digest_snapshot",
+                  "authorization_actions"
+                ],
+                "properties": {
+                  "authoring_request_validated": {
+                    "type": "boolean"
+                  },
+                  "coordinate_exact": {
+                    "type": "boolean"
+                  },
+                  "digest_verified": {
+                    "type": "boolean"
+                  },
+                  "signature_verified": {
+                    "type": "boolean"
+                  },
+                  "actor_id": {
+                    "type": "string"
+                  },
+                  "event_type": {
+                    "type": "string"
+                  },
+                  "revision": {
+                    "type": "integer"
+                  },
+                  "from_state": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "authorization_decision_ref": {
+                    "type": "string"
+                  },
+                  "committed_at": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "release_inserted": {
+                    "type": "boolean"
+                  },
+                  "event_inserted": {
+                    "type": "boolean"
+                  },
+                  "audit_outbox_inserted": {
+                    "type": "boolean"
+                  },
+                  "same_database_transaction": {
+                    "type": "boolean"
+                  },
+                  "coordinate_snapshot": {
+                    "type": "object",
+                    "required": [
+                      "publisher_id",
+                      "factory_id",
+                      "release_version"
+                    ],
+                    "properties": {
+                      "publisher_id": {
+                        "type": "string"
+                      },
+                      "factory_id": {
+                        "type": "string"
+                      },
+                      "release_version": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "digest_snapshot": {
+                    "type": "object",
+                    "required": [
+                      "profile_id",
+                      "algorithm",
+                      "value"
+                    ],
+                    "properties": {
+                      "profile_id": {
+                        "const": "efs-jcs-sha256-v1"
+                      },
+                      "algorithm": {
+                        "const": "SHA-256"
+                      },
+                      "value": {
+                        "type": "string",
+                        "minLength": 43,
+                        "maxLength": 43
+                      }
+                    }
+                  },
+                  "authorization_actions": {
+                    "type": "array",
+                    "items": {
+                      "enum": [
+                        "factory.register",
+                        "factory.publish",
+                        "release.publish"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
           },
           "expected": {
             "type": "object",
