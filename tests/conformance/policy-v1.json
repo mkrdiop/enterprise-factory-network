@@ -402,5 +402,659 @@
       "reason": "DEFAULT_DENY_NO_APPLICABLE_PERMIT"
     }
   ],
-  "policy_digest_handling": "Decision vectors exercise the pure evaluator with policy bundles treated as already resolved and digest-verified by the harness. In these evaluator-only fixtures, the all-zero 32-byte digest is a sentinel and MUST NOT be used as a digest known-answer value. Policy digest computation is tested independently by pol-kat-001."
+  "policy_digest_handling": "Decision vectors exercise the pure evaluator with policy bundles treated as already resolved and digest-verified by the harness. In these evaluator-only fixtures, the all-zero 32-byte digest is a sentinel and MUST NOT be used as a digest known-answer value. Policy digest computation is tested independently by pol-kat-001.",
+  "validation_vectors": [
+    {
+      "id": "pair-publisher-read-factory",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.read",
+      "resource_type": "factory",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-publisher-read-release",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.read",
+      "resource_type": "release",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-publisher-read-capability",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.read",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-publisher-read-registry",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.read",
+      "resource_type": "registry",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-publisher-read-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.read",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-publisher-manage-factory",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.manage",
+      "resource_type": "factory",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-publisher-manage-release",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.manage",
+      "resource_type": "release",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-publisher-manage-capability",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.manage",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-publisher-manage-registry",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.manage",
+      "resource_type": "registry",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-publisher-manage-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.manage",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-publisher-key-manage-factory",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.key.manage",
+      "resource_type": "factory",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-publisher-key-manage-release",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.key.manage",
+      "resource_type": "release",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-publisher-key-manage-capability",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.key.manage",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-publisher-key-manage-registry",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.key.manage",
+      "resource_type": "registry",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-publisher-key-manage-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "publisher.key.manage",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-discover-publisher",
+      "kind": "action-resource-compatibility",
+      "action": "factory.discover",
+      "resource_type": "publisher",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-discover-release",
+      "kind": "action-resource-compatibility",
+      "action": "factory.discover",
+      "resource_type": "release",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-discover-capability",
+      "kind": "action-resource-compatibility",
+      "action": "factory.discover",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-discover-registry",
+      "kind": "action-resource-compatibility",
+      "action": "factory.discover",
+      "resource_type": "registry",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-discover-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "factory.discover",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-read-publisher",
+      "kind": "action-resource-compatibility",
+      "action": "factory.read",
+      "resource_type": "publisher",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-read-release",
+      "kind": "action-resource-compatibility",
+      "action": "factory.read",
+      "resource_type": "release",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-read-capability",
+      "kind": "action-resource-compatibility",
+      "action": "factory.read",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-read-registry",
+      "kind": "action-resource-compatibility",
+      "action": "factory.read",
+      "resource_type": "registry",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-read-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "factory.read",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-register-publisher",
+      "kind": "action-resource-compatibility",
+      "action": "factory.register",
+      "resource_type": "publisher",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-register-release",
+      "kind": "action-resource-compatibility",
+      "action": "factory.register",
+      "resource_type": "release",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-register-capability",
+      "kind": "action-resource-compatibility",
+      "action": "factory.register",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-register-registry",
+      "kind": "action-resource-compatibility",
+      "action": "factory.register",
+      "resource_type": "registry",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-register-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "factory.register",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-publish-publisher",
+      "kind": "action-resource-compatibility",
+      "action": "factory.publish",
+      "resource_type": "publisher",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-publish-release",
+      "kind": "action-resource-compatibility",
+      "action": "factory.publish",
+      "resource_type": "release",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-publish-capability",
+      "kind": "action-resource-compatibility",
+      "action": "factory.publish",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-publish-registry",
+      "kind": "action-resource-compatibility",
+      "action": "factory.publish",
+      "resource_type": "registry",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-factory-publish-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "factory.publish",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-read-publisher",
+      "kind": "action-resource-compatibility",
+      "action": "release.read",
+      "resource_type": "publisher",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-read-factory",
+      "kind": "action-resource-compatibility",
+      "action": "release.read",
+      "resource_type": "factory",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-read-capability",
+      "kind": "action-resource-compatibility",
+      "action": "release.read",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-read-registry",
+      "kind": "action-resource-compatibility",
+      "action": "release.read",
+      "resource_type": "registry",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-read-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "release.read",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-publish-publisher",
+      "kind": "action-resource-compatibility",
+      "action": "release.publish",
+      "resource_type": "publisher",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-publish-factory",
+      "kind": "action-resource-compatibility",
+      "action": "release.publish",
+      "resource_type": "factory",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-publish-capability",
+      "kind": "action-resource-compatibility",
+      "action": "release.publish",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-publish-registry",
+      "kind": "action-resource-compatibility",
+      "action": "release.publish",
+      "resource_type": "registry",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-publish-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "release.publish",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-suspend-publisher",
+      "kind": "action-resource-compatibility",
+      "action": "release.suspend",
+      "resource_type": "publisher",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-suspend-factory",
+      "kind": "action-resource-compatibility",
+      "action": "release.suspend",
+      "resource_type": "factory",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-suspend-capability",
+      "kind": "action-resource-compatibility",
+      "action": "release.suspend",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-suspend-registry",
+      "kind": "action-resource-compatibility",
+      "action": "release.suspend",
+      "resource_type": "registry",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-suspend-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "release.suspend",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-deprecate-publisher",
+      "kind": "action-resource-compatibility",
+      "action": "release.deprecate",
+      "resource_type": "publisher",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-deprecate-factory",
+      "kind": "action-resource-compatibility",
+      "action": "release.deprecate",
+      "resource_type": "factory",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-deprecate-capability",
+      "kind": "action-resource-compatibility",
+      "action": "release.deprecate",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-deprecate-registry",
+      "kind": "action-resource-compatibility",
+      "action": "release.deprecate",
+      "resource_type": "registry",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-deprecate-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "release.deprecate",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-revoke-publisher",
+      "kind": "action-resource-compatibility",
+      "action": "release.revoke",
+      "resource_type": "publisher",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-revoke-factory",
+      "kind": "action-resource-compatibility",
+      "action": "release.revoke",
+      "resource_type": "factory",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-revoke-capability",
+      "kind": "action-resource-compatibility",
+      "action": "release.revoke",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-revoke-registry",
+      "kind": "action-resource-compatibility",
+      "action": "release.revoke",
+      "resource_type": "registry",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-revoke-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "release.revoke",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-archive-publisher",
+      "kind": "action-resource-compatibility",
+      "action": "release.archive",
+      "resource_type": "publisher",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-archive-factory",
+      "kind": "action-resource-compatibility",
+      "action": "release.archive",
+      "resource_type": "factory",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-archive-capability",
+      "kind": "action-resource-compatibility",
+      "action": "release.archive",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-archive-registry",
+      "kind": "action-resource-compatibility",
+      "action": "release.archive",
+      "resource_type": "registry",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-release-archive-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "release.archive",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-capability-invoke-publisher",
+      "kind": "action-resource-compatibility",
+      "action": "capability.invoke",
+      "resource_type": "publisher",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-capability-invoke-factory",
+      "kind": "action-resource-compatibility",
+      "action": "capability.invoke",
+      "resource_type": "factory",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-capability-invoke-release",
+      "kind": "action-resource-compatibility",
+      "action": "capability.invoke",
+      "resource_type": "release",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-capability-invoke-registry",
+      "kind": "action-resource-compatibility",
+      "action": "capability.invoke",
+      "resource_type": "registry",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-capability-invoke-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "capability.invoke",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-registry-policy-read-publisher",
+      "kind": "action-resource-compatibility",
+      "action": "registry.policy.read",
+      "resource_type": "publisher",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-registry-policy-read-factory",
+      "kind": "action-resource-compatibility",
+      "action": "registry.policy.read",
+      "resource_type": "factory",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-registry-policy-read-release",
+      "kind": "action-resource-compatibility",
+      "action": "registry.policy.read",
+      "resource_type": "release",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-registry-policy-read-capability",
+      "kind": "action-resource-compatibility",
+      "action": "registry.policy.read",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-registry-policy-read-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "registry.policy.read",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-registry-policy-manage-publisher",
+      "kind": "action-resource-compatibility",
+      "action": "registry.policy.manage",
+      "resource_type": "publisher",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-registry-policy-manage-factory",
+      "kind": "action-resource-compatibility",
+      "action": "registry.policy.manage",
+      "resource_type": "factory",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-registry-policy-manage-release",
+      "kind": "action-resource-compatibility",
+      "action": "registry.policy.manage",
+      "resource_type": "release",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-registry-policy-manage-capability",
+      "kind": "action-resource-compatibility",
+      "action": "registry.policy.manage",
+      "resource_type": "capability",
+      "expected": "invalid"
+    },
+    {
+      "id": "pair-registry-policy-manage-execution_target",
+      "kind": "action-resource-compatibility",
+      "action": "registry.policy.manage",
+      "resource_type": "execution_target",
+      "expected": "invalid"
+    },
+    {
+      "id": "selector-subject-wildcard",
+      "kind": "invalid-policy",
+      "mutation": "subject.id",
+      "value": "*",
+      "expected": "schema-invalid"
+    },
+    {
+      "id": "selector-resource-wildcard",
+      "kind": "invalid-policy",
+      "mutation": "resource.id",
+      "value": "*",
+      "expected": "schema-invalid"
+    },
+    {
+      "id": "resource-factory-coordinates-missing",
+      "kind": "invalid-resource",
+      "resource": {
+        "type": "factory",
+        "id": "f"
+      },
+      "expected": "schema-invalid"
+    },
+    {
+      "id": "resource-release-coordinates-missing",
+      "kind": "invalid-resource",
+      "resource": {
+        "type": "release",
+        "id": "r",
+        "coordinates": {
+          "publisher_id": "p",
+          "factory_id": "f"
+        }
+      },
+      "expected": "schema-invalid"
+    },
+    {
+      "id": "resource-capability-coordinates-missing",
+      "kind": "invalid-resource",
+      "resource": {
+        "type": "capability",
+        "id": "c",
+        "coordinates": {
+          "publisher_id": "p",
+          "factory_id": "f",
+          "release_version": "1"
+        }
+      },
+      "expected": "schema-invalid"
+    },
+    {
+      "id": "duplicate-rule-id",
+      "kind": "semantic-policy",
+      "expected": "semantic-invalid"
+    },
+    {
+      "id": "condition-depth-limit",
+      "kind": "condition-limit",
+      "limit": "depth",
+      "expected": "reject-above-limit"
+    },
+    {
+      "id": "condition-node-limit",
+      "kind": "condition-limit",
+      "limit": "nodes",
+      "expected": "reject-above-limit"
+    },
+    {
+      "id": "condition-children-limit",
+      "kind": "condition-limit",
+      "limit": "children",
+      "expected": "schema-invalid"
+    },
+    {
+      "id": "condition-literal-array-limit",
+      "kind": "condition-limit",
+      "limit": "literal-array",
+      "expected": "schema-invalid"
+    },
+    {
+      "id": "invalid-rfc3339-timestamp",
+      "kind": "timestamp-format",
+      "value": "2026-11-16T25:00:00Z",
+      "expected": "schema-invalid"
+    },
+    {
+      "id": "freshness-expires-at-equality",
+      "kind": "freshness-boundary",
+      "evaluation_time": "2026-11-16T12:00:00Z",
+      "expires_at": "2026-11-16T12:00:00Z",
+      "expected": "stale"
+    }
+  ]
 }
