@@ -73,13 +73,16 @@
                 ],
                 "properties": {
                   "tenant_id": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                   },
                   "principal_id": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                   },
                   "release_record_id": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                   },
                   "operation": {
                     "enum": [
@@ -90,7 +93,8 @@
                 }
               },
               "request_fingerprint": {
-                "type": "string"
+                "type": "string",
+                "minLength": 1
               },
               "idempotency_lookup": {
                 "type": "object",
@@ -108,9 +112,43 @@
                     ]
                   },
                   "record": {
-                    "type": [
-                      "object",
-                      "null"
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "object",
+                        "required": [
+                          "scope",
+                          "request_fingerprint",
+                          "original_result",
+                          "original_reason",
+                          "response_ref"
+                        ],
+                        "properties": {
+                          "scope": {
+                            "$ref": "#/$defs/scope"
+                          },
+                          "request_fingerprint": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "original_result": {
+                            "enum": [
+                              "accepted",
+                              "rejected"
+                            ]
+                          },
+                          "original_reason": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "response_ref": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      }
                     ]
                   }
                 }
@@ -119,10 +157,24 @@
                 "type": [
                   "string",
                   "null"
+                ],
+                "enum": [
+                  "published",
+                  "suspended",
+                  "deprecated",
+                  "revoked",
+                  "archived",
+                  null
                 ]
               },
               "to": {
-                "type": "string"
+                "enum": [
+                  "published",
+                  "suspended",
+                  "deprecated",
+                  "revoked",
+                  "archived"
+                ]
               },
               "authorized": {
                 "type": "boolean"
@@ -177,16 +229,13 @@
                     "type": "string"
                   },
                   "event_type": {
-                    "type": "string"
+                    "const": "factory_release.published"
                   },
                   "revision": {
-                    "type": "integer"
+                    "const": 1
                   },
                   "from_state": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": "null"
                   },
                   "authorization_decision_ref": {
                     "type": "string"
@@ -243,12 +292,14 @@
                       "value": {
                         "type": "string",
                         "minLength": 43,
-                        "maxLength": 43
+                        "maxLength": 43,
+                        "pattern": "^[A-Za-z0-9_-]{43}$"
                       }
                     }
                   },
                   "authorization_actions": {
                     "type": "array",
+                    "minItems": 2,
                     "items": {
                       "enum": [
                         "factory.register",
@@ -269,10 +320,24 @@
             ],
             "properties": {
               "result": {
-                "type": "string"
+                "enum": [
+                  "accepted",
+                  "rejected"
+                ]
               },
               "reason": {
-                "type": "string"
+                "enum": [
+                  "TRANSITION_ACCEPTED",
+                  "ILLEGAL_TRANSITION",
+                  "AUTHORIZATION_DENIED",
+                  "REASON_REQUIRED",
+                  "REVOCATION_EVIDENCE_REQUIRED",
+                  "PRECONDITION_FAILED",
+                  "STALE_REVISION",
+                  "IDEMPOTENCY_CONFLICT",
+                  "PUBLICATION_ACCEPTED",
+                  "PUBLICATION_INVALID"
+                ]
               }
             }
           }
