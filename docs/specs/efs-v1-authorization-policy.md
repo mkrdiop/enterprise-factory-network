@@ -38,7 +38,7 @@ Unsupported profile/version, digest mismatch, missing required policy, unresolve
 
 Subject types are exactly: `user`, `service_principal`, `tenant`, and `publisher_principal`. A subject has an exact, non-empty, case-sensitive `id`. Subject identity MUST be established by the authentication boundary and passed to the evaluator as authenticated evidence. An untrusted request body MUST NOT establish its own authenticated subject.
 
-Subject attributes are typed claims with provenance. Every attribute consumed by a condition MUST be supplied in the explicit evaluation context with its trusted source, observation time and freshness bound. The evaluator MUST NOT treat caller-supplied role, tenant, publisher ownership, key trust or authentication claims as trusted merely because they appear in JSON. Trust in each source is configured outside the policy document by the enforcement environment.
+Subject attributes are typed claims with provenance. Every attribute consumed by a condition MUST be supplied in the explicit evaluation request (in the subject attribute map or context attribute map) with its trusted source, observation time and freshness bound. The evaluator MUST NOT treat caller-supplied role, tenant, publisher ownership, key trust or authentication claims as trusted merely because they appear in JSON. Trust in each source is configured outside the policy document by the enforcement environment.
 
 A rule subject selector matches only an exact subject type and exact subject ID. No implicit groups, aliases, case folding, wildcard IDs, role expansion or parent/child subject inheritance exists in v1. Additional claims can be tested only through typed conditions over authenticated, provenance-bearing attributes.
 
