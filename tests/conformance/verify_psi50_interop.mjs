@@ -35,7 +35,7 @@ function classifyMutation(vector, base) {
  const statement=envelope.statement, signer=envelope.signatures[0];
  if(envelope.profile_id!=="efs-ed25519-jcs-v1")return "EFS_SIGNATURE_UNSUPPORTED_PROFILE";
  const seen=new Set();
- for(const item of envelope.signatures){const id=item.key_id+"\\u0000"+item.algorithm;if(seen.has(id))return "EFS_SIGNATURE_DUPLICATE_SIGNER";seen.add(id);}
+ for(const item of envelope.signatures){const id=item.key_id+"|"+item.algorithm;if(seen.has(id))return "EFS_SIGNATURE_DUPLICATE_SIGNER";seen.add(id);}
  if(statement.digest.profile_id!=="efs-jcs-sha256-v1"||statement.digest.algorithm!=="SHA-256")return "EFS_SIGNATURE_DIGEST_PROFILE_MISMATCH";
  if(statement.publisher_id!==base.manifest.publisher.id||statement.factory_id!==base.manifest.factory.id||statement.release_version!==base.manifest.release.version||statement.efs_version!==base.manifest.efsVersion)return "EFS_SIGNATURE_BINDING_MISMATCH";
  if(statement.digest.value!==base.manifest.release.digest.value)return "EFS_SIGNATURE_BINDING_MISMATCH";
@@ -49,7 +49,7 @@ function classifyMutation(vector, base) {
   const raw=decodeCanonical(resolver.public_key_base64url,32),sig=decodeCanonical(signer.signature,64);
   const key=createPublicKey({key:Buffer.concat([Buffer.from("302a300506032b6570032100","hex"),raw]),format:"der",type:"spki"});
   const object={domain:"efs.release.signature.v1",signer:{algorithm:signer.algorithm,key_id:signer.key_id},statement};
-  const preimage=Buffer.concat([Buffer.from("EFS-SIGNATURE-V1\\n","ascii"),Buffer.from(canonicalize(object),"utf8")]);
+  const preimage=Buffer.concat([Buffer.from("EFS-SIGNATURE-V1\n","ascii"),Buffer.from(canonicalize(object),"utf8")]);
   return verify(null,preimage,key,sig)?"VALID":"EFS_SIGNATURE_INVALID";
  } catch { return "EFS_SIGNATURE_ENCODING_INVALID"; }
 }
