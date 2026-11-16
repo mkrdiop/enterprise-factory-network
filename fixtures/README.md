@@ -28,10 +28,9 @@ outcome and taxonomy are part of the fixture contract—not Python-specific beha
 
 ## Current coverage
 
-- Positive: manifest-sourced and external execution profiles.
-- Negative: wrong field type, mutually exclusive execution branches, timezone-less
-  timestamp, invalid embedded schema, remote `$ref`, unsupported dynamic reference.
-- Boundary: timezone-aware RFC 3339 offset timestamp.
+- Positive: minimal and multi-capability manifests; manifest-sourced and external execution profiles.
+- Negative: missing required property, wrong field type, empty required collections, mutually exclusive execution branches, timezone-less timestamp, invalid embedded schema, remote `$ref`, unsupported dynamic reference.
+- Boundary: minimum valid collection cardinalities, empty optional dependencies, and timezone-aware RFC 3339 offset timestamp.
 - Extensions: namespaced opaque extension data.
 - Parser/adversarial cases are generated in isolated temporary files by tests so malformed
   byte sequences and duplicate-member inputs remain exact and portable.
