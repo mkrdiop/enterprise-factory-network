@@ -23,7 +23,7 @@ This decision lifecycle is distinct from the Notion document lifecycle (Draft, P
 | ADR-006 | Execution isolation and workload packaging | Proposed | Runtime security workstream |
 | ADR-007 | Tenant isolation and authorization model | Proposed | Runtime governance workstream |
 | ADR-008 | Protocol profiles and adapter conformance | Proposed | PSI-56, PSI-58 |
-| ADR-009 | Unknown core fields and extension namespace governance | Proposed | PSI-34 follow-through |
+| ADR-009 | Unknown core fields and extension namespace governance | Proposed | PSI-34 follow-through |\n| [ADR-010](ADR-010-efs-v1-version-dimension-model.md) | EFS v1 version-dimension model | **Accepted** | PSI-46–PSI-49 |
 
 The Proposed entries are a decision inventory only. They do not select a technology or protocol. Create a separate ADR file when an item is ready for substantive evaluation; keep its status Proposed until approved.
 

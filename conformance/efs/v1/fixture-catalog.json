@@ -89,5 +89,11 @@
     "examples": [
       "fixtures/valid/capability-contract-sync.json"
     ]
+  },
+  "versionDimensions": {
+    "specification": "docs/efs-v1-version-dimensions.md",
+    "vectors": "conformance/efs/v1/version-dimension-vectors.json",
+    "acceptance": "conformance/efs/v1/version-dimension-acceptance.json",
+    "testModule": "tests/test_version_dimensions.py"
   }
 }
