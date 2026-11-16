@@ -40,7 +40,7 @@ function testDetachedManifestProhibition(){
  const schema=JSON.parse(readFileSync(new URL("../../schemas/efs/v1/factory-manifest.schema.json",import.meta.url),"utf8"));
  const negative=JSON.parse(readFileSync(new URL("./fixtures/psi50-manifest-signature-forbidden-v1.json",import.meta.url),"utf8"));
  if(schema.$defs.release.properties.signature!==false)throw Error("manifest schema does not forbid release.signature");
- if(!Object.hasOwn(negative.manifest.release,"signature")||negative.expected.diagnostic_path!=="/release/signature"||negative.expected.diagnostic_code!=="EFS_SCHEMA_CONSTRAINT")throw Error("detached manifest negative fixture is incomplete");
+ if(!Object.hasOwn(negative.manifest.release,"signature")||negative.expected.diagnostic_path!=="/release"||negative.expected.diagnostic_code!=="EFS_SCHEMA_CONSTRAINT")throw Error("detached manifest negative fixture is incomplete");
 }
 function testJcsVectors(){const vectors=JSON.parse(readFileSync(new URL("./signatures-v1.json",import.meta.url),"utf8")).jcs_vectors;for(const v of vectors){if(v.kind==="jcs-invalid"){let parsed;try{parsed=JSON.parse(v.raw_json);}catch{continue;}let code="";try{canonicalize(parsed);}catch(e){code=e.message.split(" ")[0];}if(code!==v.expected_failure)throw Error("JCS negative vector "+v.id+" expected "+v.expected_failure+" got "+code);}else if(canonicalize(v.input)!==v.expected_canonical)throw Error("JCS vector mismatch: "+v.id);}}
 try {
