@@ -178,3 +178,12 @@ The machine-readable schema is `schemas/efs-policy-v1.schema.json`. The independ
 - PSI-46–49 — exact version dimensions and compatibility
 - ADR-001 — release digest profile (not reused for policy documents)
 - `docs/adr/ADR-005-efs-v1-policy-combination-and-digest.md` (Proposed)
+
+
+## 12.1 Conformance-vector package contract
+
+The machine-readable package at `tests/conformance/policy-v1.json` is a normative, independently consumable test oracle. Each validation vector MUST be self-contained: an action/resource compatibility vector contains a complete `evaluation_request` (subject, authoritative resource coordinates, action, trusted context and at least one policy), not an informal pair that requires an implementation to guess how to construct a request. The expected result is the closed object `{ "classification": "invalid-input", "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION" }`.
+
+A semantic-policy vector MUST declare the exact semantic-invalid classification and reason code. Duplicate `rule_id` values produce `{ "classification": "semantic-invalid", "reason_code": "DUPLICATE_RULE_ID" }`; JSON Schema validation alone is not sufficient to establish uniqueness across array items.
+
+The vector-package schema MUST use a closed, kind-discriminated shape for every validation-vector kind. Each kind has its own required fields and expected-result vocabulary; unknown fields, missing payloads and incompatible expected values are invalid package data. A conforming implementation MUST execute every vector according to its declared kind and compare the observed classification/reason code with `expected`. The repository's contract tests validate the vector package and the normative validation rules; they do not purport to implement the full policy decision point.
