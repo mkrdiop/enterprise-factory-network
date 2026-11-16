@@ -33,7 +33,7 @@ def psi53(data):
  for check in checks:
   action=check["action"]; resource=check["resource"]; kind=resource["type"]
   if action not in ALLOWED: return "rejected","ACTION_UNMAPPED"
-  if kind not in ALLOWED[action]: return "indeterminate","PDP_INDETERMINATE"
+  if kind not in ALLOWED[action]: return "indeterminate","INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR"
   if not resource["id"] or not COORD[kind].issubset(resource["coordinates"]):
    return "rejected","RESOURCE_COORDINATES_INVALID"
   policy=check["policy"]
@@ -52,6 +52,7 @@ def psi53(data):
   signers=trust["required_signers"]
   if not signers: return "rejected","TRUST_UNAVAILABLE"
   for signer in signers:
+   if signer["algorithm"]!="Ed25519" or signer["usage"]!="efs-release-signing": return "rejected","TRUST_UNAVAILABLE"
    if signer["crypto_status"]=="invalid": return "rejected","SIGNATURE_INVALID"
    if signer["crypto_status"]!="valid": return "rejected","TRUST_UNAVAILABLE"
    if signer["status"]=="untrusted": return "rejected","KEY_NOT_TRUSTED"
