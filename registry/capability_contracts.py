@@ -6,8 +6,8 @@ runtime-facing payload boundary against an exact immutable release coordinate.
 """
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Mapping
 from urllib.parse import urljoin, urlsplit
 
 from jsonschema import Draft202012Validator
@@ -71,7 +71,7 @@ def _resource_registry(
     resources.setdefault(root_uri, root_schema)
     for uri, schema in sorted(resources.items()):
         if not isinstance(uri, str) or not isinstance(schema, dict):
-            raise ValueError("Schema resource graph entries must map URI strings to schema objects")
+            raise TypeError("Schema resource graph entries must map URI strings to schema objects")
         resource = Resource.from_contents(
             schema, default_specification=DRAFT202012
         )
@@ -265,7 +265,7 @@ def validate_contract_payload(
                 "Payload does not satisfy the selected capability contract schema.",
                 {"keyword": str(error.validator)},
             ))
-    except (SchemaError, ValueError, Unresolvable) as exc:
+    except (SchemaError, TypeError, ValueError, Unresolvable) as exc:
         diagnostics.append(PayloadDiagnostic(
             "EFS_CONTRACT_SCHEMA_INVALID", "payload",
             f"/capabilities/{index}/contract/{direction}",
