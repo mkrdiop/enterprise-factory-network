@@ -3,7 +3,8 @@ import pytest
 from efs.versioning import (
     ChangeKind, ReleaseChangeError, ReleaseCoordinate, SemVer, VersionDimension,
     VersionError, compare_field_versions, contract_versions_equal,
-    parse_field_version, require_exact_release_selection, validate_release_transition,
+    parse_field_version, require_exact_release_selection, validate_manifest_versions,
+    validate_release_transition,
 )
 
 
@@ -88,3 +89,18 @@ def test_release_selection_never_compares_different_factories():
               ReleaseCoordinate("urn:acme", "f2", "2.0.0", "p", "SHA-256", "b")]
     with pytest.raises(VersionError, match="different publisher/Factory"):
         require_exact_release_selection(values)
+
+
+def test_manifest_semver_validation_is_field_aware_and_non_mutating():
+    manifest = {
+        "efsVersion": "1.0.0",
+        "release": {"version": "v1.2.3"},
+        "capabilities": [{"contract": {"version": "2026-Q4"}}],
+    }
+    diagnostics = validate_manifest_versions(manifest)
+    assert [item["path"] for item in diagnostics] == ["/release/version"]
+    assert manifest["release"]["version"] == "v1.2.3"
+    manifest["release"]["version"] = "1.2.3"
+    manifest["efsVersion"] = "1.0"
+    diagnostics = validate_manifest_versions(manifest)
+    assert [item["path"] for item in diagnostics] == ["/efsVersion"]
