@@ -51,6 +51,7 @@ class FakeQueryRepository:
 
     def get_release(self, publisher_id, factory_id, version):
         return {
+            "releaseRecordId": "00000000-0000-4000-8000-000000000041",
             "publisherId": publisher_id,
             "factoryId": factory_id,
             "version": version,
@@ -173,3 +174,47 @@ def test_publication_status_returns_not_found_for_unknown_operation():
     response = client.get("/v1/publications/00000000-0000-0000-0000-000000000000")
     assert response.status_code == 404
     assert response.json()["error"]["code"] == "EFS_REGISTRY_NOT_FOUND"
+
+
+
+def test_exact_release_passport_json_and_markdown_are_available():
+    client, _publication, _payload_value = _client()
+    params = {
+        "publisher_id": "urn:example:publishers:acme",
+        "factory_id": "customer-support",
+        "version": "1.2.0",
+    }
+    first = client.get("/v1/passports", params=params)
+    second = client.get("/v1/passports", params=params)
+    assert first.status_code == 200
+    assert first.headers["content-type"].startswith("application/json")
+    assert first.content == second.content
+    passport = first.json()
+    assert passport["source"]["publisherId"] == params["publisher_id"]
+    assert passport["source"]["factoryId"] == params["factory_id"]
+    assert passport["source"]["releaseVersion"] == params["version"]
+    assert passport["assurance"]["artifactIntegrity"] == "verified"
+    assert passport["assurance"]["publisherTrust"] == "not_evaluated"
+    assert passport["assurance"]["signatureVerification"] == "not_evaluated"
+    assert passport["source"]["registry"]["releaseRecordId"].endswith("0041")
+
+    markdown = client.get("/v1/passports", params={**params, "format": "markdown"})
+    assert markdown.status_code == 200
+    assert markdown.headers["content-type"].startswith("text/markdown")
+    assert markdown.text.startswith("# Factory Passport — Customer Support Factory")
+    assert "## Provenance" in markdown.text
+    assert "not_evaluated" not in markdown.text
+
+
+def test_passport_rejects_unknown_representation_format():
+    client, _publication, _payload_value = _client()
+    response = client.get(
+        "/v1/passports",
+        params={
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "customer-support",
+            "version": "1.2.0",
+            "format": "html",
+        },
+    )
+    assert response.status_code == 422
