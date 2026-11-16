@@ -1,0 +1,406 @@
+{
+  "vector_set": "efs-policy-v1",
+  "specification": "docs/specs/efs-v1-authorization-policy.md",
+  "policy_profile": "efs-policy-v1",
+  "combining_algorithm": "deny-overrides-indeterminate-overrides-permit",
+  "base_request": {
+    "subject": {
+      "type": "user",
+      "id": "user:alice",
+      "attributes": {}
+    },
+    "resource": {
+      "type": "factory",
+      "id": "factory:acme:payments",
+      "coordinates": {
+        "publisher_id": "urn:example:publishers:acme",
+        "factory_id": "payments"
+      }
+    },
+    "action": "factory.publish",
+    "context": {
+      "evaluation_time": "2026-11-16T12:00:00Z",
+      "attributes": {}
+    }
+  },
+  "vectors": [
+    {
+      "id": "pol-kat-001",
+      "kind": "policy-digest-known-answer",
+      "name": "JCS and SHA-256 policy digest fixture",
+      "policy": {
+        "policy_profile": "efs-policy-v1",
+        "policy_id": "p1",
+        "policy_version": "1",
+        "rules": [
+          {
+            "rule_id": "r1",
+            "effect": "permit",
+            "subject": {
+              "type": "user",
+              "id": "user:alice"
+            },
+            "resource": {
+              "type": "factory",
+              "id": "factory:acme:payments"
+            },
+            "actions": [
+              "factory.publish"
+            ]
+          }
+        ],
+        "digest": {
+          "profile_id": "efs-policy-jcs-sha256-v1",
+          "algorithm": "sha-256",
+          "value": "RAdldhx765kClLXsMvo1C0VjRQB8x8VOO6qX6Y_DauQ"
+        }
+      },
+      "expected": {
+        "jcs": "{\"domain\":\"efs.policy.v1\",\"policy\":{\"policy_id\":\"p1\",\"policy_profile\":\"efs-policy-v1\",\"policy_version\":\"1\",\"rules\":[{\"actions\":[\"factory.publish\"],\"effect\":\"permit\",\"resource\":{\"id\":\"factory:acme:payments\",\"type\":\"factory\"},\"rule_id\":\"r1\",\"subject\":{\"id\":\"user:alice\",\"type\":\"user\"}}]}}",
+        "sha256_hex": "440765761c7beb990294b5ec32fa350b456345007cc7c54e3baa97e98fc36ae4",
+        "digest_base64url": "RAdldhx765kClLXsMvo1C0VjRQB8x8VOO6qX6Y_DauQ"
+      }
+    },
+    {
+      "id": "pol-001",
+      "name": "explicit permit",
+      "policy": {
+        "policy_profile": "efs-policy-v1",
+        "policy_id": "p1",
+        "policy_version": "1",
+        "digest": {
+          "profile_id": "efs-policy-jcs-sha256-v1",
+          "algorithm": "sha-256",
+          "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        },
+        "rules": [
+          {
+            "rule_id": "r1",
+            "effect": "permit",
+            "subject": {
+              "type": "user",
+              "id": "user:alice"
+            },
+            "resource": {
+              "type": "factory",
+              "id": "factory:acme:payments"
+            },
+            "actions": [
+              "factory.publish"
+            ]
+          }
+        ]
+      },
+      "expected": "permit",
+      "reason": "PERMIT_RULE_MATCHED"
+    },
+    {
+      "id": "pol-002",
+      "name": "required policy bundle unavailable (empty bundle)",
+      "policies": [],
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_POLICY_UNAVAILABLE"
+    },
+    {
+      "id": "pol-003",
+      "name": "no applicable rule defaults to deny",
+      "policy": {
+        "policy_profile": "efs-policy-v1",
+        "policy_id": "p1",
+        "policy_version": "1",
+        "digest": {
+          "profile_id": "efs-policy-jcs-sha256-v1",
+          "algorithm": "sha-256",
+          "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        },
+        "rules": [
+          {
+            "rule_id": "r1",
+            "effect": "permit",
+            "subject": {
+              "type": "user",
+              "id": "user:bob"
+            },
+            "resource": {
+              "type": "factory",
+              "id": "factory:acme:payments"
+            },
+            "actions": [
+              "factory.publish"
+            ]
+          }
+        ]
+      },
+      "expected": "deny",
+      "reason": "DEFAULT_DENY_NO_APPLICABLE_PERMIT"
+    },
+    {
+      "id": "pol-004",
+      "name": "explicit deny overrides permit",
+      "policies": [
+        {
+          "policy_profile": "efs-policy-v1",
+          "policy_id": "p1",
+          "policy_version": "1",
+          "digest": {
+            "profile_id": "efs-policy-jcs-sha256-v1",
+            "algorithm": "sha-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "rules": [
+            {
+              "rule_id": "allow",
+              "effect": "permit",
+              "subject": {
+                "type": "user",
+                "id": "user:alice"
+              },
+              "resource": {
+                "type": "factory",
+                "id": "factory:acme:payments"
+              },
+              "actions": [
+                "factory.publish"
+              ]
+            }
+          ]
+        },
+        {
+          "policy_profile": "efs-policy-v1",
+          "policy_id": "p2",
+          "policy_version": "1",
+          "digest": {
+            "profile_id": "efs-policy-jcs-sha256-v1",
+            "algorithm": "sha-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "rules": [
+            {
+              "rule_id": "deny",
+              "effect": "deny",
+              "subject": {
+                "type": "user",
+                "id": "user:alice"
+              },
+              "resource": {
+                "type": "factory",
+                "id": "factory:acme:payments"
+              },
+              "actions": [
+                "factory.publish"
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": "deny",
+      "reason": "DENY_RULE_MATCHED"
+    },
+    {
+      "id": "pol-005",
+      "name": "policy order does not change result",
+      "permutation_of": "pol-004",
+      "expected": "deny",
+      "reason": "DENY_RULE_MATCHED"
+    },
+    {
+      "id": "pol-006",
+      "name": "missing referenced attribute is indeterminate",
+      "rule": {
+        "rule_id": "r1",
+        "effect": "permit",
+        "subject": {
+          "type": "user",
+          "id": "user:alice"
+        },
+        "resource": {
+          "type": "factory",
+          "id": "factory:acme:payments"
+        },
+        "actions": [
+          "factory.publish"
+        ],
+        "condition": {
+          "op": "eq",
+          "ref": "context.attributes.mfa",
+          "value": true
+        }
+      },
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_MISSING_ATTRIBUTE"
+    },
+    {
+      "id": "pol-007",
+      "name": "stale attribute is indeterminate",
+      "attribute": {
+        "value": true,
+        "source": "authn.example",
+        "observed_at": "2026-11-16T10:00:00Z",
+        "expires_at": "2026-11-16T11:00:00Z"
+      },
+      "condition": {
+        "op": "eq",
+        "ref": "context.attributes.mfa",
+        "value": true
+      },
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_STALE_ATTRIBUTE"
+    },
+    {
+      "id": "pol-008",
+      "name": "untrusted attribute source is indeterminate",
+      "attribute": {
+        "value": true,
+        "source": "caller",
+        "observed_at": "2026-11-16T11:59:00Z",
+        "expires_at": "2026-11-16T12:05:00Z"
+      },
+      "condition": {
+        "op": "eq",
+        "ref": "context.attributes.mfa",
+        "value": true
+      },
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_UNTRUSTED_ATTRIBUTE_SOURCE"
+    },
+    {
+      "id": "pol-009",
+      "name": "unsupported policy profile fails closed",
+      "policy": {
+        "policy_profile": "efs-policy-v2",
+        "policy_id": "p1",
+        "policy_version": "2"
+      },
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_POLICY_VERSION_UNSUPPORTED"
+    },
+    {
+      "id": "pol-010",
+      "name": "policy digest mismatch fails closed",
+      "policy_digest_valid": false,
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_POLICY_DIGEST_MISMATCH"
+    },
+    {
+      "id": "pol-011",
+      "name": "resource/action mismatch fails closed",
+      "resource": {
+        "type": "factory",
+        "id": "factory:acme:payments"
+      },
+      "action": "capability.invoke",
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR"
+    },
+    {
+      "id": "pol-012",
+      "name": "typed equality does not coerce string to boolean",
+      "condition": {
+        "op": "eq",
+        "ref": "context.attributes.mfa",
+        "value": true
+      },
+      "attribute": {
+        "value": "true",
+        "source": "authn.example",
+        "observed_at": "2026-11-16T11:59:00Z",
+        "expires_at": "2026-11-16T12:05:00Z"
+      },
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_CONDITION_TYPE_MISMATCH"
+    },
+    {
+      "id": "pol-013",
+      "name": "obligation parameter conflict fails closed",
+      "obligations": [
+        {
+          "id": "require-approval",
+          "parameters": {
+            "level": "manager"
+          }
+        },
+        {
+          "id": "require-approval",
+          "parameters": {
+            "level": "security"
+          }
+        }
+      ],
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_OBLIGATION_CONFLICT"
+    },
+    {
+      "id": "pol-014",
+      "name": "unsupported obligation cannot permit operation",
+      "obligations": [
+        {
+          "id": "require-mfa"
+        }
+      ],
+      "pep_supports_obligation": false,
+      "expected": "deny-at-pep",
+      "reason": "INDETERMINATE_UNSUPPORTED_OBLIGATION"
+    },
+    {
+      "id": "pol-015",
+      "name": "policy resolver unavailable fails closed",
+      "resolver": "unavailable",
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_POLICY_UNAVAILABLE"
+    },
+    {
+      "id": "pol-016",
+      "name": "wildcard and alias resource matching are unsupported",
+      "rule_resource": {
+        "type": "factory",
+        "id": "*"
+      },
+      "request_resource": {
+        "type": "factory",
+        "id": "factory:acme:payments"
+      },
+      "expected": "invalid-policy",
+      "reason": "INVALID_WILDCARD_RESOURCE"
+    },
+    {
+      "id": "pol-017",
+      "name": "unknown action rejected",
+      "action": "factory.admin",
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR"
+    },
+    {
+      "id": "pol-018",
+      "name": "indeterminate overrides an otherwise applicable permit",
+      "combination": [
+        "permit",
+        "indeterminate"
+      ],
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_MISSING_ATTRIBUTE"
+    },
+    {
+      "id": "pol-019",
+      "name": "combination remains indeterminate when policy order is reversed",
+      "permutation_of": "pol-018",
+      "combination": [
+        "indeterminate",
+        "permit"
+      ],
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_MISSING_ATTRIBUTE"
+    },
+    {
+      "id": "pol-020",
+      "name": "exists on an absent attribute is false, so the rule is not applicable",
+      "condition": {
+        "op": "exists",
+        "ref": "context.attributes.optional_claim"
+      },
+      "attribute_present": false,
+      "expected": "deny",
+      "reason": "DEFAULT_DENY_NO_APPLICABLE_PERMIT"
+    }
+  ],
+  "policy_digest_handling": "Decision vectors exercise the pure evaluator with policy bundles treated as already resolved and digest-verified by the harness. In these evaluator-only fixtures, the all-zero 32-byte digest is a sentinel and MUST NOT be used as a digest known-answer value. Policy digest computation is tested independently by pol-kat-001."
+}
