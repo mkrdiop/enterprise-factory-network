@@ -75,9 +75,10 @@ def test_governance_is_unknown_without_m5_authority_and_evidence():
 
 
 def test_aggregate_is_conservative_and_missing_evidence_is_unknown():
-    spec = assess_specification(supported_range="*", consumer_profile_id="p", range_evaluator_result=True,
-                                evidence=EVIDENCE)
-    report = evaluate_compatibility(subject=SUBJECT, consumer=CONSUMER,
+    consumer = ConsumerProfile("consumer-a", "profile-a", "1", "*", "runtime-a", ("https-json",))
+    spec = assess_specification(supported_range="*", consumer_profile_id=consumer.profile_id,
+                                range_evaluator_result=True, evidence=EVIDENCE)
+    report = evaluate_compatibility(subject=SUBJECT, consumer=consumer,
                                     assessments=[spec], ruleset_version="efs-compat-1")
     assert report.outcome is Outcome.UNKNOWN
     assert len(report.assessments) == len(CompatibilityDimension)
@@ -86,10 +87,12 @@ def test_aggregate_is_conservative_and_missing_evidence_is_unknown():
 
 
 def test_breaking_dominates_other_outcomes():
-    results = [assess_specification(supported_range="<1", consumer_profile_id="p",
+    consumer = ConsumerProfile("consumer-a", "profile-a", "1", "<1.0.0", "runtime-a", ("https-json",))
+    results = [assess_specification(supported_range=consumer.supported_efs_range,
+                                    consumer_profile_id=consumer.profile_id,
                                     range_evaluator_result=False, evidence=EVIDENCE),
                assess_governance(outcome=Outcome.COMPATIBLE, evidence=EVIDENCE, authority="M5")]
-    report = evaluate_compatibility(subject=SUBJECT, consumer=CONSUMER,
+    report = evaluate_compatibility(subject=SUBJECT, consumer=consumer,
                                     assessments=results, ruleset_version="1")
     assert report.outcome is Outcome.BREAKING
 
@@ -106,7 +109,8 @@ def test_duplicate_dimensions_and_unauthorized_governance_are_rejected():
 
 
 def test_report_is_deterministic_and_retains_exact_coordinates():
-    assessments = [assess_specification(supported_range=">=1 <2", consumer_profile_id="p",
+    assessments = [assess_specification(supported_range=CONSUMER.supported_efs_range,
+                                        consumer_profile_id=CONSUMER.profile_id,
                                         range_evaluator_result=True, evidence=EVIDENCE),
                    assess_governance()]
     first = evaluate_compatibility(subject=SUBJECT, consumer=CONSUMER, assessments=assessments,
