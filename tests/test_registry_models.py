@@ -1,5 +1,6 @@
 from registry.models import ArtifactBlob, Factory, FactoryRelease, Publisher
 
+
 def test_required_unique_constraints_exist():
     for model,name in [(Publisher,"uq_publishers_publisher_uri"),(Factory,"uq_factories_publisher_factory"),(ArtifactBlob,"uq_artifact_digest"),(FactoryRelease,"uq_releases_factory_version")]:
         assert name in {c.name for c in model.__table__.constraints}
