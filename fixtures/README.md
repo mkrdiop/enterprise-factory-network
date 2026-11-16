@@ -20,7 +20,7 @@ outcome and taxonomy are part of the fixture contract—not Python-specific beha
 - Use synthetic identifiers, domains and digest-shaped placeholders. A fixture digest
   is not evidence that a release digest was actually computed or verified.
 - Do not add external schema or policy retrieval requirements.
-- Every new fixture must be included in the appropriate test glob or explicit parser test.
+- Every new manifest fixture must fall under a catalogue glob in `conformance/efs/v1/fixture-catalog.json`; every raw parser vector must be registered there with encoding and expected diagnostic code. The catalogue-driven tests enforce this inventory.
 - Preserve PSI-35's open unknown-core-field behavior until a separate governance decision
   changes it.
 - Do not infer signature, policy, dependency, compatibility or runtime guarantees from
