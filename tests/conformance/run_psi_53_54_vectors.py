@@ -1,6 +1,7 @@
 """Independent reference oracle for PSI-53/54 v1.1 conformance vectors."""
 from __future__ import annotations
-import json, sys
+import json
+import sys
 from datetime import datetime
 from pathlib import Path
 
