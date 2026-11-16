@@ -77,6 +77,13 @@
         "test_subject_semver_coordinates_are_validated_by_psi47",
         "test_exact_subject_coordinates_and_consumer_ranges_are_preserved"
       ]
+    },
+    {
+      "id": "PSI49-AC-10",
+      "requirement": "The evaluated specification coordinates must match the exact report subject efsVersion and consumer profile/range; inconsistent caller-supplied assessments are rejected.",
+      "tests": [
+        "test_report_rejects_specification_assessed_against_different_coordinates"
+      ]
     }
   ]
 }
