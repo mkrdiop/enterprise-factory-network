@@ -1,0 +1,37 @@
+name: Registry PostgreSQL integration
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  registry:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: efs
+          POSTGRES_PASSWORD: efs
+          POSTGRES_DB: efs_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U efs -d efs_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install -r requirements-dev.txt
+      - run: ruff check .
+      - run: pytest -q
+        env:
+          EFS_TEST_DATABASE_URL: postgresql+psycopg://efs:efs@localhost:5432/efs_test
+      - run: alembic upgrade head
+        env:
+          EFS_DATABASE_URL: postgresql+psycopg://efs:efs@localhost:5432/efs_test
