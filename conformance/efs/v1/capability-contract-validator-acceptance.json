@@ -38,7 +38,9 @@
       "requirement": "Embedded schemas use the local-only EFS reference profile; remote, dynamic and unresolved references fail without network retrieval.",
       "tests": [
         "test_schema_reference_profile_rejects_remote_and_unresolved_refs",
-        "test_valid_local_json_pointer_reference_is_accepted"
+        "test_valid_local_json_pointer_reference_is_accepted",
+        "test_definition_reference_graph_resolves_only_prebundled_resources",
+        "test_duplicate_schema_resource_ids_are_rejected"
       ],
       "fixtures": [
         "capabilityContractValidation"
