@@ -2,7 +2,7 @@
 
 The packages are language- and transport-neutral semantic oracles.
 
-- PSI-53: exact PSI-52 action/resource compatibility, multi-check publication, all-check permit composition, deny/indeterminate outcomes, trust-required versus trust-not-required, evidence freshness, obligations, commit-generation changes and external-effect durable intent/outcome.
+- PSI-53: exact PSI-52 action/resource compatibility, multi-check publication, all-check permit composition, deny/indeterminate outcomes, policy-required per-signer cryptographic/trust checks, key validity intervals and evidence freshness, obligations, commit-generation changes and external-effect durable intent/outcome.
 - PSI-54: legal/illegal lifecycle transitions, scoped idempotency, replay of the original accepted or rejected result, fingerprint conflict, cross-scope key isolation and atomic revision-1 publication event.
 
 ## Execute the reference oracle
@@ -13,7 +13,7 @@ From the repository root:
 python tests/conformance/run_psi_53_54_vectors.py
 ```
 
-Expected result: 24/24 vectors (14 PSI-53 + 10 PSI-54).
+Expected result: 52/52 vectors (28 PSI-53 + 24 PSI-54).
 
 ## Independent implementation requirements
 
