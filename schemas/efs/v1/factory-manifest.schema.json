@@ -61,7 +61,8 @@
       "type": "string",
       "minLength": 1,
       "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:",
-      "format": "uri"
+      "format": "uri",
+      "description": "RFC 3986 absolute URI. EFS publisher identifiers additionally MUST satisfy efs-uri-c14n-1 in the semantic conformance stage."
     },
     "publisher": {
       "type": "object",
@@ -70,7 +71,7 @@
       ],
       "properties": {
         "id": {
-          "$ref": "#/$defs/nonEmptyString"
+          "$ref": "#/$defs/absoluteUri"
         },
         "name": {
           "type": "string"
