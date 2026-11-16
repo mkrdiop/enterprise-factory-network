@@ -32,5 +32,4 @@ outcome and taxonomy are part of the fixture contract—not Python-specific beha
 - Negative: missing required property, wrong field type, empty required collections, invalid digest length, execution-mode enum/branch violations, invalid contract URI, empty policy declarations, timezone-less timestamp, invalid embedded schema, remote `$ref`, unsupported dynamic reference.
 - Boundary: minimum valid collection cardinalities, empty optional dependencies, one execution mode, absolute URN/HTTPS identifiers, timezone-aware RFC 3339 offset timestamp and leap-day timestamp.
 - Extensions: namespaced opaque extension data.
-- Parser/adversarial cases are generated in isolated temporary files by tests so malformed
-  byte sequences and duplicate-member inputs remain exact and portable.
+- Parser/adversarial inputs are explicit files under `adversarial/parser/`. Invalid UTF-8 is stored as Base64 and decoded by tests, preserving exact bytes across Git and checkout environments. Duplicate-member files intentionally contain invalid JSON object texts.
