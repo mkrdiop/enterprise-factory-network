@@ -104,7 +104,7 @@ def test_catalog_and_acceptance_registry_are_complete():
             "EFS_PROFILE_INVARIANT_FAILED", "EFS_PUBLISHER_URI_INVALID",
             "EFS_PUBLISHER_URI_NON_CANONICAL", "EFS_CAPABILITY_ID_DUPLICATE",
             "EFS_CONTRACT_ERROR_CODE_DUPLICATE", "EFS_CAPABILITY_EXECUTION_PROFILE_UNRESOLVED",
-            "EFS_SCHEMA_REF_UNRESOLVED", "EFS_CONTRACT_ERROR_CODE_UNDECLARED"} <= codes
+            "EFS_SCHEMA_REF_UNRESOLVED", "EFS_CONTRACT_ERROR_CODE_UNDECLARED", "EFS_SCHEMA_RESOURCE_ID_DUPLICATE"} <= codes
     contract_catalog = catalog["capabilityContractValidation"]
     assert (ROOT / contract_catalog["vectors"]).is_file()
     assert (ROOT / contract_catalog["acceptance"]).is_file()
