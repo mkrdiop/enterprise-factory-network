@@ -1,7 +1,5 @@
 import json
 
-import pytest
-
 from efs.compatibility import (
     CompatibilityDimension,
     CompatibilityError,
