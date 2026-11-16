@@ -106,6 +106,8 @@ def validate_execution_envelope(
 
     _capability_index, capability = selected[0]
     contract = capability.get("contract", {})
+    if not isinstance(contract, dict):
+        contract = {}
     contract_context = context["contract"]
     if (
         not isinstance(contract, dict)
@@ -148,6 +150,13 @@ def validate_execution_envelope(
                 ))
             # The external profile's mode declaration is not inferred or fetched
             # here. The adapter must resolve and verify that immutable artifact.
+
+    if diagnostics:
+        diagnostics.sort(key=lambda item: (
+            item["stage"], item["path"], item["code"], item["message"],
+            json.dumps(item.get("details", {}), sort_keys=True),
+        ))
+        return {"valid": False, "diagnostics": diagnostics}
 
     message_type = envelope["messageType"]
     direction = None
@@ -208,7 +217,7 @@ def validate_execution_transition(previous: dict, current: dict) -> dict:
     allowed = {
         ("request", "sync"): {"result", "error"},
         ("request", "async"): {"accepted", "result", "error"},
-        ("request", "streaming"): {"accepted", "progress", "result", "error"},
+        ("request", "streaming"): {"accepted", "result", "error"},
         ("event", "event"): {"result", "error"},
         ("accepted", "async"): {"result", "error"},
         ("accepted", "streaming"): {"progress", "result", "error"},
