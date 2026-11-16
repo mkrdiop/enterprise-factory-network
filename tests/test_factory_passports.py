@@ -101,9 +101,10 @@ def test_passport_rejects_registry_manifest_identity_or_digest_mismatch():
 def test_optional_fields_are_omitted_and_extensions_are_preserved():
     manifest = _manifest()
     manifest["extensions"] = {"https://extensions.example.org/ui": {"theme": "dark"}}
+    manifest["publisher"].pop("name")
     record = _registry_record(manifest)
     passport = build_factory_passport(manifest, record)
-    assert "name" not in passport["publisher"] if "name" not in manifest["publisher"] else True
+    assert "name" not in passport["publisher"]
     assert "createdAt" not in passport["release"]
     assert passport["extensions"] == manifest["extensions"]
     assert any(item["target"].startswith("/extensions/") for item in passport["provenance"])
@@ -134,3 +135,22 @@ def test_json_and_markdown_golden_fixtures():
     expected_markdown = (FIXTURES / "minimal-passport.md").read_text(encoding="utf-8")
     assert canonical_passport_json(passport) + b"\\n" == expected_json
     assert render_factory_passport_markdown(passport) == expected_markdown
+
+
+
+def test_external_execution_profiles_and_optional_policy_branches_are_preserved():
+    manifest = _manifest()
+    manifest["execution"] = {
+        "source": "external",
+        "profileReferences": [{
+            "id": "https://profiles.example.org/execution/http/v1",
+            "version": "1.0.0",
+            "digest": {"algorithm": "SHA-256", "value": "A" * 43},
+        }],
+    }
+    manifest["policies"] = {"declarations": []}
+    passport = build_factory_passport(manifest, _registry_record(manifest))
+    assert passport["execution"] == manifest["execution"]
+    assert passport["policies"] == manifest["policies"]
+    assert passport["summary"]["policyDeclarationCount"] == 0
+    assert passport["summary"]["policyReferenceCount"] == 0
