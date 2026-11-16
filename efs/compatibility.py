@@ -208,14 +208,16 @@ def assess_contract_change(
                   ("previousContractVersion", previous_version), ("selectedContractVersion", selected_version))
     if previous_version == selected_version:
         if not refs:
-            return _unknown(dimension, "EFC-CONTRACT-002",
-                            "Exact contract version matches, but definition identity/evidence is absent.")
+            return DimensionAssessment(dimension, Outcome.UNKNOWN, "EFC-CONTRACT-002",
+                                       "Exact contract version matches, but definition identity/evidence is absent.",
+                                       coordinates=coordinate)
         return DimensionAssessment(dimension, Outcome.COMPATIBLE, "EFC-CONTRACT-003",
                                    "Exact opaque contract version matches and definition evidence was supplied.", refs,
                                    coordinates=coordinate)
     if not refs or change_classification is None:
-        return _unknown(dimension, "EFC-CONTRACT-004",
-                        "Contract version differs; no explicit definition-change classification/evidence was supplied.")
+        return DimensionAssessment(dimension, Outcome.UNKNOWN, "EFC-CONTRACT-004",
+                                   "Contract version differs; no explicit definition-change classification/evidence was supplied.",
+                                   coordinates=coordinate)
     if change_classification == "compatible-additive":
         return DimensionAssessment(dimension, Outcome.COMPATIBLE, "EFC-CONTRACT-005",
                                    "Contract definition change is explicitly classified as compatible additive.", refs,
