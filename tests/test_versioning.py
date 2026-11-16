@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 from efs.versioning import (
@@ -14,6 +16,7 @@ from efs.versioning import (
     validate_manifest_versions,
     validate_release_transition,
 )
+from registry.publication_service import ManifestValidationError, RegistryPublicationService
 
 
 @pytest.mark.parametrize("value", ["0.0.0", "1.2.3", "1.2.3-alpha", "1.2.3-alpha.1",
@@ -112,3 +115,16 @@ def test_manifest_semver_validation_is_field_aware_and_non_mutating():
     manifest["efsVersion"] = "1.0"
     diagnostics = validate_manifest_versions(manifest)
     assert [item["path"] for item in diagnostics] == ["/efsVersion"]
+
+
+def test_registry_publication_rejects_non_semver_release_before_storage():
+    root = Path(__file__).resolve().parents[1]
+    raw = (root / "fixtures/valid/manifest-minimal.json").read_bytes().replace(
+        b'"version":"1.2.0"', b'"version":"v1.2.0"'
+    )
+    service = RegistryPublicationService(None, None, None, root / "schemas/efs/v1/factory-manifest.schema.json")
+    with pytest.raises(ManifestValidationError) as exc_info:
+        service._validate(raw)
+    diagnostic = next(item for item in exc_info.value.report["diagnostics"]
+                      if item["code"] == "EFS_VERSION_SEMVER_INVALID")
+    assert diagnostic["path"] == "/release/version"
