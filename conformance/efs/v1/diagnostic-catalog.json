@@ -27,6 +27,11 @@
       "meaning": "Contract error code is duplicated within one exact contract definition."
     },
     {
+      "code": "EFS_CONTRACT_ERROR_CODE_UNDECLARED",
+      "stage": "payload",
+      "meaning": "Error detail payload does not identify exactly one declared contract error code."
+    },
+    {
       "code": "EFS_CONTRACT_PAYLOAD_INVALID",
       "stage": "payload",
       "meaning": "Concrete JSON payload does not satisfy the selected capability contract schema."
