@@ -9,8 +9,8 @@ from pathlib import Path
 
 from sqlalchemy.exc import SQLAlchemyError
 
-from scripts.validate_manifest import validate_report
 from efs.versioning import validate_manifest_versions
+from scripts.validate_manifest import validate_report
 
 from .artifact_store import ArtifactIntegrityError
 from .digests import ReleaseDigestError, verify_canonical_payload
