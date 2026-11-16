@@ -53,7 +53,7 @@ Dispatch occurs only after that durable local commit and uses the same stable in
 PSI-45 remains authoritative for execution lifecycle, state vocabulary, event replay and revision semantics. PSI-53 defines only the authorization/audit gate and durable hand-off contract; it creates no competing execution state machine and promises no cross-system atomicity.
 
 ## 6. Stable enforcement reasons
-`AUTHN_REQUIRED`, `ACTION_UNMAPPED`, `RESOURCE_COORDINATES_INVALID`, `INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR`, `POLICY_DENIED`, `PDP_INDETERMINATE`, `OBLIGATION_UNFULFILLED`, `TRUST_UNAVAILABLE`, `KEY_NOT_TRUSTED`, `KEY_REVOKED`, `SIGNATURE_INVALID`, `RELEASE_NOT_ADMISSIBLE`, `EVIDENCE_STALE`, `AUDIT_DURABILITY_FAILURE`, `AUTHORIZATION_REVISION_CHANGED`, `EXECUTION_INTENT_NOT_DURABLE`, `EXECUTION_OUTCOME_UNKNOWN`.
+`AUTHN_REQUIRED`, `ACTION_UNMAPPED`, `RESOURCE_COORDINATES_INVALID`, `INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR`, `INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR`, `POLICY_DENIED`, `PDP_INDETERMINATE`, `OBLIGATION_UNFULFILLED`, `TRUST_UNAVAILABLE`, `KEY_NOT_TRUSTED`, `KEY_REVOKED`, `SIGNATURE_INVALID`, `RELEASE_NOT_ADMISSIBLE`, `EVIDENCE_STALE`, `AUDIT_DURABILITY_FAILURE`, `AUTHORIZATION_REVISION_CHANGED`, `EXECUTION_INTENT_NOT_DURABLE`, `EXECUTION_OUTCOME_UNKNOWN`.
 
 ## 7. Conformance and acceptance
 The v1.1 vector package exercises exact action/resource compatibility, composite all-permit semantics, deny/indeterminate composition, trust-required and trust-not-required behavior, evidence freshness, obligations, commit-generation changes and external-effect intent/outcome handling. It is a composition oracle, not a replacement for PSI-52 PDP vectors.
