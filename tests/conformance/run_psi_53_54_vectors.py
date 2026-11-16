@@ -36,7 +36,7 @@ def psi53(data):
   if action not in ALLOWED: return "rejected","ACTION_UNMAPPED"
   if kind not in ALLOWED[action]: return "indeterminate","INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR"
   if not resource["id"] or not COORD[kind].issubset(resource["coordinates"]):
-   return "rejected","RESOURCE_COORDINATES_INVALID"
+   return "indeterminate","INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR"
   policy=check["policy"]
   if policy["policy_profile"]!="efs-policy-v1" or not policy.get("digest_verified") or not all(policy.get(k) for k in ("policy_id","policy_version","digest")):
    return "indeterminate","PDP_INDETERMINATE"
