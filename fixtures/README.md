@@ -12,7 +12,7 @@ outcome and taxonomy are part of the fixture contract—not Python-specific beha
 | `invalid/` | Fail | Structural, profile, embedded-schema and prohibited-reference cases |
 | `boundary/` | Pass | Valid boundary values, including RFC 3339 offset timestamps |
 | `extensions/` | Pass | Namespaced opaque extension payloads; unknown core fields remain open pending governance |
-| `adversarial/` | Fail at parsing | Raw parser inputs such as malformed JSON and duplicate object members |
+| `adversarial/` | Fail at parsing | Raw parser inputs such as malformed JSON, non-standard numeric constants and duplicate object members |
 
 ## Fixture authoring rules
 
