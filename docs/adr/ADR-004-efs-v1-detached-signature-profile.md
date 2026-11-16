@@ -1,8 +1,8 @@
 # ADR-004 — EFS v1 detached release-signature profile
 
-- **Status:** Proposed — architecture decision for founder review
+- **Status:** Accepted — delegated architecture decision (2026-11-16)
 - **Date:** 2026-11-16
-- **Owners:** EFS architecture
+- **Owners:** EFS architecture, acting under project-owner delegation (2026-11-16)
 - **Related issues:** PSI-50, PSI-51, PSI-52, PSI-53
 - **Supersedes:** None
 - **Normative inputs:** ADR-001, ADR-003, EFS v1 Baseline, PSI-34
@@ -13,7 +13,7 @@ EFS v1 needs a portable signature contract for an immutable release. ADR-001 alr
 
 ## Decision
 
-This ADR proposes the following v1 decisions. It is not accepted until the EFS decision owner records approval.
+The project owner delegated resolution of these choices to the architecture role on 2026-11-16. The following decisions are therefore accepted as the EFS v1 normative direction; downstream implementation remains gated on specification review and conformance evidence.
 
 1. **Detached envelope.** A signature envelope is a separate immutable registry/security record associated with the exact release coordinates and digest. It is not embedded in, nor does it mutate, the canonical manifest.
 2. **Reserved manifest field.** For EFS v1, `release.signature` MUST be absent from a conforming canonical manifest. ADR-001's projection rule remains unchanged and continues to exclude that reserved field for profile compatibility; its exclusion MUST NOT be interpreted as permission to carry mutable signature data in the manifest. A semantic validator MUST reject a present `release.signature` member under this v1 profile. A future in-manifest signature design requires a new profile and ADR.
@@ -51,4 +51,4 @@ This ADR proposes the following v1 decisions. It is not accepted until the EFS d
 
 | Date | Change |
 |---|---|
-| 2026-11-16 | Proposed detached Ed25519/JCS v1 profile and resolved the reserved manifest signature-field ambiguity for founder review |
+| 2026-11-16 | Accepted detached Ed25519/JCS v1 profile and resolved the reserved manifest signature-field ambiguity under delegated architecture authority |
