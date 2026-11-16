@@ -1,6 +1,6 @@
 # EFS v1 — Authorization Policy and Evaluation Contract
 
-- **Status:** Proposed normative specification; requires architecture-owner approval
+- **Status:** Draft normative specification; pending independent review and PR acceptance
 - **Policy profile:** `efs-policy-v1`
 - **Policy digest:** `efs-policy-jcs-sha256-v1`
 - **Owner:** PSI-52
