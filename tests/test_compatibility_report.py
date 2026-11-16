@@ -110,6 +110,17 @@ def test_exact_subject_coordinates_and_consumer_ranges_are_preserved():
     assert payload["subject"]["efsVersion"] == "1.0.0"
     assert payload["consumer"]["supportedEfsRange"] == ">=1.0.0 <2.0.0"
     assert payload["consumer"]["protocolProfileIds"] == ["https-json"]
+    dimensions = {item["dimension"]: item for item in payload["dimensions"]}
+    assert dimensions["specification"]["coordinates"] == {
+        "consumerProfileId": "profile-a",
+        "subjectEfsVersion": "1.0.0",
+        "supportedEfsRange": ">=1.0.0 <2.0.0",
+    }
+    assert dimensions["runtime-execution"]["coordinates"] == {
+        "consumerProfileId": "runtime-a",
+        "mappingId": "runtime-adapter-v1",
+        "subjectProfileId": "runtime-2",
+    }
 
 
 def test_opaque_contract_version_is_not_normalized_or_parsed():
