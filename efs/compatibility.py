@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import hashlib
 from collections.abc import Iterable
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from enum import Enum
 from functools import lru_cache
 from pathlib import Path
@@ -274,19 +274,28 @@ def assess_specification(
     range_evaluator_result: bool | None, evidence: Iterable[EvidenceReference] = (),
 ) -> DimensionAssessment:
     """Consume the PSI-47 SemVer range-evaluator result; never parse ranges here."""
+    coordinates = tuple(sorted(
+        (key, value) for key, value in (
+            ("supportedEfsRange", supported_range),
+            ("consumerProfileId", consumer_profile_id),
+        ) if isinstance(value, str) and value
+    ))
     if not isinstance(supported_range, str) or not supported_range or not isinstance(consumer_profile_id, str) or not consumer_profile_id:
-        return _unknown(CompatibilityDimension.SPECIFICATION, "EFC-SPEC-001",
-                        "No explicit consumer EFS support range/profile was supplied.")
+        return DimensionAssessment(CompatibilityDimension.SPECIFICATION, Outcome.UNKNOWN, "EFC-SPEC-001",
+                                   "No explicit consumer EFS support range/profile was supplied.",
+                                   coordinates=coordinates)
     refs = tuple(evidence)
     if not isinstance(range_evaluator_result, bool) or not refs:
-        return _unknown(CompatibilityDimension.SPECIFICATION, "EFC-SPEC-002",
-                        "EFS range evaluation or its supporting evidence is unavailable.")
+        return DimensionAssessment(CompatibilityDimension.SPECIFICATION, Outcome.UNKNOWN, "EFC-SPEC-002",
+                                   "EFS range evaluation or its supporting evidence is unavailable.",
+                                   coordinates=coordinates)
     if range_evaluator_result:
         return DimensionAssessment(CompatibilityDimension.SPECIFICATION, Outcome.COMPATIBLE,
-                                   "EFC-SPEC-003", "Subject EFS version is within the declared consumer range.", refs)
+                                   "EFC-SPEC-003", "Subject EFS version is within the declared consumer range.",
+                                   refs, coordinates=coordinates)
     return DimensionAssessment(CompatibilityDimension.SPECIFICATION, Outcome.BREAKING,
                                "EFC-SPEC-004", "Subject EFS version is outside the declared consumer range.",
-                               refs, blockers=("unsupported-efs-version",))
+                               refs, blockers=("unsupported-efs-version",), coordinates=coordinates)
 
 
 def assess_contract_change(
@@ -339,11 +348,23 @@ def assess_profile_mapping(
     if dimension not in (CompatibilityDimension.RUNTIME, CompatibilityDimension.PROTOCOL):
         raise CompatibilityError("profile mapping is valid only for runtime or protocol dimensions")
     refs = tuple(evidence)
+    coordinate_values = {
+        "subjectProfileId": subject_profile_id,
+        "consumerProfileId": consumer_profile_id,
+    }
+    if mapping_id:
+        coordinate_values["mappingId"] = mapping_id
+    coordinates = tuple(sorted(
+        (key, value) for key, value in coordinate_values.items()
+        if isinstance(value, str) and value
+    ))
     if not subject_profile_id or not consumer_profile_id:
-        return _unknown(dimension, "EFC-PROFILE-001", "Subject or consumer profile identity is missing.")
+        return DimensionAssessment(dimension, Outcome.UNKNOWN, "EFC-PROFILE-001",
+                                   "Subject or consumer profile identity is missing.", coordinates=coordinates)
     if not mapping_id or not refs or mapping_outcome is None:
-        return _unknown(dimension, "EFC-PROFILE-002",
-                        "No explicit mapping result and supporting evidence were supplied.")
+        return DimensionAssessment(dimension, Outcome.UNKNOWN, "EFC-PROFILE-002",
+                                   "No explicit mapping result and supporting evidence were supplied.",
+                                   coordinates=coordinates)
     try:
         result = Outcome(mapping_outcome)
     except (ValueError, TypeError):
@@ -352,7 +373,8 @@ def assess_profile_mapping(
         return _unknown(dimension, "EFC-PROFILE-005", "Profile mapping evidence leaves compatibility unknown.")
     return DimensionAssessment(dimension, result, "EFC-PROFILE-003",
                                "Explicit subject-to-consumer profile mapping result is evidenced.", refs,
-                               conditions=tuple(conditions), blockers=tuple(blockers), mappings=(mapping_id,))
+                               conditions=tuple(conditions), blockers=tuple(blockers), mappings=(mapping_id,),
+                               coordinates=coordinates)
 
 
 def assess_governance(
@@ -402,6 +424,14 @@ def evaluate_compatibility(
         by_dimension.setdefault(dimension, _unknown(
             dimension, "EFC-EVIDENCE-001", "No assessment/evidence supplied for this dimension."
         ))
+    specification = by_dimension[CompatibilityDimension.SPECIFICATION]
+    specification_coordinates = dict(specification.coordinates)
+    specification_coordinates.setdefault("subjectEfsVersion", subject.efs_version)
+    specification_coordinates.setdefault("consumerProfileId", consumer.profile_id)
+    specification_coordinates.setdefault("supportedEfsRange", consumer.supported_efs_range)
+    by_dimension[CompatibilityDimension.SPECIFICATION] = replace(
+        specification, coordinates=tuple(sorted(specification_coordinates.items()))
+    )
     ordered = tuple(by_dimension[key] for key in CompatibilityDimension)
     aggregate = max((item.outcome for item in ordered), key=lambda value: _AGGREGATE_RANK[value])
     blockers = tuple(sorted({blocker for item in ordered for blocker in item.blockers}))
