@@ -3,6 +3,7 @@ import os
 from datetime import datetime, timezone
 import pytest
 from sqlalchemy import create_engine, text
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy.orm import Session
 from registry.repositories import FactoryRepository, PublisherRepository, ReleaseRepository, RegistryConflict
@@ -48,3 +49,29 @@ def test_retired_factory_cannot_publish(session):
     f=FactoryRepository(session); f.create("urn:example:publisher:t","f"); f.retire("urn:example:publisher:t","f")
     with pytest.raises(RegistryConflict):
         ReleaseRepository(session).publish("urn:example:publisher:t","f","1.0","p","SHA-256","d",1,"test","d",datetime.now(timezone.utc))
+
+def test_migration_revision_is_installed(session):
+    revision = session.scalar(text("SELECT version_num FROM alembic_version"))
+    assert revision == "0001_initial_registry"
+
+
+def test_concurrent_factory_registration_has_one_winner():
+    engine = create_engine(URL)
+    with Session(engine) as seed:
+        PublisherRepository(seed).create("urn:example:publisher:concurrent")
+        seed.commit()
+
+    def register():
+        with Session(engine) as worker:
+            try:
+                FactoryRepository(worker).create("urn:example:publisher:concurrent", "race")
+                worker.commit()
+                return "created"
+            except RegistryConflict:
+                worker.rollback()
+                return "conflict"
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        outcomes = list(pool.map(lambda _: register(), range(2)))
+    assert sorted(outcomes) == ["conflict", "created"]
+    engine.dispose()
