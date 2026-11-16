@@ -101,7 +101,12 @@ def test_catalog_and_acceptance_registry_are_complete():
             "EFS_SCHEMA_TYPE", "EFS_SCHEMA_ENUM", "EFS_SCHEMA_FORMAT",
             "EFS_SCHEMA_CONSTRAINT", "EFS_EMBEDDED_SCHEMA_INVALID",
             "EFS_SCHEMA_REF_REMOTE", "EFS_SCHEMA_REF_UNSUPPORTED",
-            "EFS_PROFILE_INVARIANT_FAILED"} <= codes
+            "EFS_PROFILE_INVARIANT_FAILED", "EFS_PUBLISHER_URI_INVALID",
+            "EFS_PUBLISHER_URI_NON_CANONICAL"} <= codes
+    identity_catalog = catalog["publisherIdentity"]
+    assert (ROOT / identity_catalog["vectors"]).is_file()
+    assert (ROOT / identity_catalog["acceptance"]).is_file()
+    assert (ROOT / identity_catalog["testModule"]).is_file()
 
 
 def test_conformance_report_claim_boundary():
