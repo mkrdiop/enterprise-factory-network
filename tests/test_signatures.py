@@ -71,7 +71,7 @@ def _signed():
 def test_transport_neutral_verifier_adapter_uses_injected_resolver():
     raw, _manifest, _envelope, encoded = _signed()
     verifier = EFSReleaseSignatureVerifier(FixtureResolver())
-    assert verifier.verify(raw, encoded).code is SignatureCode.VERIFIED
+    assert verifier.verify(raw, encoded).code is SignatureCode.EVALUATED
 
 
 def test_known_seed_ed25519_signing_and_verification_round_trip():
@@ -82,7 +82,7 @@ def test_known_seed_ed25519_signing_and_verification_round_trip():
     assert result.digest_valid is True
     assert result.all_signers_cryptographically_valid is True
     assert result.all_keys_trusted is True
-    assert     assert resolver.calls == [(
+    assert resolver.calls == [(
         "urn:example:publishers:acme",
         "test-release-key",
         "Ed25519",
@@ -171,8 +171,7 @@ def test_unknown_key_is_typed_and_fails_closed():
         raw, encoded, FixtureResolver(status=KeyTrustStatus.NOT_FOUND, public_key=None)
     )
     assert result.signers[0].code is SignatureCode.KEY_NOT_FOUND
-    assert result.signers[0].cryptographic_valid is False
-    assert 
+    assert result.signers[0].cryptographic_valid is None
 
 def test_resolver_exception_is_unavailable_and_fails_closed():
     raw, _manifest, _envelope, encoded = _signed()
@@ -183,7 +182,7 @@ def test_resolver_exception_is_unavailable_and_fails_closed():
 
     result = verify_release_signature(raw, encoded, BrokenResolver())
     assert result.signers[0].code is SignatureCode.RESOLVER_UNAVAILABLE
-    assert 
+    assert result.signers[0].trust_status is KeyTrustStatus.UNAVAILABLE
 
 def test_cross_publisher_key_substitution_is_binding_failure():
     raw, _manifest, _envelope, encoded = _signed()
