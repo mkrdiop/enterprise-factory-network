@@ -130,71 +130,223 @@
           "type": "string"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "validationVector": {
-      "type": "object",
-      "required": [
-        "id",
-        "kind",
-        "expected"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "minLength": 1
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "evaluation_request",
+            "expected"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "const": "action-resource-compatibility"
+            },
+            "evaluation_request": {
+              "$ref": "../schemas/efs-policy-v1.schema.json#/$defs/evaluationRequest"
+            },
+            "expected": {
+              "const": {
+                "classification": "invalid-input",
+                "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+              }
+            }
+          }
         },
-        "kind": {
-          "enum": [
-            "action-resource-compatibility",
-            "invalid-policy",
-            "invalid-resource",
-            "semantic-policy",
-            "condition-limit",
-            "timestamp-format",
-            "freshness-boundary"
-          ]
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "mutation",
+            "value",
+            "expected",
+            "policy"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "const": "invalid-policy"
+            },
+            "mutation": {
+              "type": "string",
+              "minLength": 1
+            },
+            "value": {
+              "type": "string"
+            },
+            "expected": {
+              "const": "schema-invalid"
+            },
+            "policy": {
+              "type": "object"
+            }
+          }
         },
-        "action": {
-          "type": "string"
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "resource",
+            "expected"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "const": "invalid-resource"
+            },
+            "resource": {
+              "type": "object"
+            },
+            "expected": {
+              "const": "schema-invalid"
+            }
+          }
         },
-        "resource_type": {
-          "type": "string"
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "policy",
+            "expected"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "const": "semantic-policy"
+            },
+            "policy": {
+              "type": "object"
+            },
+            "expected": {
+              "const": {
+                "classification": "semantic-invalid",
+                "reason_code": "DUPLICATE_RULE_ID"
+              }
+            }
+          }
         },
-        "mutation": {
-          "type": "string"
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "limit",
+            "expected",
+            "condition"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "const": "condition-limit"
+            },
+            "limit": {
+              "enum": [
+                "depth",
+                "nodes",
+                "children",
+                "literal-array"
+              ]
+            },
+            "expected": {
+              "enum": [
+                "reject-above-limit",
+                "schema-invalid"
+              ]
+            },
+            "condition": {
+              "type": "object"
+            }
+          }
         },
-        "value": {
-          "type": "string"
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "value",
+            "expected",
+            "attribute"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "const": "timestamp-format"
+            },
+            "value": {
+              "type": "string"
+            },
+            "expected": {
+              "const": "schema-invalid"
+            },
+            "attribute": {
+              "type": "object"
+            }
+          }
         },
-        "resource": {
-          "type": "object"
-        },
-        "limit": {
-          "type": "string"
-        },
-        "expected": {
-          "type": "string"
-        },
-        "evaluation_time": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "expires_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "policy": {
-          "type": "object"
-        },
-        "condition": {
-          "type": "object"
-        },
-        "attribute": {
-          "type": "object"
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "evaluation_time",
+            "expires_at",
+            "expected"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "const": "freshness-boundary"
+            },
+            "evaluation_time": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "expires_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "expected": {
+              "const": "stale"
+            }
+          }
         }
-      },
-      "additionalProperties": true
+      ]
     }
   }
 }
