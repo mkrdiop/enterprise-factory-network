@@ -20,13 +20,14 @@ The normative JSON Schema is `schemas/passport/v1/factory-passport.schema.json`.
 - `dependencies` and `policies`: declarations/references exactly as declared. They are not resolved or evaluated.
 - `extensions`: copied without interpretation when present.
 - `assurance`: artifact integrity is `verified` because the registry API has read and verified the immutable digest artifact. Publisher authentication, trust, signature verification and authorization are explicitly `not_evaluated`. Signature material is not included in the digest-addressed artifact.
-- `provenance`: one entry for each copied leaf or empty container, mapping Passport JSON Pointer to source namespace and source JSON Pointer.
+- `summary`: deterministic counts of capabilities, endpoints, dependencies and policy declarations/references. Each count has an explicit derivation provenance rule.
+- `provenance`: one entry for each copied leaf or empty container, plus every derived field, mapping Passport JSON Pointer to source namespace, source JSON Pointer and derivation rule.
 
 Optional source fields are omitted when absent. Empty arrays/objects are preserved. Array order is preserved from the source manifest; object member ordering is canonicalized for serialization. No runtime state, deployment, credentials, permissions, commercial metadata, certification, ratings or inferred capability claims are added.
 
 ## Determinism
 
-For identical verified manifest content and identical registry metadata, the Passport object is identical. Machine-readable output is RFC 8785 JCS bytes. Provenance entries are sorted by target pointer, source namespace and source pointer. Source arrays retain their authored order; no semantic or alphabetical reordering is introduced. Human-readable Markdown is rendered from the same Passport object, has no generated timestamp, and uses stable section/field order.
+For identical verified manifest content and identical registry metadata, the Passport object is identical. Machine-readable output is RFC 8785 JCS bytes. Provenance entries are sorted by target pointer, source namespace and source pointer. Source arrays retain their authored order; no semantic or alphabetical reordering is introduced. Human-readable Markdown is rendered from the same Passport object, has no generated timestamp, and uses stable section/field order. It includes the declared capability contract schemas/errors, endpoint declarations, execution profiles, dependencies and policy declarations/references.
 
 ## Provenance semantics
 
