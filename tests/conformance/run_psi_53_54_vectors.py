@@ -33,30 +33,40 @@ def psi53(data):
  for check in checks:
   action=check["action"]; resource=check["resource"]; kind=resource["type"]
   if action not in ALLOWED: return "rejected","ACTION_UNMAPPED"
-  if kind not in ALLOWED[action]: return "rejected","ACTION_RESOURCE_MISMATCH"
+  if kind not in ALLOWED[action]: return "indeterminate","PDP_INDETERMINATE"
   if not resource["id"] or not COORD[kind].issubset(resource["coordinates"]):
    return "rejected","RESOURCE_COORDINATES_INVALID"
   policy=check["policy"]
-  if policy["policy_profile"]!="efs-policy-v1" or not all(policy.get(k) for k in ("policy_id","policy_version","digest")):
+  if policy["policy_profile"]!="efs-policy-v1" or not policy.get("digest_verified") or not all(policy.get(k) for k in ("policy_id","policy_version","digest")):
    return "indeterminate","PDP_INDETERMINATE"
  if any(c["pdp_outcome"]=="deny" for c in checks): return "rejected","POLICY_DENIED"
  if any(c["pdp_outcome"]=="indeterminate" for c in checks): return "indeterminate","PDP_INDETERMINATE"
  if any(c["pdp_outcome"]!="permit" for c in checks): return "indeterminate","PDP_INDETERMINATE"
- if any(c["obligations"] and not c["obligations_fulfilled"] for c in checks):
-  return "rejected","OBLIGATION_UNFULFILLED"
+ for check in checks:
+  fulfilled={item["obligation_id"] for item in check["fulfillment_evidence"] if item["fulfilled"] and item["evidence_ref"]}
+  required={item["id"] for item in check["obligations"]}
+  if required-fulfilled or (required and not check["obligations_fulfilled"]):
+   return "rejected","OBLIGATION_UNFULFILLED"
  trust=data["trust"]
  if trust["required"]:
-  evidence=trust["evidence"]
-  if trust["status"]=="unavailable" or evidence is None: return "rejected","TRUST_UNAVAILABLE"
-  if trust["status"]=="untrusted": return "rejected","KEY_NOT_TRUSTED"
-  if trust["status"]=="revoked" or evidence["status"]=="revoked": return "rejected","KEY_REVOKED"
-  if trust["status"]!="trusted" or evidence["status"]!="trusted": return "rejected","TRUST_UNAVAILABLE"
-  if evidence["publisher_id"]!=trust["publisher_id"] or evidence["key_id"]!=trust["key_id"]:
-   return "rejected","TRUST_UNAVAILABLE"
-  commit=dt(data["commit"]["at"]); observed=dt(evidence["observed_at"])
-  age=(commit-observed).total_seconds()
-  if age<0 or age>data["commit"]["max_evidence_age_seconds"] or commit>=dt(evidence["expires_at"]):
-   return "rejected","EVIDENCE_STALE"
+  signers=trust["required_signers"]
+  if not signers: return "rejected","TRUST_UNAVAILABLE"
+  for signer in signers:
+   if signer["crypto_status"]=="invalid": return "rejected","SIGNATURE_INVALID"
+   if signer["crypto_status"]!="valid": return "rejected","TRUST_UNAVAILABLE"
+   if signer["status"]=="untrusted": return "rejected","KEY_NOT_TRUSTED"
+   if signer["status"]=="revoked": return "rejected","KEY_REVOKED"
+   if signer["status"]!="trusted": return "rejected","TRUST_UNAVAILABLE"
+   evidence=signer["evidence"]
+   if evidence is None: return "rejected","TRUST_UNAVAILABLE"
+   if evidence["publisher_id"]!=signer["publisher_id"] or evidence["key_id"]!=signer["key_id"]:
+    return "rejected","TRUST_UNAVAILABLE"
+   if evidence["status"]=="revoked": return "rejected","KEY_REVOKED"
+   if evidence["status"]!="trusted": return "rejected","KEY_NOT_TRUSTED"
+   now=dt(data["commit"]["at"]); observed=dt(evidence["observed_at"])
+   age=(now-observed).total_seconds()
+   if age<0 or age>data["commit"]["max_evidence_age_seconds"] or now>=dt(evidence["expires_at"]):
+    return "rejected","EVIDENCE_STALE"
  lifecycle=data["lifecycle"]
  if lifecycle["required"] and lifecycle["state"] not in ("published","deprecated"):
   return "rejected","RELEASE_NOT_ADMISSIBLE"
