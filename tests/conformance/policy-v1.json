@@ -59,7 +59,7 @@
     },
     {
       "id": "pol-002",
-      "name": "no applicable policy defaults to deny",
+      "name": "required policy bundle unavailable (empty bundle)",
       "policies": [],
       "expected": "indeterminate",
       "reason": "INDETERMINATE_POLICY_UNAVAILABLE"
