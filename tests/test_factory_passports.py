@@ -7,6 +7,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 from registry.passports import (
     build_factory_passport,
+    PassportSourceMismatch,
     canonical_passport_json,
     render_factory_passport_markdown,
 )
@@ -94,7 +95,7 @@ def test_passport_rejects_registry_manifest_identity_or_digest_mismatch():
     manifest = _manifest()
     record = _registry_record(manifest)
     record["factoryId"] = "different-factory"
-    with pytest.raises(ValueError, match="do not match"):
+    with pytest.raises(PassportSourceMismatch, match="do not match"):
         build_factory_passport(manifest, record)
 
 
