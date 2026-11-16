@@ -115,11 +115,6 @@ def _embedded_schema_checks(manifest):
                     {"validator": str(exc.validator), "message": exc.message},
                 ))
                 continue
-            if schema.get("type") != "object":
-                diagnostics.append(diagnostic(
-                    "EFS_PROFILE_INVARIANT_FAILED", "profile", pointer(base + ["type"]),
-                    "Contract input/output payload schemas must declare top-level type=object.",
-                ))
             _walk_schema(schema, base, diagnostics)
         errors = contract.get("errors", [])
         if isinstance(errors, list):
@@ -149,6 +144,22 @@ def _embedded_schema_checks(manifest):
 
 def _profile_checks(manifest):
     diagnostics = []
+    capabilities = manifest.get("capabilities", [])
+    if isinstance(capabilities, list):
+        for i, capability in enumerate(capabilities):
+            if not isinstance(capability, dict):
+                continue
+            contract = capability.get("contract")
+            if not isinstance(contract, dict):
+                continue
+            for direction in ("inputs", "outputs"):
+                schema = contract.get(direction)
+                if isinstance(schema, dict) and schema.get("type") != "object":
+                    diagnostics.append(diagnostic(
+                        "EFS_PROFILE_INVARIANT_FAILED", "profile",
+                        pointer(["capabilities", i, "contract", direction, "type"]),
+                        "Contract input/output payload schemas must declare top-level type=object.",
+                    ))
     execution = manifest.get("execution")
     if isinstance(execution, dict):
         source = execution.get("source")
