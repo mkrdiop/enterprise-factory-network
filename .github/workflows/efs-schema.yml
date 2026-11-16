@@ -6,6 +6,7 @@ jobs:
   schema-conformance:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
     steps:
@@ -15,5 +16,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: python -m pip install -r requirements-dev.txt
       - run: python -m pytest -q
-      - run: python scripts/validate_manifest.py fixtures/valid/manifest-minimal.json
+      - run: python -m pytest tests/test_conformance_catalog.py -q
+      - run: python scripts/validate_manifest.py fixtures/valid/manifest-minimal.json --json
       - run: python scripts/validate_manifest.py fixtures/valid/manifest-external-execution.json
+      - run: python scripts/validate_manifest.py fixtures/boundary/manifest-offset-datetime.json
