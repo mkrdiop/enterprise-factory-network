@@ -1,0 +1,68 @@
+{
+  "profile": "efs-uri-c14n-1",
+  "criteria": [
+    {
+      "id": "PSI37-AC-01",
+      "requirement": "Publisher identifier is an absolute RFC 3986 URI in ASCII URI syntax and rejects forbidden query, fragment, userinfo and malformed syntax.",
+      "tests": [
+        "test_publisher_identity_vectors",
+        "test_publisher_id_profile_diagnostics"
+      ],
+      "vectors": [
+        "urn-basic",
+        "https-basic",
+        "relative-reference",
+        "query-component",
+        "fragment-component",
+        "userinfo-component",
+        "malformed-percent"
+      ]
+    },
+    {
+      "id": "PSI37-AC-02",
+      "requirement": "Canonical serialization lowercases scheme and host, normalizes percent encoding and removes dot segments while preserving path case and explicit ports.",
+      "tests": [
+        "test_publisher_identity_vectors"
+      ],
+      "vectors": [
+        "uppercase-scheme-noncanonical",
+        "uppercase-host-noncanonical",
+        "decode-unreserved-noncanonical",
+        "uppercase-percent-hex-noncanonical",
+        "dot-segment-noncanonical",
+        "path-case-preserved",
+        "explicit-default-port-preserved"
+      ]
+    },
+    {
+      "id": "PSI37-AC-03",
+      "requirement": "Validators reject non-canonical input rather than rewriting it; diagnostics expose the canonical candidate.",
+      "tests": [
+        "test_publisher_identity_vectors",
+        "test_publisher_id_profile_diagnostics"
+      ],
+      "vectors": [
+        "uppercase-host-noncanonical",
+        "dot-segment-noncanonical"
+      ]
+    },
+    {
+      "id": "PSI37-AC-04",
+      "requirement": "Publisher identity is opaque and URI processing performs no network resolution; Factory identity is the exact publisher/factory pair.",
+      "tests": [
+        "test_factory_identity_pair_is_publisher_scoped_and_exact"
+      ],
+      "vectors": []
+    },
+    {
+      "id": "PSI37-AC-05",
+      "requirement": "Existing canonical URN publisher fixture remains conformant.",
+      "tests": [
+        "test_existing_urn_publisher_fixture_remains_conformant"
+      ],
+      "vectors": [
+        "urn-basic"
+      ]
+    }
+  ]
+}
