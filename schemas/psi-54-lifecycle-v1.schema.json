@@ -119,7 +119,8 @@
               },
               "request_fingerprint": {
                 "type": "string",
-                "minLength": 1
+                "minLength": 1,
+                "pattern": "^sha256:[A-Za-z0-9_-]{43}$"
               },
               "idempotency_lookup": {
                 "type": "object",
@@ -207,7 +208,8 @@
                           },
                           "request_fingerprint": {
                             "type": "string",
-                            "minLength": 1
+                            "minLength": 1,
+                            "pattern": "^sha256:[A-Za-z0-9_-]{43}$"
                           },
                           "original_result": {
                             "enum": [
