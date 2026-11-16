@@ -4,7 +4,6 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator, FormatChecker
 from referencing import Registry, Resource
-from referencing import Registry, Resource
 
 from registry.execution_state import (
     apply_execution_state_transition,
