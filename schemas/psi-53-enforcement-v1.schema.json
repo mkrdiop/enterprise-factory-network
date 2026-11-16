@@ -446,45 +446,620 @@
                     }
                   },
                   "execution_state": {
-                    "oneOf": [
-                      {
-                        "type": "null"
-                      },
-                      {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "request_event",
+                      "initial_snapshot",
+                      "outcome_event",
+                      "current_snapshot",
+                      "persisted_with_intent",
+                      "revision_cas"
+                    ],
+                    "properties": {
+                      "request_event": {
                         "type": "object",
                         "additionalProperties": false,
                         "required": [
-                          "invocation_id",
-                          "correlation_id",
-                          "initial_event_id",
-                          "initial_state",
-                          "initial_revision",
-                          "current_state",
-                          "current_revision",
-                          "persisted_with_intent",
-                          "revision_cas"
+                          "eventVersion",
+                          "eventId",
+                          "invocationId",
+                          "correlationId",
+                          "source",
+                          "sourceMessageId",
+                          "eventType",
+                          "fromState",
+                          "toState",
+                          "expectedRevision",
+                          "reasonCode",
+                          "occurredAt",
+                          "context"
                         ],
                         "properties": {
-                          "invocation_id": {
-                            "type": "string",
-                            "minLength": 1
+                          "eventVersion": {
+                            "const": "1.0"
                           },
-                          "correlation_id": {
+                          "eventId": {
                             "type": "string",
-                            "minLength": 1
+                            "minLength": 1,
+                            "maxLength": 255
                           },
-                          "initial_event_id": {
+                          "invocationId": {
                             "type": "string",
-                            "minLength": 1
+                            "minLength": 1,
+                            "maxLength": 255
                           },
-                          "initial_state": {
+                          "correlationId": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 255
+                          },
+                          "causationId": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "maxLength": 255
+                          },
+                          "source": {
+                            "const": "envelope"
+                          },
+                          "sourceMessageId": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 255
+                          },
+                          "eventType": {
+                            "const": "request"
+                          },
+                          "fromState": {
+                            "const": "created"
+                          },
+                          "toState": {
                             "const": "requested"
                           },
-                          "initial_revision": {
+                          "expectedRevision": {
+                            "const": 0
+                          },
+                          "reasonCode": {
+                            "type": "string",
+                            "pattern": "^[a-z][a-z0-9._-]{0,127}$"
+                          },
+                          "governanceRef": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 2048
+                          },
+                          "occurredAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "context": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "publisherId",
+                              "factoryId",
+                              "releaseVersion",
+                              "releaseDigest",
+                              "capabilityId",
+                              "contract",
+                              "executionProfileId",
+                              "executionMode"
+                            ],
+                            "properties": {
+                              "publisherId": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "factoryId": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "releaseVersion": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "releaseDigest": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                  "profile",
+                                  "algorithm",
+                                  "value"
+                                ],
+                                "properties": {
+                                  "profile": {
+                                    "const": "efs-jcs-sha256-v1"
+                                  },
+                                  "algorithm": {
+                                    "const": "SHA-256"
+                                  },
+                                  "value": {
+                                    "type": "string",
+                                    "pattern": "^[A-Za-z0-9_-]{43}$"
+                                  }
+                                }
+                              },
+                              "capabilityId": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "contract": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                  "id",
+                                  "version"
+                                ],
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  },
+                                  "version": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  }
+                                }
+                              },
+                              "executionProfileId": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "executionMode": {
+                                "enum": [
+                                  "sync",
+                                  "async",
+                                  "streaming",
+                                  "event"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "initial_snapshot": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "stateVersion",
+                          "invocationId",
+                          "correlationId",
+                          "context",
+                          "state",
+                          "revision",
+                          "lastEventId"
+                        ],
+                        "properties": {
+                          "stateVersion": {
+                            "const": "1.0"
+                          },
+                          "invocationId": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 255
+                          },
+                          "correlationId": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 255
+                          },
+                          "context": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "publisherId",
+                              "factoryId",
+                              "releaseVersion",
+                              "releaseDigest",
+                              "capabilityId",
+                              "contract",
+                              "executionProfileId",
+                              "executionMode"
+                            ],
+                            "properties": {
+                              "publisherId": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "factoryId": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "releaseVersion": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "releaseDigest": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                  "profile",
+                                  "algorithm",
+                                  "value"
+                                ],
+                                "properties": {
+                                  "profile": {
+                                    "const": "efs-jcs-sha256-v1"
+                                  },
+                                  "algorithm": {
+                                    "const": "SHA-256"
+                                  },
+                                  "value": {
+                                    "type": "string",
+                                    "pattern": "^[A-Za-z0-9_-]{43}$"
+                                  }
+                                }
+                              },
+                              "capabilityId": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "contract": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                  "id",
+                                  "version"
+                                ],
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  },
+                                  "version": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  }
+                                }
+                              },
+                              "executionProfileId": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "executionMode": {
+                                "enum": [
+                                  "sync",
+                                  "async",
+                                  "streaming",
+                                  "event"
+                                ]
+                              }
+                            }
+                          },
+                          "state": {
+                            "const": "requested"
+                          },
+                          "revision": {
                             "const": 1
                           },
-                          "current_state": {
+                          "lastEventId": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "maxLength": 255
+                          }
+                        }
+                      },
+                      "outcome_event": {
+                        "oneOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "eventVersion",
+                              "eventId",
+                              "invocationId",
+                              "correlationId",
+                              "source",
+                              "sourceMessageId",
+                              "eventType",
+                              "fromState",
+                              "toState",
+                              "expectedRevision",
+                              "reasonCode",
+                              "occurredAt",
+                              "context"
+                            ],
+                            "properties": {
+                              "eventVersion": {
+                                "const": "1.0"
+                              },
+                              "eventId": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 255
+                              },
+                              "invocationId": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 255
+                              },
+                              "correlationId": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 255
+                              },
+                              "causationId": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ],
+                                "maxLength": 255
+                              },
+                              "source": {
+                                "enum": [
+                                  "envelope",
+                                  "runtime",
+                                  "governed_control"
+                                ]
+                              },
+                              "sourceMessageId": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 255
+                              },
+                              "eventType": {
+                                "enum": [
+                                  "request",
+                                  "accepted",
+                                  "queued",
+                                  "started",
+                                  "progress",
+                                  "waiting",
+                                  "resumed",
+                                  "succeeded",
+                                  "failed",
+                                  "cancelled"
+                                ]
+                              },
+                              "fromState": {
+                                "enum": [
+                                  "created",
+                                  "requested",
+                                  "accepted",
+                                  "queued",
+                                  "running",
+                                  "waiting",
+                                  "succeeded",
+                                  "failed",
+                                  "cancelled"
+                                ]
+                              },
+                              "toState": {
+                                "enum": [
+                                  "created",
+                                  "requested",
+                                  "accepted",
+                                  "queued",
+                                  "running",
+                                  "waiting",
+                                  "succeeded",
+                                  "failed",
+                                  "cancelled"
+                                ]
+                              },
+                              "expectedRevision": {
+                                "type": "integer",
+                                "minimum": 0
+                              },
+                              "reasonCode": {
+                                "type": "string",
+                                "pattern": "^[a-z][a-z0-9._-]{0,127}$"
+                              },
+                              "governanceRef": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 2048
+                              },
+                              "occurredAt": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "context": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                  "publisherId",
+                                  "factoryId",
+                                  "releaseVersion",
+                                  "releaseDigest",
+                                  "capabilityId",
+                                  "contract",
+                                  "executionProfileId",
+                                  "executionMode"
+                                ],
+                                "properties": {
+                                  "publisherId": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "factoryId": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "releaseVersion": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "releaseDigest": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "required": [
+                                      "profile",
+                                      "algorithm",
+                                      "value"
+                                    ],
+                                    "properties": {
+                                      "profile": {
+                                        "const": "efs-jcs-sha256-v1"
+                                      },
+                                      "algorithm": {
+                                        "const": "SHA-256"
+                                      },
+                                      "value": {
+                                        "type": "string",
+                                        "pattern": "^[A-Za-z0-9_-]{43}$"
+                                      }
+                                    }
+                                  },
+                                  "capabilityId": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "contract": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "required": [
+                                      "id",
+                                      "version"
+                                    ],
+                                    "properties": {
+                                      "id": {
+                                        "type": "string",
+                                        "format": "uri"
+                                      },
+                                      "version": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    }
+                                  },
+                                  "executionProfileId": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "executionMode": {
+                                    "enum": [
+                                      "sync",
+                                      "async",
+                                      "streaming",
+                                      "event"
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "current_snapshot": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "stateVersion",
+                          "invocationId",
+                          "correlationId",
+                          "context",
+                          "state",
+                          "revision",
+                          "lastEventId"
+                        ],
+                        "properties": {
+                          "stateVersion": {
+                            "const": "1.0"
+                          },
+                          "invocationId": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 255
+                          },
+                          "correlationId": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 255
+                          },
+                          "context": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "publisherId",
+                              "factoryId",
+                              "releaseVersion",
+                              "releaseDigest",
+                              "capabilityId",
+                              "contract",
+                              "executionProfileId",
+                              "executionMode"
+                            ],
+                            "properties": {
+                              "publisherId": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "factoryId": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "releaseVersion": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "releaseDigest": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                  "profile",
+                                  "algorithm",
+                                  "value"
+                                ],
+                                "properties": {
+                                  "profile": {
+                                    "const": "efs-jcs-sha256-v1"
+                                  },
+                                  "algorithm": {
+                                    "const": "SHA-256"
+                                  },
+                                  "value": {
+                                    "type": "string",
+                                    "pattern": "^[A-Za-z0-9_-]{43}$"
+                                  }
+                                }
+                              },
+                              "capabilityId": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "contract": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                  "id",
+                                  "version"
+                                ],
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  },
+                                  "version": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  }
+                                }
+                              },
+                              "executionProfileId": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "executionMode": {
+                                "enum": [
+                                  "sync",
+                                  "async",
+                                  "streaming",
+                                  "event"
+                                ]
+                              }
+                            }
+                          },
+                          "state": {
                             "enum": [
+                              "created",
                               "requested",
                               "accepted",
                               "queued",
@@ -495,23 +1070,26 @@
                               "cancelled"
                             ]
                           },
-                          "current_revision": {
+                          "revision": {
                             "type": "integer",
-                            "minimum": 1
+                            "minimum": 0
                           },
-                          "persisted_with_intent": {
-                            "const": true
-                          },
-                          "revision_cas": {
-                            "const": true
-                          },
-                          "governance_reference": {
-                            "type": "string",
-                            "minLength": 1
+                          "lastEventId": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "maxLength": 255
                           }
                         }
+                      },
+                      "persisted_with_intent": {
+                        "const": true
+                      },
+                      "revision_cas": {
+                        "const": true
                       }
-                    ]
+                    }
                   }
                 }
               }
