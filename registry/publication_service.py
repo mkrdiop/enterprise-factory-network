@@ -9,6 +9,7 @@ from pathlib import Path
 
 from sqlalchemy.exc import SQLAlchemyError
 
+from efs.versioning import validate_manifest_versions
 from scripts.validate_manifest import validate_report
 
 from .artifact_store import ArtifactIntegrityError
@@ -56,6 +57,14 @@ class RegistryPublicationService:
             path.write_bytes(manifest_bytes)
             report = validate_report(path, self.schema_path)
         if not report["valid"]:
+            raise ManifestValidationError(report)
+        manifest = json.loads(manifest_bytes.decode("utf-8"))
+        version_diagnostics = validate_manifest_versions(manifest)
+        if version_diagnostics:
+            report["stages"]["profile"] = "failed"
+            report["diagnostics"].extend(version_diagnostics)
+            report["diagnostics"].sort(key=lambda item: (item["stage"], item["path"], item["code"], item["message"]))
+            report["valid"] = False
             raise ManifestValidationError(report)
         return report
 

@@ -1,0 +1,14 @@
+{
+  "acceptanceSetVersion": "1.0",
+  "issue": "PSI-47",
+  "authority": "docs/efs-v1-version-dimensions.md",
+  "decisionRecord": "docs/adr/ADR-010-efs-v1-version-dimension-model.md",
+  "criteria": [
+    {"id":"PSI47-AC-01","requirement":"SemVer 2.0.0 grammar is implemented exactly for efsVersion and release.version only.","tests":["test_semver_valid_vectors","test_semver_invalid_vectors","test_semver_only_applies_to_two_canonical_fields"],"vectors":["SEM-001","SEM-002","SEM-003","SEM-004","SEM-005","SEM-006","SEM-007","SEM-008","SEM-009"]},
+    {"id":"PSI47-AC-02","requirement":"SemVer precedence including prerelease and build metadata follows 2.0.0.","tests":["test_semver_precedence_and_build_metadata"],"vectors":["PRECEDENCE-001"]},
+    {"id":"PSI47-AC-03","requirement":"Factory release comparison requires exact publisher/Factory scope; cross-dimension comparison is rejected.","tests":["test_cross_dimension_and_factory_scope_comparisons_rejected"],"vectors":["SCOPE-001","SCOPE-002"]},
+    {"id":"PSI47-AC-04","requirement":"Contract versions remain opaque and exact; no ordering or SemVer parse is exposed.","tests":["test_contract_versions_are_exact_opaque_values","test_semver_only_applies_to_two_canonical_fields"],"vectors":["CONTRACT-001","CONTRACT-002","CONTRACT-003"]},
+    {"id":"PSI47-AC-05","requirement":"Release version and digest remain separate immutable coordinates; equal-precedence labels require exact selection.","tests":["test_release_coordinate_keeps_version_and_digest_separate","test_equal_precedence_labels_require_exact_selection"],"vectors":["DIGEST-001","PRECEDENCE-001"]},
+    {"id":"PSI47-AC-06","requirement":"Explicit breaking/additive/fix classifications require the corresponding MAJOR/MINOR/PATCH increment.","tests":["test_release_change_classification_requires_correct_segment"],"vectors":[]}
+  ]
+}
