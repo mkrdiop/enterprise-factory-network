@@ -332,6 +332,62 @@
         }
       ],
       "expected_failure": "EFS_SIGNATURE_DIGEST_PROFILE_MISMATCH"
+    },
+    {
+      "id": "sig-neg-014",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/statement/efs_version",
+          "value": "2.0.0"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_BINDING_MISMATCH"
+    },
+    {
+      "id": "sig-neg-015",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/statement/digest/profile_id",
+          "value": "efs-other-digest-v1"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_DIGEST_PROFILE_MISMATCH"
+    },
+    {
+      "id": "sig-neg-016",
+      "kind": "negative",
+      "target": "envelope",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/statement/digest/value",
+          "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_BINDING_MISMATCH"
+    },
+    {
+      "id": "sig-neg-017",
+      "kind": "negative",
+      "target": "resolver",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/public_key_base64url",
+          "value": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHUR"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_ENCODING_INVALID"
     }
   ],
   "interop_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
