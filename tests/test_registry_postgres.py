@@ -40,9 +40,13 @@ def test_publisher_scoped_factory_identity(session):
 def test_duplicate_identity_conflicts(session):
     publishers = PublisherRepository(session)
     publishers.create("urn:example:publisher:dup")
+    # Preserve the prerequisite publisher across the expected failed insert.
+    session.commit()
+
     with pytest.raises(RegistryConflict):
         publishers.create("urn:example:publisher:dup")
     session.rollback()
+
     factories = FactoryRepository(session)
     factories.create("urn:example:publisher:dup", "f")
     session.commit()
@@ -58,29 +62,67 @@ def test_release_is_immutable_and_digest_bound(session):
         "urn:example:publisher:r", "f", "1.0", "efs-jcs-sha256-v1",
         "SHA-256", "abc", 12, "test", "abc", datetime.now(UTC),
     )
+    session.commit()
     with pytest.raises(DBAPIError):
         session.execute(
             text("UPDATE factory_releases SET digest_value='changed' WHERE release_record_id=:id"),
             {"id": str(row.release_record_id)},
         )
-        session.flush()
 
 
 def test_publisher_identity_is_immutable(session):
     publisher = PublisherRepository(session).create("urn:example:publisher:immutable")
+    session.commit()
     with pytest.raises(DBAPIError):
         session.execute(
             text("UPDATE publishers SET publisher_uri='urn:example:publisher:changed' WHERE publisher_record_id=:id"),
             {"id": str(publisher.publisher_record_id)},
         )
-        session.flush()
+
+
+def test_factory_identity_is_immutable(session):
+    PublisherRepository(session).create("urn:example:publisher:factory-immutable")
+    factory = FactoryRepository(session).create(
+        "urn:example:publisher:factory-immutable", "stable-id"
+    )
+    session.commit()
+    with pytest.raises(DBAPIError):
+        session.execute(
+            text("UPDATE factories SET factory_id='changed-id' WHERE factory_record_id=:id"),
+            {"id": str(factory.factory_record_id)},
+        )
+
+
+def test_publisher_retirement_is_permanent_and_blocks_new_factories(session):
+    publishers = PublisherRepository(session)
+    publishers.create("urn:example:publisher:retired")
+    session.commit()
+
+    publishers.retire("urn:example:publisher:retired")
+    session.commit()
+
+    with pytest.raises(RegistryConflict):
+        FactoryRepository(session).create("urn:example:publisher:retired", "new")
+    session.rollback()
+
+    with pytest.raises(DBAPIError):
+        session.execute(
+            text(
+                "UPDATE publishers SET lifecycle_state='active', retired_at=NULL "
+                "WHERE publisher_uri='urn:example:publisher:retired'"
+            )
+        )
 
 
 def test_retired_factory_cannot_publish(session):
     PublisherRepository(session).create("urn:example:publisher:t")
     factories = FactoryRepository(session)
     factories.create("urn:example:publisher:t", "f")
+    session.commit()
+
     factories.retire("urn:example:publisher:t", "f")
+    session.commit()
+
     with pytest.raises(RegistryConflict):
         ReleaseRepository(session).publish(
             "urn:example:publisher:t", "f", "1.0", "p", "SHA-256",
