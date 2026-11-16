@@ -372,3 +372,52 @@ def test_signature_array_order_does_not_change_verification_result():
     second_report = verify_release_signature(raw, serialize_signature_envelope(reordered), MultiKeyResolver())
     assert first_report == second_report
     assert first_report.code is SignatureCode.INVALID
+
+
+@pytest.mark.parametrize(
+    ("coordinate", "value"),
+    [
+        ("publisher_id", "urn:example:publishers:other"),
+        ("factory_id", "other-factory"),
+        ("release_version", "9.9.9"),
+        ("efs_version", "2.0.0"),
+    ],
+)
+def test_each_release_coordinate_is_cryptographically_bound(coordinate, value):
+    raw, _manifest, envelope, _encoded = _signed()
+    envelope["statement"][coordinate] = value
+    result = verify_release_signature(raw, json.dumps(envelope).encode(), FixtureResolver())
+    assert result.code is SignatureCode.BINDING_MISMATCH
+    assert result.signers == ()
+
+
+def test_digest_tuple_is_bound_to_the_immutable_release():
+    raw, _manifest, envelope, _encoded = _signed()
+    envelope["statement"]["digest"]["value"] = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    result = verify_release_signature(raw, json.dumps(envelope).encode(), FixtureResolver())
+    assert result.code is SignatureCode.BINDING_MISMATCH
+
+
+def test_envelope_digest_profile_mismatch_has_its_own_typed_outcome():
+    raw, _manifest, envelope, _encoded = _signed()
+    envelope["statement"]["digest"]["profile_id"] = "efs-jcs-sha512-v1"
+    result = verify_release_signature(raw, json.dumps(envelope).encode(), FixtureResolver())
+    assert result.code is SignatureCode.DIGEST_PROFILE_MISMATCH
+
+
+def test_manifest_digest_profile_mismatch_fails_before_key_resolution():
+    _raw, manifest = _manifest_bytes()
+    manifest["release"]["digest"]["profile"] = "efs-jcs-sha512-v1"
+    changed = json.dumps(manifest).encode()
+    resolver = FixtureResolver()
+    result = verify_release_signature(changed, b"{}", resolver)
+    assert result.code is SignatureCode.DIGEST_PROFILE_MISMATCH
+    assert resolver.calls == []
+
+
+def test_wrong_publisher_scoped_public_key_is_an_invalid_signature():
+    raw, _manifest, _envelope, encoded = _signed()
+    wrong_key = Ed25519PrivateKey.from_private_bytes(bytes(reversed(range(32)))).public_key().public_bytes_raw()
+    result = verify_release_signature(raw, encoded, FixtureResolver(public_key=wrong_key))
+    assert result.code is SignatureCode.INVALID
+    assert result.cryptographic_valid is False
