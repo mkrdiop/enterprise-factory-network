@@ -2,6 +2,56 @@
   "catalogVersion": "1.0",
   "diagnostics": [
     {
+      "code": "EFS_CAPABILITY_EXECUTION_PROFILE_UNRESOLVED",
+      "stage": "profile",
+      "meaning": "Capability execution profile does not resolve to exactly one profile in the selected execution source."
+    },
+    {
+      "code": "EFS_CAPABILITY_ID_DUPLICATE",
+      "stage": "profile",
+      "meaning": "Capability identifier is duplicated within one exact Factory release."
+    },
+    {
+      "code": "EFS_CONTRACT_CAPABILITY_NOT_UNIQUE",
+      "stage": "payload",
+      "meaning": "Exact capability identifier does not resolve to exactly one capability in the selected release."
+    },
+    {
+      "code": "EFS_CONTRACT_DIRECTION_INVALID",
+      "stage": "payload",
+      "meaning": "Payload validation direction is not inputs or outputs."
+    },
+    {
+      "code": "EFS_CONTRACT_ERROR_CODE_DUPLICATE",
+      "stage": "profile",
+      "meaning": "Contract error code is duplicated within one exact contract definition."
+    },
+    {
+      "code": "EFS_CONTRACT_PAYLOAD_INVALID",
+      "stage": "payload",
+      "meaning": "Concrete JSON payload does not satisfy the selected capability contract schema."
+    },
+    {
+      "code": "EFS_CONTRACT_RELEASE_COORDINATE_MISMATCH",
+      "stage": "payload",
+      "meaning": "Manifest does not match the exact publisher, factory, release and digest coordinate."
+    },
+    {
+      "code": "EFS_CONTRACT_SCHEMA_INVALID",
+      "stage": "payload",
+      "meaning": "Selected capability contract schema or local schema resource graph is invalid."
+    },
+    {
+      "code": "EFS_CONTRACT_SCHEMA_MISSING",
+      "stage": "payload",
+      "meaning": "Selected capability contract has no object schema for the requested direction."
+    },
+    {
+      "code": "EFS_CONTRACT_VERSION_MISMATCH",
+      "stage": "payload",
+      "meaning": "Capability contract does not match the exact contract identifier and version."
+    },
+    {
       "code": "EFS_EMBEDDED_SCHEMA_INVALID",
       "stage": "embedded_schemas",
       "meaning": "Embedded contract schema is not valid Draft 2020-12."
@@ -60,6 +110,11 @@
       "code": "EFS_SCHEMA_REF_REMOTE",
       "stage": "embedded_schemas",
       "meaning": "Absolute or network schema reference is prohibited."
+    },
+    {
+      "code": "EFS_SCHEMA_REF_UNRESOLVED",
+      "stage": "embedded_schemas",
+      "meaning": "Local schema reference does not resolve in the supplied immutable schema resource graph."
     },
     {
       "code": "EFS_SCHEMA_REF_UNSUPPORTED",
