@@ -9,7 +9,9 @@ import base64
 import binascii
 import json
 import re
+from copy import deepcopy
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Protocol, runtime_checkable
@@ -87,6 +89,8 @@ class KeyResolution:
     algorithm: str | None = None
     public_key: bytes | None = None
     usage: str | None = None
+    valid_from: datetime | None = None
+    valid_until: datetime | None = None
     evidence_version: str | None = None
 
 
@@ -371,6 +375,36 @@ def create_signature_envelope(
     return envelope
 
 
+def add_signature(
+    envelope: dict,
+    key_id: str,
+    signer: ReleaseSigner,
+    *,
+    schema_path: str | Path | None = None,
+) -> dict:
+    """Return a new envelope with one additional independent signer entry."""
+    _validate_envelope(envelope, schema_path)
+    if any(item["key_id"] == key_id for item in envelope["signatures"]):
+        raise SignatureEnvelopeError(
+            SignatureCode.DUPLICATE_SIGNER, "key_id is already present in this envelope"
+        )
+    message = signing_input(envelope["statement"], key_id)
+    signature = signer.sign(message)
+    if not isinstance(signature, bytes) or len(signature) != 64:
+        raise SignatureEnvelopeError(
+            SignatureCode.INVALID, "Ed25519 signer must return exactly 64 signature octets"
+        )
+    result = deepcopy(envelope)
+    result["signatures"].append({
+        "key_id": key_id,
+        "algorithm": "Ed25519",
+        "signature": base64.urlsafe_b64encode(signature).rstrip(b"=").decode("ascii"),
+    })
+    result["signatures"].sort(key=lambda item: item["key_id"].encode("ascii"))
+    _validate_envelope(result, schema_path)
+    return result
+
+
 def serialize_signature_envelope(envelope: dict, *, schema_path: str | Path | None = None) -> bytes:
     """Validate and serialize an envelope using RFC 8785."""
     _validate_envelope(envelope, schema_path)
@@ -483,6 +517,17 @@ def verify_release_signature(
             or resolution.usage != KEY_USAGE
             or not isinstance(resolution.public_key, bytes)
             or len(resolution.public_key) != 32
+            or not isinstance(resolution.valid_from, datetime)
+            or resolution.valid_from.tzinfo is None
+            or (
+                resolution.valid_until is not None
+                and (
+                    not isinstance(resolution.valid_until, datetime)
+                    or resolution.valid_until.tzinfo is None
+                )
+            )
+            or not isinstance(resolution.evidence_version, str)
+            or not resolution.evidence_version
         ):
             results.append(SignerVerification(
                 key_id, None, KeyTrustStatus.BINDING_MISMATCH,
