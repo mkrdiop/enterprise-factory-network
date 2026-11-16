@@ -136,6 +136,14 @@ def test_malformed_json_is_rejected(tmp_path):
     assert report["diagnostics"][0]["code"] == "EFS_JSON_INVALID"
 
 
+def test_non_json_numeric_constants_are_rejected(tmp_path):
+    path = tmp_path / "nan.json"
+    path.write_text('{"value": NaN}', encoding="utf-8")
+    report = validate_report(path, SCHEMA_PATH)
+    assert not report["valid"]
+    assert report["diagnostics"][0]["code"] == "EFS_JSON_INVALID"
+
+
 def test_invalid_utf8_is_rejected(tmp_path):
     path = tmp_path / "invalid-utf8.json"
     path.write_bytes(b'{"name":"\xff"}')
