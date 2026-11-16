@@ -113,6 +113,16 @@ class ReleaseSigner(Protocol):
         ...
 
 
+@runtime_checkable
+class ReleaseSignatureVerifier(Protocol):
+    """Transport-neutral verifier contract for Registry, Connect and Runtime."""
+
+    def verify(
+        self, manifest_bytes: bytes, envelope_bytes: bytes
+    ) -> "SignatureVerificationReport":
+        ...
+
+
 class Ed25519Signer:
     """Ed25519 adapter around an already-provisioned private key."""
 
@@ -161,8 +171,8 @@ class SignatureVerificationReport:
         )
 
     @property
-    def admission_eligible(self) -> bool:
-        """Cryptographic + trust evidence only; policy authorization is excluded."""
+    def trusted_signature_evidence(self) -> bool:
+        """Cryptographic + resolver trust evidence; never an authorization grant."""
         return (
             self.digest_valid
             and self.cryptographic_valid
@@ -291,9 +301,12 @@ def _validate_envelope(envelope: dict, schema_path: str | Path | None = None):
     )
     if errors:
         first = errors[0]
-        if first.path and first.path[0] == "profile_id":
+        if first.path and (
+            first.path[0] == "profile_id"
+            or "algorithm" in first.path
+        ):
             raise SignatureEnvelopeError(
-                SignatureCode.UNSUPPORTED_PROFILE, "unsupported signature profile"
+                SignatureCode.UNSUPPORTED_PROFILE, "unsupported signature profile or algorithm"
             )
         raise SignatureEnvelopeError(
             SignatureCode.ENVELOPE_INVALID, f"signature envelope schema violation: {first.message}"
@@ -408,8 +421,14 @@ def verify_release_signature(
 
     try:
         payload = canonicalize_and_verify(manifest_bytes)
-    except ReleaseDigestError:
-        return SignatureVerificationReport(SignatureCode.DIGEST_MISMATCH, False)
+    except ReleaseDigestError as exc:
+        message = str(exc).lower()
+        code = (
+            SignatureCode.DIGEST_PROFILE_MISMATCH
+            if "unsupported" in message or "profile" in message or "algorithm" in message
+            else SignatureCode.DIGEST_MISMATCH
+        )
+        return SignatureVerificationReport(code, False)
 
     try:
         expected_statement = _release_statement(manifest, payload.digest.value)
@@ -500,3 +519,26 @@ def verify_release_signature(
             SignatureCode.ENVELOPE_INVALID,
         )
     return SignatureVerificationReport(overall, True, tuple(results))
+
+
+class EFSReleaseSignatureVerifier:
+    """Default transport-neutral adapter around the PSI-51 reference verifier."""
+
+    def __init__(
+        self,
+        resolver: PublisherKeyResolver,
+        *,
+        schema_path: str | Path | None = None,
+    ):
+        self._resolver = resolver
+        self._schema_path = schema_path
+
+    def verify(
+        self, manifest_bytes: bytes, envelope_bytes: bytes
+    ) -> SignatureVerificationReport:
+        return verify_release_signature(
+            manifest_bytes,
+            envelope_bytes,
+            self._resolver,
+            schema_path=self._schema_path,
+        )
