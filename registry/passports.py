@@ -196,9 +196,8 @@ def build_factory_passport(
             "endpointCount": sum(len(item["endpoints"]) for item in manifest["capabilities"]),
         },
     }
-    for field in ("artifactIntegrity",):
-        provenance.append({
-            "target": f"/assurance/{field}",
+    provenance.append({
+            "target": "/assurance/artifactIntegrity",
             "source": "derivation",
             "sourcePointer": "/registry/artifactReadback",
             "rule": "verified-artifact-readback",
@@ -303,7 +302,6 @@ def render_factory_passport_markdown(passport: dict[str, Any]) -> str:
         lines.extend(
             [
                 f"- **Contract:** `{contract['id']}@{contract['version']}`",
-                f"- **Endpoints:** {len(capability['endpoints'])}",
                 f"- **Declared execution profiles:** {', '.join(capability.get('executionProfiles', [])) or 'None'}",
                 "",
                 "**Contract details**",
