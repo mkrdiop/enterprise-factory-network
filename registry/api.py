@@ -13,6 +13,7 @@ from .passports import (
     build_factory_passport,
     canonical_passport_json,
     render_factory_passport_markdown,
+    PassportSourceMismatch,
 )
 from .query_repository import (
     ArtifactLocationUnavailable,
@@ -90,6 +91,16 @@ def create_app(
         return JSONResponse(
             status_code=503,
             content=_error("EFS_ARTIFACT_UNAVAILABLE", str(exc)),
+        )
+
+    @app.exception_handler(PassportSourceMismatch)
+    async def passport_source_mismatch(_request: Request, _exc: PassportSourceMismatch):
+        return JSONResponse(
+            status_code=503,
+            content=_error(
+                "EFS_ARTIFACT_INTEGRITY_FAILURE",
+                "Registry release coordinates disagree with the verified artifact.",
+            ),
         )
 
     @app.exception_handler(ArtifactIntegrityError)
