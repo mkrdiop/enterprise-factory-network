@@ -86,6 +86,8 @@ class ReleaseDigestService(Protocol):
 class ArtifactStore(Protocol):
     """PSI-40 content-addressed storage boundary; no publisher/factory concepts."""
 
+    provider: str
+
     def put_if_absent(self, payload: CanonicalReleasePayload) -> StoredArtifact:
         """Durably create once, or verify and return an identical existing object."""
         ...
