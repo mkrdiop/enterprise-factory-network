@@ -17,6 +17,8 @@ from urllib.parse import urlparse, urlsplit
 from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError
 
+from registry.capability_contracts import validate_schema_references
+
 DIALECT = "https://json-schema.org/draft/2020-12/schema"
 PROFILE = "efs-v1"
 STAGES = ("parsing", "structural", "embedded_schemas", "profile")
@@ -115,7 +117,11 @@ def _embedded_schema_checks(manifest):
                     {"validator": str(exc.validator), "message": exc.message},
                 ))
                 continue
-            _walk_schema(schema, base, diagnostics)
+            for item in validate_schema_references(schema):
+                diagnostics.append(diagnostic(
+                    item["code"], "embedded_schemas",
+                    pointer(base) + item["path"], item["message"], item.get("details"),
+                ))
         errors = contract.get("errors", [])
         if isinstance(errors, list):
             for j, error in enumerate(errors):
@@ -138,7 +144,11 @@ def _embedded_schema_checks(manifest):
                         {"validator": str(exc.validator), "message": exc.message},
                     ))
                     continue
-                _walk_schema(schema, base, diagnostics)
+                for item in validate_schema_references(schema):
+                    diagnostics.append(diagnostic(
+                        item["code"], "embedded_schemas",
+                        pointer(base) + item["path"], item["message"], item.get("details"),
+                    ))
     return diagnostics
 
 
@@ -254,8 +264,82 @@ def canonical_publisher_uri(value: str) -> str | None:
     return scheme.lower() + ":" + ("//" + authority if has_authority else "") + path
 
 
-def _profile_checks(manifest):
+def _capability_contract_checks(manifest):
+    """Apply PSI-42 capability identity, error and profile-binding semantics."""
     diagnostics = []
+    capabilities = manifest.get("capabilities", [])
+    if not isinstance(capabilities, list):
+        return diagnostics
+
+    capability_ids = {}
+    for index, capability in enumerate(capabilities):
+        if not isinstance(capability, dict):
+            continue
+        capability_id = capability.get("id")
+        if isinstance(capability_id, str):
+            if capability_id in capability_ids:
+                diagnostics.append(diagnostic(
+                    "EFS_CAPABILITY_ID_DUPLICATE", "profile",
+                    pointer(["capabilities", index, "id"]),
+                    "Capability identifier is duplicated within this exact Factory release.",
+                    {"firstPath": pointer(["capabilities", capability_ids[capability_id], "id"])},
+                ))
+            else:
+                capability_ids[capability_id] = index
+
+        contract = capability.get("contract")
+        if isinstance(contract, dict) and isinstance(contract.get("errors"), list):
+            error_codes = {}
+            for error_index, error in enumerate(contract["errors"]):
+                if not isinstance(error, dict) or not isinstance(error.get("code"), str):
+                    continue
+                code = error["code"]
+                if code in error_codes:
+                    diagnostics.append(diagnostic(
+                        "EFS_CONTRACT_ERROR_CODE_DUPLICATE", "profile",
+                        pointer(["capabilities", index, "contract", "errors", error_index, "code"]),
+                        "Contract error code is duplicated within this contract definition.",
+                        {"firstPath": pointer([
+                            "capabilities", index, "contract", "errors", error_codes[code], "code"
+                        ])},
+                    ))
+                else:
+                    error_codes[code] = error_index
+
+    execution = manifest.get("execution")
+    if isinstance(execution, dict):
+        source = execution.get("source")
+        if source == "manifest":
+            declared = execution.get("profiles", [])
+            profile_ids = [item.get("id") for item in declared if isinstance(item, dict)]
+        elif source == "external":
+            declared = execution.get("profileReferences", [])
+            profile_ids = [item.get("id") for item in declared if isinstance(item, dict)]
+        else:
+            profile_ids = []
+        profile_counts = {}
+        for profile_id in profile_ids:
+            profile_counts[profile_id] = profile_counts.get(profile_id, 0) + 1
+
+        for index, capability in enumerate(capabilities):
+            if not isinstance(capability, dict):
+                continue
+            selected = capability.get("executionProfiles")
+            if not isinstance(selected, list):
+                continue
+            for selected_index, profile_id in enumerate(selected):
+                if profile_counts.get(profile_id, 0) != 1:
+                    diagnostics.append(diagnostic(
+                        "EFS_CAPABILITY_EXECUTION_PROFILE_UNRESOLVED", "profile",
+                        pointer(["capabilities", index, "executionProfiles", selected_index]),
+                        "Capability execution profile must resolve to exactly one profile in the selected execution source.",
+                        {"matches": profile_counts.get(profile_id, 0), "source": source},
+                    ))
+    return diagnostics
+
+
+def _profile_checks(manifest):
+    diagnostics = _capability_contract_checks(manifest)
     publisher = manifest.get("publisher")
     if isinstance(publisher, dict) and isinstance(publisher.get("id"), str):
         publisher_id = publisher["id"]
