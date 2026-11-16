@@ -17,7 +17,8 @@
       "id": "PSI44-AC-02",
       "requirement": "Every envelope carries the exact immutable publisher/factory/release digest/capability/contract/profile/mode context.",
       "tests": [
-        "test_envelope_binds_exact_manifest_and_contract_coordinates"
+        "test_envelope_binds_exact_manifest_and_contract_coordinates",
+        "test_context_mismatch_stops_before_payload_validator_invocation"
       ],
       "fixtures": [
         "executionExamples"
@@ -57,7 +58,8 @@
       "id": "PSI44-AC-06",
       "requirement": "Mode-specific message shapes and observed transitions are explicit without implementing the PSI-45 state machine.",
       "tests": [
-        "test_mode_specific_envelopes_and_transition_rules"
+        "test_mode_specific_envelopes_and_transition_rules",
+        "test_context_mismatch_stops_before_payload_validator_invocation"
       ],
       "fixtures": [
         "executionExamples"
