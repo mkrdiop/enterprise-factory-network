@@ -146,6 +146,10 @@ def test_mode_specific_envelopes_and_transition_rules():
     accepted = _example("accepted-async")["envelope"]
     assert not validate_execution_transition(request, accepted)["valid"]
 
+    streaming_request = _example("request-streaming")["envelope"]
+    streaming_progress = _example("progress-streaming")["envelope"]
+    assert not validate_execution_transition(streaming_request, streaming_progress)["valid"]
+
     event = _example("event")["envelope"]
     event_result = _example("result-event")["envelope"]
     assert validate_execution_transition(event, event_result)["valid"]
@@ -195,3 +199,18 @@ def test_execution_acceptance_registry_maps_to_executable_tests():
     for criterion in criteria:
         assert criterion["tests"]
         assert set(criterion["tests"]) <= tests
+
+
+def test_context_mismatch_stops_before_payload_validator_invocation():
+    item = _example("request-sync")
+    envelope = json.loads(json.dumps(item["envelope"]))
+    envelope["context"]["contract"]["version"] = "9.9"
+    calls = []
+    def port(*args, **kwargs):
+        calls.append((args, kwargs))
+        return {"valid": True, "diagnostics": []}
+    report = validate_execution_envelope(
+        envelope, _manifest(item["manifestPath"]), payload_validator=port
+    )
+    assert not report["valid"]
+    assert not calls
