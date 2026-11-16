@@ -115,6 +115,8 @@ class DimensionAssessment:
     coordinates: tuple[tuple[str, str], ...] = ()
 
     def __post_init__(self) -> None:
+        if not isinstance(self.dimension, CompatibilityDimension) or not isinstance(self.outcome, Outcome):
+            raise CompatibilityError("assessment dimension and outcome must use the shared enums")
         if not self.rule_id or not self.explanation:
             raise CompatibilityError("each assessment requires a stable rule ID and explanation")
         if self.outcome is Outcome.CONDITIONAL and not self.conditions:
@@ -207,12 +209,12 @@ def assess_contract_change(
     coordinate = (("capabilityId", capability_id), ("contractId", contract_id),
                   ("previousContractVersion", previous_version), ("selectedContractVersion", selected_version))
     if previous_version == selected_version:
-        if not refs:
+        if not refs or change_classification != "unchanged":
             return DimensionAssessment(dimension, Outcome.UNKNOWN, "EFC-CONTRACT-002",
-                                       "Exact contract version matches, but definition identity/evidence is absent.",
+                                       "Exact opaque contract version matches, but unchanged definition evidence is not established.",
                                        coordinates=coordinate)
         return DimensionAssessment(dimension, Outcome.COMPATIBLE, "EFC-CONTRACT-003",
-                                   "Exact opaque contract version matches and definition evidence was supplied.", refs,
+                                   "Exact opaque contract version and unchanged definition are evidenced.", refs,
                                    coordinates=coordinate)
     if not refs or change_classification is None:
         return DimensionAssessment(dimension, Outcome.UNKNOWN, "EFC-CONTRACT-004",
@@ -237,7 +239,9 @@ def assess_contract_change(
 def assess_profile_mapping(
     dimension: CompatibilityDimension, *, subject_profile_id: str | None,
     consumer_profile_id: str | None, mapping_id: str | None,
-    evidence: Iterable[EvidenceReference] = (),
+    mapping_outcome: Outcome | str | None,
+    evidence: Iterable[EvidenceReference] = (), conditions: Iterable[str] = (),
+    blockers: Iterable[str] = (),
 ) -> DimensionAssessment:
     """Evaluate runtime/protocol only from explicit profiles and a named mapping."""
     if dimension not in (CompatibilityDimension.RUNTIME, CompatibilityDimension.PROTOCOL):
@@ -245,12 +249,18 @@ def assess_profile_mapping(
     refs = tuple(evidence)
     if not subject_profile_id or not consumer_profile_id:
         return _unknown(dimension, "EFC-PROFILE-001", "Subject or consumer profile identity is missing.")
-    if not mapping_id or not refs:
+    if not mapping_id or not refs or mapping_outcome is None:
         return _unknown(dimension, "EFC-PROFILE-002",
-                        "No explicit profile mapping and supporting evidence were supplied.")
-    return DimensionAssessment(dimension, Outcome.COMPATIBLE, "EFC-PROFILE-003",
-                               "Explicit subject-to-consumer profile mapping is evidenced.", refs,
-                               mappings=(mapping_id,))
+                        "No explicit mapping result and supporting evidence were supplied.")
+    try:
+        result = Outcome(mapping_outcome)
+    except ValueError:
+        return _unknown(dimension, "EFC-PROFILE-004", "Profile mapping result is not recognized.")
+    if result is Outcome.UNKNOWN:
+        return _unknown(dimension, "EFC-PROFILE-005", "Profile mapping evidence leaves compatibility unknown.")
+    return DimensionAssessment(dimension, result, "EFC-PROFILE-003",
+                               "Explicit subject-to-consumer profile mapping result is evidenced.", refs,
+                               conditions=tuple(conditions), blockers=tuple(blockers), mappings=(mapping_id,))
 
 
 def assess_governance(
