@@ -1325,13 +1325,120 @@
             "reconciled": false
           },
           "execution_state": {
-            "invocation_id": "inv-1",
-            "correlation_id": "corr-1",
-            "initial_event_id": "event-request-1",
-            "initial_state": "requested",
-            "initial_revision": 1,
-            "current_state": "succeeded",
-            "current_revision": 2,
+            "request_event": {
+              "eventVersion": "1.0",
+              "eventId": "event-request-1",
+              "invocationId": "inv-1",
+              "correlationId": "corr-1",
+              "causationId": null,
+              "source": "envelope",
+              "sourceMessageId": "msg-request-1",
+              "eventType": "request",
+              "fromState": "created",
+              "toState": "requested",
+              "expectedRevision": 0,
+              "reasonCode": "execution.request",
+              "occurredAt": "2026-11-16T11:59:51Z",
+              "context": {
+                "publisherId": "urn:example:publishers:acme",
+                "factoryId": "contract-sync",
+                "releaseVersion": "1.2.0",
+                "releaseDigest": {
+                  "profile": "efs-jcs-sha256-v1",
+                  "algorithm": "SHA-256",
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                },
+                "capabilityId": "sync-operation",
+                "contract": {
+                  "id": "https://schemas.example.org/contracts/operation",
+                  "version": "1.0.0"
+                },
+                "executionProfileId": "profile-sync",
+                "executionMode": "sync"
+              }
+            },
+            "initial_snapshot": {
+              "stateVersion": "1.0",
+              "invocationId": "inv-1",
+              "correlationId": "corr-1",
+              "context": {
+                "publisherId": "urn:example:publishers:acme",
+                "factoryId": "contract-sync",
+                "releaseVersion": "1.2.0",
+                "releaseDigest": {
+                  "profile": "efs-jcs-sha256-v1",
+                  "algorithm": "SHA-256",
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                },
+                "capabilityId": "sync-operation",
+                "contract": {
+                  "id": "https://schemas.example.org/contracts/operation",
+                  "version": "1.0.0"
+                },
+                "executionProfileId": "profile-sync",
+                "executionMode": "sync"
+              },
+              "state": "requested",
+              "revision": 1,
+              "lastEventId": "event-request-1"
+            },
+            "outcome_event": {
+              "eventVersion": "1.0",
+              "eventId": "event-succeeded-1",
+              "invocationId": "inv-1",
+              "correlationId": "corr-1",
+              "causationId": "msg-request-1",
+              "source": "envelope",
+              "sourceMessageId": "msg-result-1",
+              "eventType": "succeeded",
+              "fromState": "requested",
+              "toState": "succeeded",
+              "expectedRevision": 1,
+              "reasonCode": "execution.succeeded",
+              "occurredAt": "2026-11-16T12:00:00Z",
+              "context": {
+                "publisherId": "urn:example:publishers:acme",
+                "factoryId": "contract-sync",
+                "releaseVersion": "1.2.0",
+                "releaseDigest": {
+                  "profile": "efs-jcs-sha256-v1",
+                  "algorithm": "SHA-256",
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                },
+                "capabilityId": "sync-operation",
+                "contract": {
+                  "id": "https://schemas.example.org/contracts/operation",
+                  "version": "1.0.0"
+                },
+                "executionProfileId": "profile-sync",
+                "executionMode": "sync"
+              }
+            },
+            "current_snapshot": {
+              "stateVersion": "1.0",
+              "invocationId": "inv-1",
+              "correlationId": "corr-1",
+              "context": {
+                "publisherId": "urn:example:publishers:acme",
+                "factoryId": "contract-sync",
+                "releaseVersion": "1.2.0",
+                "releaseDigest": {
+                  "profile": "efs-jcs-sha256-v1",
+                  "algorithm": "SHA-256",
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                },
+                "capabilityId": "sync-operation",
+                "contract": {
+                  "id": "https://schemas.example.org/contracts/operation",
+                  "version": "1.0.0"
+                },
+                "executionProfileId": "profile-sync",
+                "executionMode": "sync"
+              },
+              "state": "succeeded",
+              "revision": 2,
+              "lastEventId": "event-succeeded-1"
+            },
             "persisted_with_intent": true,
             "revision_cas": true
           }
@@ -2055,13 +2162,89 @@
             "reconciled": false
           },
           "execution_state": {
-            "invocation_id": "inv-unknown",
-            "correlation_id": "corr-unknown",
-            "initial_event_id": "event-request-unknown",
-            "initial_state": "requested",
-            "initial_revision": 1,
-            "current_state": "requested",
-            "current_revision": 1,
+            "request_event": {
+              "eventVersion": "1.0",
+              "eventId": "event-request-unknown",
+              "invocationId": "inv-unknown",
+              "correlationId": "corr-unknown",
+              "causationId": null,
+              "source": "envelope",
+              "sourceMessageId": "msg-request-unknown",
+              "eventType": "request",
+              "fromState": "created",
+              "toState": "requested",
+              "expectedRevision": 0,
+              "reasonCode": "execution.request",
+              "occurredAt": "2026-11-16T11:59:51Z",
+              "context": {
+                "publisherId": "urn:example:publishers:acme",
+                "factoryId": "contract-sync",
+                "releaseVersion": "1.2.0",
+                "releaseDigest": {
+                  "profile": "efs-jcs-sha256-v1",
+                  "algorithm": "SHA-256",
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                },
+                "capabilityId": "sync-operation",
+                "contract": {
+                  "id": "https://schemas.example.org/contracts/operation",
+                  "version": "1.0.0"
+                },
+                "executionProfileId": "profile-sync",
+                "executionMode": "sync"
+              }
+            },
+            "initial_snapshot": {
+              "stateVersion": "1.0",
+              "invocationId": "inv-unknown",
+              "correlationId": "corr-unknown",
+              "context": {
+                "publisherId": "urn:example:publishers:acme",
+                "factoryId": "contract-sync",
+                "releaseVersion": "1.2.0",
+                "releaseDigest": {
+                  "profile": "efs-jcs-sha256-v1",
+                  "algorithm": "SHA-256",
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                },
+                "capabilityId": "sync-operation",
+                "contract": {
+                  "id": "https://schemas.example.org/contracts/operation",
+                  "version": "1.0.0"
+                },
+                "executionProfileId": "profile-sync",
+                "executionMode": "sync"
+              },
+              "state": "requested",
+              "revision": 1,
+              "lastEventId": "event-request-unknown"
+            },
+            "outcome_event": null,
+            "current_snapshot": {
+              "stateVersion": "1.0",
+              "invocationId": "inv-unknown",
+              "correlationId": "corr-unknown",
+              "context": {
+                "publisherId": "urn:example:publishers:acme",
+                "factoryId": "contract-sync",
+                "releaseVersion": "1.2.0",
+                "releaseDigest": {
+                  "profile": "efs-jcs-sha256-v1",
+                  "algorithm": "SHA-256",
+                  "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                },
+                "capabilityId": "sync-operation",
+                "contract": {
+                  "id": "https://schemas.example.org/contracts/operation",
+                  "version": "1.0.0"
+                },
+                "executionProfileId": "profile-sync",
+                "executionMode": "sync"
+              },
+              "state": "requested",
+              "revision": 1,
+              "lastEventId": "event-request-unknown"
+            },
             "persisted_with_intent": true,
             "revision_cas": true
           }
