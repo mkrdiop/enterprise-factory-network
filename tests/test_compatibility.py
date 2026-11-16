@@ -43,7 +43,7 @@ def test_specification_range_mismatch_is_breaking_not_unknown():
 
 def test_contract_versions_are_opaque_and_definition_evidence_drives_result():
     same = assess_contract_change(capability_id="cap", contract_id="c", previous_version="VNext", selected_version="VNext",
-                                  change_classification=None, evidence=EVIDENCE)
+                                  change_classification="unchanged", evidence=EVIDENCE)
     assert same.outcome is Outcome.COMPATIBLE
     assert dict(same.coordinates)["capabilityId"] == "cap"
     changed = assess_contract_change(capability_id="cap", contract_id="c", previous_version="2026-Q4", selected_version="vNext",
@@ -58,10 +58,10 @@ def test_contract_versions_are_opaque_and_definition_evidence_drives_result():
 def test_runtime_and_protocol_need_explicit_mapping_evidence():
     for dimension in (CompatibilityDimension.RUNTIME, CompatibilityDimension.PROTOCOL):
         absent = assess_profile_mapping(dimension, subject_profile_id="a", consumer_profile_id="b",
-                                        mapping_id=None, evidence=())
+                                        mapping_id=None, mapping_outcome=None, evidence=())
         assert absent.outcome is Outcome.UNKNOWN
         mapped = assess_profile_mapping(dimension, subject_profile_id="a", consumer_profile_id="b",
-                                        mapping_id="mapping-1", evidence=EVIDENCE)
+                                        mapping_id="mapping-1", mapping_outcome=Outcome.COMPATIBLE, evidence=EVIDENCE)
         assert mapped.outcome is Outcome.COMPATIBLE
 
 
