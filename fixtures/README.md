@@ -8,7 +8,7 @@ outcome and taxonomy are part of the fixture contract—not Python-specific beha
 
 | Directory | Expected result | Purpose |
 | --- | --- | --- |
-| `valid/` | Pass | Minimal manifest and externally referenced execution profile |
+| `valid/` | Pass | Minimal, full and multi-capability manifests; manifest/external execution and policy variants |
 | `invalid/` | Fail | Structural, profile, embedded-schema and prohibited-reference cases |
 | `boundary/` | Pass | Valid boundary values, including RFC 3339 offset timestamps |
 | `extensions/` | Pass | Namespaced opaque extension payloads; unknown core fields remain open pending governance |
@@ -29,7 +29,7 @@ outcome and taxonomy are part of the fixture contract—not Python-specific beha
 ## Current coverage
 
 - Positive: minimal, full and multi-capability manifests; manifest-sourced and external execution profiles; declarations and references.
-- Negative: missing required property, wrong field type, empty required collections, mutually exclusive execution branches, timezone-less timestamp, invalid embedded schema, remote `$ref`, unsupported dynamic reference.
+- Negative: missing required property, wrong field type, empty required collections, invalid digest length, execution-mode enum/branch violations, invalid contract URI, empty policy declarations, timezone-less timestamp, invalid embedded schema, remote `$ref`, unsupported dynamic reference.
 - Boundary: minimum valid collection cardinalities, empty optional dependencies, one execution mode, absolute URN/HTTPS identifiers, timezone-aware RFC 3339 offset timestamp and leap-day timestamp.
 - Extensions: namespaced opaque extension data.
 - Parser/adversarial cases are generated in isolated temporary files by tests so malformed
