@@ -36,7 +36,10 @@ def vector_package():
     return load_json(VECTORS_PATH)
 
 
-def validate(instance, schema):
+def validate(instance, schema, definition=None):
+    if definition is not None:
+        schema = copy.deepcopy(schema)
+        schema["$ref"] = f"#/$defs/{definition}"
     Draft202012Validator(schema, format_checker=FORMAT_CHECKER).validate(instance)
 
 
@@ -93,13 +96,13 @@ def test_policy_examples_and_base_request_match_policy_schema():
     schema = policy_schema()
     package = vector_package()
     for name in ("subject", "resource", "context"):
-        validate(package["base_request"][name], schema["$defs"][name])
+        validate(package["base_request"][name], schema, name)
     for vector in package["vectors"]:
         policies = vector.get("policies", [])
         if vector.get("policy", {}).get("policy_profile") == "efs-policy-v1":
             policies = [vector["policy"], *policies]
         for policy in policies:
-            validate(policy, schema["$defs"]["policy"])
+            validate(policy, schema, "policy")
 
 
 def test_policy_digest_known_answer_is_recomputed():
@@ -126,11 +129,11 @@ def test_wildcard_subject_and_resource_ids_are_rejected():
     policy = copy.deepcopy(next(v["policy"] for v in vector_package()["vectors"] if v["id"] == "pol-001"))
     policy["rules"][0]["subject"]["id"] = "*"
     with pytest.raises(ValidationError):
-        validate(policy, schema["$defs"]["policy"])
+        validate(policy, schema, "policy")
     policy["rules"][0]["subject"]["id"] = "user:alice"
     policy["rules"][0]["resource"]["id"] = "*"
     with pytest.raises(ValidationError):
-        validate(policy, schema["$defs"]["policy"])
+        validate(policy, schema, "policy")
 
 
 @pytest.mark.parametrize("resource", [
@@ -140,7 +143,7 @@ def test_wildcard_subject_and_resource_ids_are_rejected():
 ])
 def test_resource_types_require_normative_coordinates(resource):
     with pytest.raises(ValidationError):
-        validate(resource, policy_schema()["$defs"]["resource"])
+        validate(resource, policy_schema(), "resource")
 
 
 def test_duplicate_rule_ids_are_semantically_invalid():
@@ -182,7 +185,7 @@ def test_schema_enforces_condition_child_and_literal_array_limits():
 def test_rfc3339_format_is_asserted_with_format_checker():
     attribute = {"value": True, "source": "issuer", "observed_at": "2026-11-16T25:00:00Z", "expires_at": "2026-11-16T12:00:00Z"}
     with pytest.raises(ValidationError):
-        validate(attribute, policy_schema()["$defs"]["attribute"])
+        validate(attribute, policy_schema(), "attribute")
     attribute["observed_at"] = "2026-11-16T11:00:00Z"
     validate(attribute, policy_schema()["$defs"]["attribute"])
 
@@ -205,10 +208,10 @@ def test_machine_readable_negative_vectors_are_executable():
         kind = vector["kind"]
         if kind == "invalid-policy":
             with pytest.raises(ValidationError):
-                validate(vector["policy"], schema["$defs"]["policy"])
+                validate(vector["policy"], schema, "policy")
         elif kind == "invalid-resource":
             with pytest.raises(ValidationError):
-                validate(vector["resource"], schema["$defs"]["resource"])
+                validate(vector["resource"], schema, "resource")
         elif kind == "semantic-policy":
             ids = [rule["rule_id"] for rule in vector["policy"]["rules"]]
             assert len(ids) != len(set(ids))
@@ -216,13 +219,13 @@ def test_machine_readable_negative_vectors_are_executable():
             condition = vector["condition"]
             if vector["limit"] in {"children", "literal-array"}:
                 with pytest.raises(ValidationError):
-                    validate(condition, schema["$defs"]["condition"])
+                    validate(condition, schema, "condition")
             else:
                 with pytest.raises(ValueError):
                     condition_metrics(condition)
         elif kind == "timestamp-format":
             with pytest.raises(ValidationError):
-                validate(vector["attribute"], schema["$defs"]["attribute"])
+                validate(vector["attribute"], schema, "attribute")
         elif kind == "freshness-boundary":
             assert vector["evaluation_time"] == vector["expires_at"]
             assert not (vector["evaluation_time"] < vector["expires_at"])
