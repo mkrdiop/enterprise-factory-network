@@ -42,6 +42,7 @@ def test_semver_precedence_and_build_metadata():
     assert [SemVer.parse(value) for value in ordered] == sorted(SemVer.parse(value) for value in ordered)
     assert SemVer.parse("1.2.3+build.7") == SemVer.parse("1.2.3+build.8")
     assert SemVer.parse("1.2.3+build.7").exact != SemVer.parse("1.2.3+build.8").exact
+    assert hash(SemVer.parse("1.2.3+build.7")) == hash(SemVer.parse("1.2.3+build.8"))
 
 
 def test_semver_only_applies_to_two_canonical_fields():
