@@ -53,7 +53,7 @@ The statement has exactly:
 - `factory_id`: exact decoded JSON string from the manifest; case-sensitive, with no normalization.
 - `release_version`: exact release version string from the immutable manifest; opaque and not parsed or normalized by this profile.
 - `efs_version`: exact EFS version string from the manifest.
-- `digest`: object with `profile_id` = `efs-jcs-sha256-v1`, `algorithm` = `SHA-256`, and `value` equal to the verified unpadded Base64URL SHA-256 digest. The algorithm token is exactly `SHA-256` (uppercase), matching ADR-001 and PSI-40; `sha-256` is invalid.
+- `digest`: object with `profile_id` = `efs-jcs-sha256-v1`, `algorithm` = `SHA-256`, and `value` equal to the verified unpadded Base64URL SHA-256 digest. The algorithm token is exactly `SHA-256` (uppercase), matching ADR-001 and PSI-40; `SHA-256` is invalid.
 
 Each signer entry has exactly:
 
@@ -84,7 +84,7 @@ For each signer entry, construct the following JSON object:
     "efs_version": "<exact EFS version>",
     "digest": {
       "profile_id": "efs-jcs-sha256-v1",
-      "algorithm": "sha-256",
+      "algorithm": "SHA-256",
       "value": "<verified digest value>"
     }
   }
