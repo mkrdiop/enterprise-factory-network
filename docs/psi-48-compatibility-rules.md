@@ -20,8 +20,8 @@ Evidence references identify a source and may include a digest and owning author
 | Dimension | Required evidence / rule | Insufficient evidence |
 | --- | --- | --- |
 | Specification | Explicit consumer EFS range/profile and PSI-47 range-evaluator result with evidence | Unknown |
-| Factory release/capability contract | Exact contract ID and opaque versions; explicit definition-change classification and evidence. Same version still requires definition evidence. | Unknown |
-| Runtime/execution | Explicit subject and consumer runtime profiles, named mapping and evidence | Unknown |
+| Factory release/capability contract | Exact contract ID and opaque versions; explicit definition-change classification and evidence. Same version requires explicit unchanged-definition evidence; a matching opaque version alone is not proof. | Unknown |
+| Runtime/execution | Explicit subject and consumer runtime profiles, named mapping, explicit mapping outcome and evidence | Unknown |
 | Protocol | Explicit subject and consumer protocol profiles, named adapter/protocol mapping and evidence | Unknown |
 | Governance | Only an explicit M5-authority result with M5 evidence | Unknown until M5 authority/evidence exists |
 
