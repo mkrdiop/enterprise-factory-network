@@ -283,8 +283,8 @@ def test_resolver_unknown_status_fails_closed():
             return {"status": "trusted", "public_key": PUBLIC}
 
     result = verify_release_signature(raw, encoded, InvalidResolver())
-    assert result.code is SignatureCode.RESOLVER_UNAVAILABLE
-    assert 
+    assert result.code is SignatureCode.EVALUATED
+    assert result.signers[0].code is SignatureCode.RESOLVER_UNAVAILABLE
 
 def test_multiple_signatures_are_independently_signed_and_sorted():
     raw, _manifest = _manifest_bytes()
@@ -333,7 +333,7 @@ def test_resolver_missing_validity_or_evidence_fails_closed():
 
     result = verify_release_signature(raw, encoded, IncompleteResolver())
     assert result.signers[0].code is SignatureCode.KEY_BINDING_MISMATCH
-    assert 
+    assert result.signers[0].cryptographic_valid is None
 
 def test_signature_array_order_does_not_change_verification_result():
     raw, _manifest = _manifest_bytes()
