@@ -33,7 +33,6 @@ sorted deterministically. The validator does not fetch remote schemas: absolute/
 | --- | --- |
 | `EFS_JSON_INVALID` | Malformed JSON or unreadable input |
 | `EFS_JSON_INVALID_ENCODING` | Input is not valid UTF-8 |
-| `EFS_JSON_INVALID_ENCODING` | Input is not valid UTF-8 |
 | `EFS_JSON_DUPLICATE_MEMBER` | Duplicate JSON object member |
 | `EFS_SCHEMA_INVALID` | Manifest schema invalid or manifest violates it |
 | `EFS_EMBEDDED_SCHEMA_INVALID` | Embedded Draft 2020-12 schema is invalid |
