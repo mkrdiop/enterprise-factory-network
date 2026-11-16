@@ -48,6 +48,7 @@ class EvidenceReference:
     source: str
     digest: str | None = None
     authority: str | None = None
+    coordinates: tuple[tuple[str, str], ...] = ()
 
     def __post_init__(self) -> None:
         if not self.evidence_id or not self.source:
@@ -152,6 +153,7 @@ class CompatibilityReport:
                     "blockers": list(item.blockers),
                     "mappings": list(item.mappings),
                     "authority": item.authority,
+                    "coordinates": dict(item.coordinates),
                 }
                 for item in sorted(self.assessments, key=lambda result: result.dimension.value)
             ],
@@ -194,35 +196,40 @@ def assess_specification(
 
 
 def assess_contract_change(
-    *, contract_id: str, previous_version: str, selected_version: str,
+    *, capability_id: str, contract_id: str, previous_version: str, selected_version: str,
     change_classification: str | None, evidence: Iterable[EvidenceReference] = (),
 ) -> DimensionAssessment:
     """Assess contract definitions/evidence; contract versions are never parsed or ordered."""
     dimension = CompatibilityDimension.FACTORY_CONTRACT
-    if not all(isinstance(value, str) and value for value in (contract_id, previous_version, selected_version)):
-        return _unknown(dimension, "EFC-CONTRACT-001", "Exact contract coordinate is incomplete.")
+    if not all(isinstance(value, str) and value for value in (capability_id, contract_id, previous_version, selected_version)):
+        return _unknown(dimension, "EFC-CONTRACT-001", "Exact capability/contract coordinate is incomplete.")
     refs = tuple(evidence)
+    coordinate = (("capabilityId", capability_id), ("contractId", contract_id),
+                  ("previousContractVersion", previous_version), ("selectedContractVersion", selected_version))
     if previous_version == selected_version:
         if not refs:
             return _unknown(dimension, "EFC-CONTRACT-002",
                             "Exact contract version matches, but definition identity/evidence is absent.")
         return DimensionAssessment(dimension, Outcome.COMPATIBLE, "EFC-CONTRACT-003",
-                                   "Exact opaque contract version matches and definition evidence was supplied.", refs)
+                                   "Exact opaque contract version matches and definition evidence was supplied.", refs,
+                                   coordinates=coordinate)
     if not refs or change_classification is None:
         return _unknown(dimension, "EFC-CONTRACT-004",
                         "Contract version differs; no explicit definition-change classification/evidence was supplied.")
     if change_classification == "compatible-additive":
         return DimensionAssessment(dimension, Outcome.COMPATIBLE, "EFC-CONTRACT-005",
-                                   "Contract definition change is explicitly classified as compatible additive.", refs)
+                                   "Contract definition change is explicitly classified as compatible additive.", refs,
+                                   coordinates=coordinate)
     if change_classification == "breaking":
         return DimensionAssessment(dimension, Outcome.BREAKING, "EFC-CONTRACT-006",
                                    "Contract definition change is explicitly classified as breaking.", refs,
-                                   blockers=("breaking-contract-change",))
+                                   blockers=("breaking-contract-change",), coordinates=coordinate)
     if change_classification == "conditional":
         return DimensionAssessment(dimension, Outcome.CONDITIONAL, "EFC-CONTRACT-007",
                                    "Contract change requires an explicit consumer action.", refs,
-                                   conditions=("consumer-must-apply-declared-contract-mapping",))
-    return _unknown(dimension, "EFC-CONTRACT-008", "Contract change classification is not recognized.")
+                                   conditions=("consumer-must-apply-declared-contract-mapping",), coordinates=coordinate)
+    return DimensionAssessment(dimension, Outcome.UNKNOWN, "EFC-CONTRACT-008",
+                               "Contract change classification is not recognized.", coordinates=coordinate)
 
 
 def assess_profile_mapping(
