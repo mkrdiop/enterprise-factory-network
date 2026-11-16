@@ -354,7 +354,8 @@
                   "current_evidence_versions",
                   "audit_outbox_available",
                   "operation_kind",
-                  "side_effect"
+                  "side_effect",
+                  "execution_state"
                 ],
                 "properties": {
                   "at": {
@@ -382,8 +383,13 @@
                     "required": [
                       "intent_durable",
                       "idempotency_key",
+                      "operation_id",
+                      "intent_record_id",
+                      "audit_record_id",
+                      "payload_fingerprint",
                       "dispatch_attempted",
                       "outcome_recorded",
+                      "outcome_ref",
                       "reconciled"
                     ],
                     "properties": {
@@ -393,16 +399,94 @@
                       "idempotency_key": {
                         "type": "string"
                       },
+                      "operation_id": {
+                        "type": "string"
+                      },
+                      "intent_record_id": {
+                        "type": "string"
+                      },
+                      "audit_record_id": {
+                        "type": "string"
+                      },
+                      "payload_fingerprint": {
+                        "type": "string"
+                      },
                       "dispatch_attempted": {
                         "type": "boolean"
                       },
                       "outcome_recorded": {
                         "type": "boolean"
                       },
+                      "outcome_ref": {
+                        "type": "string"
+                      },
                       "reconciled": {
                         "type": "boolean"
                       }
                     }
+                  },
+                  "execution_state": {
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "invocation_id",
+                          "correlation_id",
+                          "initial_event_id",
+                          "initial_state",
+                          "initial_revision",
+                          "current_state",
+                          "current_revision",
+                          "persisted_with_intent",
+                          "revision_cas"
+                        ],
+                        "properties": {
+                          "invocation_id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "correlation_id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "initial_event_id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "initial_state": {
+                            "const": "requested"
+                          },
+                          "initial_revision": {
+                            "const": 1
+                          },
+                          "current_state": {
+                            "enum": [
+                              "requested",
+                              "accepted",
+                              "queued",
+                              "running",
+                              "waiting",
+                              "succeeded",
+                              "failed"
+                            ]
+                          },
+                          "current_revision": {
+                            "type": "integer",
+                            "minimum": 1
+                          },
+                          "persisted_with_intent": {
+                            "const": true
+                          },
+                          "revision_cas": {
+                            "const": true
+                          }
+                        }
+                      }
+                    ]
                   }
                 }
               }
