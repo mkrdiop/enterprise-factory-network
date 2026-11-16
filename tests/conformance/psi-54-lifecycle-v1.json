@@ -84,7 +84,22 @@
           "release_inserted": true,
           "event_inserted": true,
           "audit_outbox_inserted": true,
-          "same_database_transaction": true
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ]
         }
       },
       "expected": {
@@ -129,7 +144,22 @@
           "release_inserted": true,
           "event_inserted": true,
           "audit_outbox_inserted": true,
-          "same_database_transaction": true
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ]
         }
       },
       "expected": {
@@ -174,7 +204,22 @@
           "release_inserted": true,
           "event_inserted": true,
           "audit_outbox_inserted": true,
-          "same_database_transaction": true
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ]
         }
       },
       "expected": {
@@ -219,7 +264,22 @@
           "release_inserted": true,
           "event_inserted": true,
           "audit_outbox_inserted": true,
-          "same_database_transaction": true
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ]
         }
       },
       "expected": {
@@ -264,7 +324,22 @@
           "release_inserted": true,
           "event_inserted": true,
           "audit_outbox_inserted": true,
-          "same_database_transaction": true
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ]
         }
       },
       "expected": {
@@ -320,7 +395,22 @@
           "release_inserted": true,
           "event_inserted": true,
           "audit_outbox_inserted": true,
-          "same_database_transaction": true
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ]
         }
       },
       "expected": {
@@ -376,7 +466,22 @@
           "release_inserted": true,
           "event_inserted": true,
           "audit_outbox_inserted": true,
-          "same_database_transaction": true
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ]
         }
       },
       "expected": {
@@ -432,7 +537,22 @@
           "release_inserted": true,
           "event_inserted": true,
           "audit_outbox_inserted": true,
-          "same_database_transaction": true
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ]
         }
       },
       "expected": {
@@ -477,7 +597,22 @@
           "release_inserted": true,
           "event_inserted": true,
           "audit_outbox_inserted": true,
-          "same_database_transaction": true
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ]
         }
       },
       "expected": {
@@ -522,7 +657,142 @@
           "release_inserted": true,
           "event_inserted": true,
           "audit_outbox_inserted": true,
-          "same_database_transaction": true
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ]
+        }
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "PUBLICATION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-011",
+      "scenario": "same raw key in another release scope is not a replay",
+      "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-8",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "other_scope_only",
+          "record": null
+        },
+        "from": "published",
+        "to": "suspended",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ]
+        }
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-012",
+      "scenario": "same raw key in another operation scope is not a replay",
+      "input": {
+        "operation": "initial_publication",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "initial_publication"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": null,
+        "to": "published",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ]
         }
       },
       "expected": {
