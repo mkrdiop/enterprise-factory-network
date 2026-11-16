@@ -246,3 +246,74 @@ def validate_manifest_versions(manifest: dict) -> list[dict[str, str]]:
                 "message": f"{path} must be an exact Semantic Versioning 2.0.0 value; no coercion or normalization is permitted.",
             })
     return diagnostics
+
+
+class VersionRangeError(VersionError):
+    """A supported EFS version range violates the EFS v1 range profile."""
+
+
+def evaluate_efs_version_range(candidate: str, supported_range: str) -> bool:
+    """Evaluate an EFS v1 supported range against an exact efsVersion value.
+
+    Range grammar is owned by PSI-48 and implemented here using the PSI-47
+    SemVer 2.0.0 parser/comparator. Supported forms:
+      *                       any valid SemVer
+      MAJOR.x                 one major line
+      MAJOR.MINOR.x            one minor line
+      VERSION                  exact SemVer precedence
+      OP VERSION [OP VERSION]  conjunction of strict comparisons
+    OP is one of >, >=, <, <=, =. No coercion, trimming, OR, shorthand
+    comparator versions, tilde, caret, hyphen ranges or aliases are accepted.
+    """
+    if not isinstance(candidate, str):
+        raise VersionRangeError("candidate efsVersion must be a string")
+    if not isinstance(supported_range, str) or not supported_range:
+        raise VersionRangeError("supported EFS version range must be a non-empty string")
+    try:
+        parsed_candidate = parse_field_version(VersionDimension.EFS_SPECIFICATION, candidate)
+    except VersionError as exc:
+        raise VersionRangeError(f"invalid candidate efsVersion: {exc}") from exc
+
+    if supported_range == "*":
+        return True
+
+    wildcard = re.fullmatch(r"(0|[1-9][0-9]*)\\.(?:(0|[1-9][0-9]*)\\.)?x", supported_range, re.ASCII)
+    if wildcard is not None:
+        major = int(wildcard.group(1))
+        minor_text = wildcard.group(2)
+        if parsed_candidate.major != major:
+            return False
+        if minor_text is None:
+            return True
+        return parsed_candidate.minor == int(minor_text)
+
+    # Exact versions and comparator conjunctions use strict full SemVer tokens.
+    if " " not in supported_range:
+        try:
+            bound = parse_field_version(VersionDimension.EFS_SPECIFICATION, supported_range)
+        except VersionError as exc:
+            raise VersionRangeError(f"invalid supported EFS version range: {supported_range!r}") from exc
+        return parsed_candidate.compare_precedence(bound) == 0
+
+    tokens = supported_range.split(" ")
+    if any(not token for token in tokens) or len(tokens) % 2 != 0:
+        raise VersionRangeError("comparison range must be operator/version pairs separated by one ASCII space")
+    for index in range(0, len(tokens), 2):
+        operator, version_text = tokens[index], tokens[index + 1]
+        if operator not in (">", ">=", "<", "<=", "="):
+            raise VersionRangeError(f"unsupported range operator: {operator!r}")
+        try:
+            bound = parse_field_version(VersionDimension.EFS_SPECIFICATION, version_text)
+        except VersionError as exc:
+            raise VersionRangeError(f"invalid SemVer range bound: {version_text!r}") from exc
+        comparison = parsed_candidate.compare_precedence(bound)
+        matched = {
+            ">": comparison > 0,
+            ">=": comparison >= 0,
+            "<": comparison < 0,
+            "<=": comparison <= 0,
+            "=": comparison == 0,
+        }[operator]
+        if not matched:
+            return False
+    return True
