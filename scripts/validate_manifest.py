@@ -2,7 +2,7 @@
 import argparse, json
 from pathlib import Path
 from urllib.parse import urlparse
-from jsonschema import Draft202012Validator
+from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError
 
 def reject_duplicate_members(pairs):
