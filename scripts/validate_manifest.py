@@ -230,14 +230,14 @@ def validate_report(manifest_path: Path, schema_path: Path) -> dict:
             "EFS_JSON_INVALID_ENCODING", "parsing", "",
             "Input is not valid UTF-8.", {"message": str(exc)},
         ))
-        return report
+        return _finalize(report)
     except (json.JSONDecodeError, InvalidJSONConstant, OSError) as exc:
         stages["parsing"] = "failed"
         diagnostics.append(diagnostic(
             "EFS_JSON_INVALID", "parsing", "",
             "Input could not be read as valid JSON.", {"message": str(exc)},
         ))
-        return report
+        return _finalize(report)
     stages["parsing"] = "passed"
 
     try:
@@ -250,7 +250,7 @@ def validate_report(manifest_path: Path, schema_path: Path) -> dict:
             "The normative manifest schema could not be loaded or is not valid Draft 2020-12.",
             {"message": str(exc)},
         ))
-        return report
+        return _finalize(report)
 
     errors = sorted(
         Draft202012Validator(schema, format_checker=FORMAT_CHECKER).iter_errors(manifest),
@@ -263,21 +263,21 @@ def validate_report(manifest_path: Path, schema_path: Path) -> dict:
                 _structural_code(error), "structural", _structural_path(error),
                 error.message, {"keyword": error.validator},
             ))
-        return report
+        return _finalize(report)
     stages["structural"] = "passed"
 
     embedded = _embedded_schema_checks(manifest)
     if embedded:
         stages["embedded_schemas"] = "failed"
         diagnostics.extend(embedded)
-        return report
+        return _finalize(report)
     stages["embedded_schemas"] = "passed"
 
     profile = _profile_checks(manifest)
     if profile:
         stages["profile"] = "failed"
         diagnostics.extend(profile)
-        return report
+        return _finalize(report)
     stages["profile"] = "passed"
 
     report["valid"] = True
