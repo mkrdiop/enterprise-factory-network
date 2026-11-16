@@ -61,11 +61,11 @@ The normative logical model and PostgreSQL mapping are specified in [docs/regist
 - `publishers`: local UUID, canonical opaque publisher URI, lifecycle state and timestamps. Unique on the exact URI.
 - `publisher_metadata`: mutable descriptive projection, separate from the immutable publisher URI.
 - `factories`: local UUID, publisher FK, exact opaque factory ID, lifecycle state and timestamps. Unique on (publisher FK, factory ID).
-- `artifact_blobs`: content identity tuple (digest profile, algorithm, digest value), byte length and creation metadata. Unique on the complete digest tuple.
+- `artifact_blobs`: content identity tuple (digest profile, algorithm, digest value), byte length and creation metadata. Unique on the complete digest tuple, with a composite candidate key including the local blob ID for release-level referential validation.
 - `artifact_locations`: replaceable storage-provider/object-key locations for a blob; never part of portable identity.
 - `factory_releases`: Factory FK, exact version, digest tuple and artifact-blob FK. Unique on (Factory FK, exact version); release association is immutable.
 
-Use RESTRICT semantics for identity/release foreign keys. Do not cascade-delete historical identity, release or artifact records. Database checks enforce enumerated lifecycle values and timestamp consistency. PostgreSQL triggers and database privileges protect immutable identity columns and published release rows against UPDATE/DELETE.
+Use RESTRICT semantics for identity/release foreign keys. Do not cascade-delete historical identity, release or artifact records. Database checks enforce enumerated lifecycle values and timestamp consistency. Retired publishers cannot register new Factories/releases; retired Factories cannot register new releases, while historical reads remain available. PostgreSQL triggers and database privileges protect immutable identity columns and published release rows against UPDATE/DELETE.
 
 ## Transaction and artifact boundary
 
