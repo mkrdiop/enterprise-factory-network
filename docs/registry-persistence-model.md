@@ -94,7 +94,7 @@ One row represents immutable content identified by the complete digest tuple.
 | `byte_length` | Non-negative stored byte length |
 | `created_at` | UTC timestamp |
 
-Required constraint: `UNIQUE(digest_profile, digest_algorithm, digest_value)`. Digest tuple equality is exact. For EFS factory releases, PSI-34's approved `efs-jcs-sha256-v1` profile and SHA-256 algorithm are expected; the storage abstraction may represent other governed artifact profiles without silently substituting them. Unsupported profiles are rejected by the relevant profile/registry layer.
+Required constraints: `UNIQUE(digest_profile, digest_algorithm, digest_value)` and a composite candidate key `UNIQUE(artifact_blob_id, digest_profile, digest_algorithm, digest_value)` so the release row can enforce that its digest tuple matches the referenced blob. Digest tuple equality is exact. For EFS factory releases, PSI-34's approved `efs-jcs-sha256-v1` profile and SHA-256 algorithm are expected; the storage abstraction may represent other governed artifact profiles without silently substituting them. Unsupported profiles are rejected by the relevant profile/registry layer.
 
 A digest is content integrity, not publisher identity, signature verification, trust or authorization.
 
@@ -167,7 +167,7 @@ The PostgreSQL implementation must include:
 7. Database trigger or equivalent database-enforced protection against changing/deleting publisher URI, Factory identity pair, and published release records.
 8. Application/database role separation so normal registry writes cannot bypass immutable-field protections.
 
-Retirement is the only supported lifecycle mutation on publisher/Factory identity rows. The transition is one-way from active to retired. A retired row remains queryable for historical release resolution and federation conflict detection.
+Retirement is the only supported lifecycle mutation on publisher/Factory identity rows. The transition is one-way from active to retired. A retired row remains queryable for historical release resolution and federation conflict detection. A retired publisher cannot register new Factories or releases; a retired Factory cannot register new releases. Retirement does not cascade-delete or rewrite historical records.
 
 The database enforces exact uniqueness and referential integrity. The application validator enforces the full ADR-003 URI syntax/canonicalization profile; do not duplicate an incomplete URI parser in SQL.
 
