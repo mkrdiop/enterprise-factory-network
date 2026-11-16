@@ -214,3 +214,25 @@ def test_validator_acceptance_registry_maps_to_executable_tests():
     for item in criteria:
         assert item["tests"]
         assert set(item["tests"]) <= names
+
+
+def test_declared_error_details_are_validated_by_the_contract_error_schema():
+    manifest = _manifest()
+    coordinate = _coordinate(manifest)
+    valid = validate_contract_payload(
+        manifest, coordinate, "errors", {"message": "bad request"},
+        error_code="INVALID_REQUEST",
+    )
+    assert valid["valid"], valid
+    invalid = validate_contract_payload(
+        manifest, coordinate, "errors", {"message": 123},
+        error_code="INVALID_REQUEST",
+    )
+    assert not invalid["valid"]
+    assert invalid["diagnostics"][0]["code"] == "EFS_CONTRACT_PAYLOAD_INVALID"
+    undeclared = validate_contract_payload(
+        manifest, coordinate, "errors", {"message": "x"},
+        error_code="NOT_DECLARED",
+    )
+    assert not undeclared["valid"]
+    assert undeclared["diagnostics"][0]["code"] == "EFS_CONTRACT_ERROR_CODE_UNDECLARED"
