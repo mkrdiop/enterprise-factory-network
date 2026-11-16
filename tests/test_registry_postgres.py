@@ -14,8 +14,7 @@ pytestmark=pytest.mark.skipif(not URL,reason="EFS_TEST_DATABASE_URL not configur
 def session():
     engine=create_engine(URL)
     with Session(engine) as s:
-        with s.begin():
-            yield s
+        yield s
     engine.dispose()
 
 def test_publisher_scoped_factory_identity(session):
