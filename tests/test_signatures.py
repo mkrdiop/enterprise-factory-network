@@ -421,3 +421,34 @@ def test_wrong_publisher_scoped_public_key_is_an_invalid_signature():
     result = verify_release_signature(raw, encoded, FixtureResolver(public_key=wrong_key))
     assert result.code is SignatureCode.INVALID
     assert result.cryptographic_valid is False
+
+
+def test_trust_denial_without_public_key_still_requires_exact_resolver_binding():
+    raw, _manifest, _envelope, encoded = _signed()
+
+    class RevokedResolver:
+        def __init__(self, publisher_id):
+            self.publisher_id = publisher_id
+
+        def resolve(self, _publisher_id, key_id, algorithm, usage):
+            return KeyResolution(
+                status=KeyTrustStatus.REVOKED,
+                publisher_id=self.publisher_id,
+                key_id=key_id,
+                algorithm=algorithm,
+                public_key=None,
+                usage=usage,
+                valid_from=datetime(2026, 1, 1, tzinfo=UTC),
+                evidence_version="revocation-evidence-v1",
+            )
+
+    revoked = verify_release_signature(
+        raw, encoded, RevokedResolver("urn:example:publishers:acme")
+    )
+    assert revoked.code is SignatureCode.KEY_REVOKED
+    assert revoked.signers[0].cryptographic_valid is None
+
+    mismatched = verify_release_signature(
+        raw, encoded, RevokedResolver("urn:example:publishers:attacker")
+    )
+    assert mismatched.code is SignatureCode.KEY_BINDING_MISMATCH
