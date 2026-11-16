@@ -76,7 +76,7 @@ A `result.payload` MUST be validated against the exact selected contract's `outp
 
 An `error.code` MUST exactly match one declared code in the selected capability contract. The envelope does not replace or reinterpret the contract's error vocabulary. If `error.details` is present, the selected error declaration MUST contain a structured details schema and the details MUST be validated against it. Human-readable `error.message` is optional and MUST NOT be used as a machine discriminator.
 
-All payload and structured error-details validation MUST be delegated to the shared PSI-43 capability contract validator, using the exact context coordinates. This PSI-44 envelope validator does not implement a second payload schema engine.
+All payload and structured error-details validation MUST be delegated to the shared PSI-43 capability contract validator, using the exact context coordinates. The reference implementation wires this validator directly through `validate_psi43_contract_payload` by default; an adapter may inject an equivalent callback for controlled integration/testing. PSI-44 does not implement a second payload schema engine.
 
 ## 5. Mode-specific message flow
 
@@ -106,7 +106,7 @@ The reference validator performs:
 3. exact declared error-code checking;
 4. capability execution-profile binding and embedded mode checking;
 5. causal-edge validation for message type, invocation ID, correlation ID, context and causation ID;
-6. delegation of inputs, outputs and structured error details to the PSI-43 validator through an explicit adapter port.
+6. direct delegation of inputs, outputs and structured error details to the PSI-43 validator through the default adapter function `validate_psi43_contract_payload`.
 
 Product boundaries:
 
