@@ -48,7 +48,12 @@
               "factory.publish"
             ]
           }
-        ]
+        ],
+        "digest": {
+          "profile_id": "efs-policy-jcs-sha256-v1",
+          "algorithm": "sha-256",
+          "value": "RAdldhx765kClLXsMvo1C0VjRQB8x8VOO6qX6Y_DauQ"
+        }
       },
       "expected": {
         "jcs": "{\"domain\":\"efs.policy.v1\",\"policy\":{\"policy_id\":\"p1\",\"policy_profile\":\"efs-policy-v1\",\"policy_version\":\"1\",\"rules\":[{\"actions\":[\"factory.publish\"],\"effect\":\"permit\",\"resource\":{\"id\":\"factory:acme:payments\",\"type\":\"factory\"},\"rule_id\":\"r1\",\"subject\":{\"id\":\"user:alice\",\"type\":\"user\"}}]}}",
@@ -396,5 +401,6 @@
       "expected": "deny",
       "reason": "DEFAULT_DENY_NO_APPLICABLE_PERMIT"
     }
-  ]
+  ],
+  "policy_digest_handling": "Decision vectors exercise the pure evaluator with policy bundles treated as already resolved and digest-verified by the harness. In these evaluator-only fixtures, the all-zero 32-byte digest is a sentinel and MUST NOT be used as a digest known-answer value. Policy digest computation is tested independently by pol-kat-001."
 }
