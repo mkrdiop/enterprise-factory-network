@@ -18,7 +18,10 @@
     "publisher-scoped key resolution and key binding",
     "cryptographic validity separated from trust state",
     "unknown, expired, revoked and unavailable resolver outcomes fail closed",
-    "no algorithm fallback or policy authorization in verifier"
+    "no algorithm fallback or policy authorization in verifier",
+    "envelope-level evaluation is signer-selection neutral and exposes no any/all signer aggregate",
+    "mixed valid+invalid, valid+unknown and valid+revoked signer outcomes remain independent",
+    "trusted resolver status must agree with validity interval at verifier UTC evaluation time"
   ],
   "trustStates": [
     "trusted",
