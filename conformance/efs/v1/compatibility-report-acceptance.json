@@ -3,14 +3,80 @@
   "issue": "PSI-49",
   "authority": "docs/psi-49-compatibility-report.md",
   "reportSchema": "conformance/efs/v1/compatibility-report.schema.json",
-  "normativeDependencies": ["PSI-46", "PSI-47", "PSI-48"],
+  "normativeDependencies": [
+    "PSI-46",
+    "PSI-47",
+    "PSI-48"
+  ],
   "criteria": [
-    {"id":"PSI49-AC-01","requirement":"Identical immutable subject, consumer profile, evidence set and ruleset produce identical RFC 8785 canonical report bytes and SHA-256 fingerprint.","tests":["test_canonical_report_is_order_independent_and_has_no_volatile_metadata","test_evidence_and_action_arrays_are_canonicalized_as_sets"]},
-    {"id":"PSI49-AC-02","requirement":"Report schema/version, ruleset version, provenance and all five dimension results are present and schema-validated before return.","tests":["test_report_schema_and_provenance_are_present"]},
-    {"id":"PSI49-AC-03","requirement":"Exact subject release/digest/EFS and consumer/profile/range coordinates are preserved; no latest resolution or fallback occurs.","tests":["test_exact_subject_coordinates_and_consumer_ranges_are_preserved","test_equal_precedence_release_labels_are_never_implicitly_selected"]},
-    {"id":"PSI49-AC-04","requirement":"Opaque contract values remain exact and are never parsed or normalized as SemVer.","tests":["test_opaque_contract_version_is_not_normalized_or_parsed"]},
-    {"id":"PSI49-AC-05","requirement":"Compatible, breaking, conditional and unknown outcomes retain stable rule IDs, evidence, conditions, mappings, warnings and blockers; missing/malformed evaluator evidence remains unknown.","tests":["test_unknown_or_non_boolean_range_evaluator_result_stays_unknown","test_breaking_and_conditional_outcomes_keep_diagnostics_in_report"]},
-    {"id":"PSI49-AC-06","requirement":"Every output conforms to the dedicated Draft 2020-12 compatibility report schema; invalid or extra fields are rejected.","tests":["test_report_schema_and_provenance_are_present","test_schema_rejects_unknown_fields_and_incomplete_coordinates"]},
-    {"id":"PSI49-AC-07","requirement":"Report is a derived artifact and does not mutate source release coordinates, manifests or digests.","tests":["test_report_is_derived_and_does_not_mutate_source_coordinates"]}
+    {
+      "id": "PSI49-AC-01",
+      "requirement": "Identical immutable subject, consumer profile, evidence set and ruleset produce identical RFC 8785 canonical report bytes and SHA-256 fingerprint.",
+      "tests": [
+        "test_canonical_report_is_order_independent_and_has_no_volatile_metadata",
+        "test_evidence_and_action_arrays_are_canonicalized_as_sets"
+      ]
+    },
+    {
+      "id": "PSI49-AC-02",
+      "requirement": "Report schema/version, ruleset version, provenance and all five dimension results are present and schema-validated before return.",
+      "tests": [
+        "test_report_schema_and_provenance_are_present"
+      ]
+    },
+    {
+      "id": "PSI49-AC-03",
+      "requirement": "Exact subject release/digest/EFS and consumer/profile/range coordinates are preserved; no latest resolution or fallback occurs.",
+      "tests": [
+        "test_exact_subject_coordinates_and_consumer_ranges_are_preserved",
+        "test_equal_precedence_release_labels_are_never_implicitly_selected"
+      ]
+    },
+    {
+      "id": "PSI49-AC-04",
+      "requirement": "Opaque contract values remain exact and are never parsed or normalized as SemVer.",
+      "tests": [
+        "test_opaque_contract_version_is_not_normalized_or_parsed"
+      ]
+    },
+    {
+      "id": "PSI49-AC-05",
+      "requirement": "Compatible, breaking, conditional and unknown outcomes retain stable rule IDs, evidence, conditions, mappings, warnings and blockers; missing/malformed evaluator evidence remains unknown.",
+      "tests": [
+        "test_unknown_or_non_boolean_range_evaluator_result_stays_unknown",
+        "test_breaking_and_conditional_outcomes_keep_diagnostics_in_report"
+      ]
+    },
+    {
+      "id": "PSI49-AC-06",
+      "requirement": "Every output conforms to the dedicated Draft 2020-12 compatibility report schema; invalid or extra fields are rejected.",
+      "tests": [
+        "test_report_schema_and_provenance_are_present",
+        "test_schema_rejects_unknown_fields_and_incomplete_coordinates"
+      ]
+    },
+    {
+      "id": "PSI49-AC-07",
+      "requirement": "Report is a derived artifact and does not mutate source release coordinates, manifests or digests.",
+      "tests": [
+        "test_report_is_derived_and_does_not_mutate_source_coordinates"
+      ]
+    },
+    {
+      "id": "PSI49-AC-08",
+      "requirement": "Specification evaluation directly invokes the PSI-47 EFS supported-range evaluator and preserves PSI-48 outcomes: match, evidenced non-match, invalid/missing range and missing evidence are not conflated.",
+      "tests": [
+        "test_specification_uses_psi47_range_evaluator_and_fails_closed",
+        "test_unknown_or_non_boolean_range_evaluator_result_stays_unknown"
+      ]
+    },
+    {
+      "id": "PSI49-AC-09",
+      "requirement": "Exact subject Factory release and EFS version coordinates are validated by PSI-47's field-aware SemVer parser without normalization.",
+      "tests": [
+        "test_subject_semver_coordinates_are_validated_by_psi47",
+        "test_exact_subject_coordinates_and_consumer_ranges_are_preserved"
+      ]
+    }
   ]
 }
