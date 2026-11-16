@@ -89,7 +89,7 @@
           "value": "attacker-key"
         }
       ],
-      "expected_failure": "EFS_SIGNATURE_INVALID"
+      "expected_failure": "EFS_SIGNATURE_KEY_NOT_FOUND"
     },
     {
       "id": "sig-neg-005",
