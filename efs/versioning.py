@@ -210,3 +210,29 @@ def require_exact_release_selection(candidates: list[ReleaseCoordinate]) -> Rele
     if len(tied) > 1:
         raise VersionError("equal-precedence release labels require explicit exact release selection")
     return highest
+
+
+def validate_manifest_versions(manifest: dict) -> list[dict[str, str]]:
+    """Return stable semantic diagnostics for the two SemVer fields on publication.
+
+    Structural validation remains a separate earlier stage. This function does
+    not mutate or normalize the supplied manifest or any stored release.
+    """
+    diagnostics = []
+    for field, path, value in (
+        (VersionDimension.EFS_SPECIFICATION, "/efsVersion", manifest.get("efsVersion")),
+        (VersionDimension.FACTORY_RELEASE, "/release/version",
+         manifest.get("release", {}).get("version") if isinstance(manifest.get("release"), dict) else None),
+    ):
+        if not isinstance(value, str):
+            continue
+        try:
+            parse_field_version(field, value)
+        except VersionError:
+            diagnostics.append({
+                "code": "EFS_VERSION_SEMVER_INVALID",
+                "stage": "profile",
+                "path": path,
+                "message": f"{path} must be an exact Semantic Versioning 2.0.0 value; no coercion or normalization is permitted.",
+            })
+    return diagnostics
