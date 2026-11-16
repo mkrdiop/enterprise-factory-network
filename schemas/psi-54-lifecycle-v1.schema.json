@@ -127,7 +127,33 @@
                         ],
                         "properties": {
                           "scope": {
-                            "$ref": "#/$defs/scope"
+                            "type": "object",
+                            "required": [
+                              "tenant_id",
+                              "principal_id",
+                              "release_record_id",
+                              "operation"
+                            ],
+                            "properties": {
+                              "tenant_id": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "principal_id": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "release_record_id": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "operation": {
+                                "enum": [
+                                  "transition",
+                                  "initial_publication"
+                                ]
+                              }
+                            }
                           },
                           "request_fingerprint": {
                             "type": "string",
