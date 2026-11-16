@@ -55,7 +55,7 @@ def test_catalogued_raw_parser_inputs(tmp_path):
     for item in catalog["rawInputs"]:
         source = ROOT / item["path"]
         encoded = source.read_bytes()
-        raw = base64.b64decode(encoded, validate=True) if item["encoding"] == "base64" else encoded
+        raw = base64.b64decode(encoded.strip(), validate=True) if item["encoding"] == "base64" else encoded
         candidate = tmp_path / item["id"]
         candidate.write_bytes(raw)
         report = validate_report(candidate, SCHEMA_PATH)
@@ -78,6 +78,13 @@ def test_catalog_and_acceptance_registry_are_complete():
         assert list(ROOT.glob(group["glob"])), f'empty fixture group: {group["id"]}'
     for item in catalog["rawInputs"]:
         assert (ROOT / item["path"]).is_file(), item["path"]
+
+    workflow = (ROOT / ".github/workflows/efs-schema.yml").read_text(encoding="utf-8")
+    for version in ('"3.11"', '"3.12"', '"3.13"'):
+        assert version in workflow
+    assert "python -m pytest -q" in workflow
+    assert (ROOT / "docs/psi-36-conformance.md").is_file()
+    assert (ROOT / "docs/efs-v1-conformance.md").is_file()
 
     criteria = registry["acceptanceCriteria"]
     assert [item["id"] for item in criteria] == [f"AC-{n:02d}" for n in range(1, 16)]
