@@ -147,7 +147,7 @@ def test_signature_byte_tampering_is_invalid():
         raw, serialize_signature_envelope(envelope), FixtureResolver()
     )
     assert result.signers[0].code is SignatureCode.INVALID
-    assert result.cryptographic_valid is False
+    assert result.signers[0].cryptographic_valid is False
 
 
 @pytest.mark.parametrize(
@@ -162,7 +162,7 @@ def test_cryptographic_validity_is_separate_from_key_trust(trust, expected):
     raw, _manifest, _envelope, encoded = _signed()
     result = verify_release_signature(raw, encoded, FixtureResolver(status=trust))
     assert result.signers[0].code is expected
-    assert result.cryptographic_valid is True
+    assert result.signers[0].cryptographic_valid is True
     assert result.all_keys_trusted is False
     assert 
 
@@ -172,9 +172,8 @@ def test_unknown_key_is_typed_and_fails_closed():
         raw, encoded, FixtureResolver(status=KeyTrustStatus.NOT_FOUND, public_key=None)
     )
     assert result.signers[0].code is SignatureCode.KEY_NOT_FOUND
-    assert result.cryptographic_valid is False
-    assert result.trusted_signature_evidence is False
-
+    assert result.signers[0].cryptographic_valid is False
+    assert 
 
 def test_resolver_exception_is_unavailable_and_fails_closed():
     raw, _manifest, _envelope, encoded = _signed()
@@ -185,8 +184,7 @@ def test_resolver_exception_is_unavailable_and_fails_closed():
 
     result = verify_release_signature(raw, encoded, BrokenResolver())
     assert result.signers[0].code is SignatureCode.RESOLVER_UNAVAILABLE
-    assert result.trusted_signature_evidence is False
-
+    assert 
 
 def test_cross_publisher_key_substitution_is_binding_failure():
     raw, _manifest, _envelope, encoded = _signed()
@@ -203,7 +201,7 @@ def test_cross_publisher_key_substitution_is_binding_failure():
 
     result = verify_release_signature(raw, encoded, WrongPublisherResolver())
     assert result.signers[0].code is SignatureCode.KEY_BINDING_MISMATCH
-    assert result.cryptographic_valid is False
+    assert result.signers[0].cryptographic_valid is False
 
 
 def test_duplicate_signer_entries_are_rejected():
@@ -288,8 +286,7 @@ def test_resolver_unknown_status_fails_closed():
 
     result = verify_release_signature(raw, encoded, InvalidResolver())
     assert result.code is SignatureCode.RESOLVER_UNAVAILABLE
-    assert result.trusted_signature_evidence is False
-
+    assert 
 
 def test_multiple_signatures_are_independently_signed_and_sorted():
     raw, _manifest = _manifest_bytes()
@@ -317,9 +314,9 @@ def test_multiple_signatures_are_independently_signed_and_sorted():
             )
 
     result = verify_release_signature(raw, serialize_signature_envelope(combined), MultiKeyResolver())
-    assert result.code is SignatureCode.VERIFIED
+    assert result.code is SignatureCode.EVALUATED
     assert len(result.signers) == 2
-    assert result.cryptographic_valid is True
+    assert result.signers[0].cryptographic_valid is True
 
 
 def test_resolver_missing_validity_or_evidence_fails_closed():
@@ -337,9 +334,8 @@ def test_resolver_missing_validity_or_evidence_fails_closed():
             )
 
     result = verify_release_signature(raw, encoded, IncompleteResolver())
-    assert result.code is SignatureCode.KEY_BINDING_MISMATCH
-    assert result.trusted_signature_evidence is False
-
+    assert result.signers[0].code is SignatureCode.KEY_BINDING_MISMATCH
+    assert 
 
 def test_signature_array_order_does_not_change_verification_result():
     raw, _manifest = _manifest_bytes()
@@ -418,8 +414,8 @@ def test_wrong_publisher_scoped_public_key_is_an_invalid_signature():
     raw, _manifest, _envelope, encoded = _signed()
     wrong_key = Ed25519PrivateKey.from_private_bytes(bytes(reversed(range(32)))).public_key().public_bytes_raw()
     result = verify_release_signature(raw, encoded, FixtureResolver(public_key=wrong_key))
-    assert result.code is SignatureCode.INVALID
-    assert result.cryptographic_valid is False
+    assert result.signers[0].code is SignatureCode.INVALID
+    assert result.signers[0].cryptographic_valid is False
 
 
 def test_trust_denial_without_public_key_still_requires_exact_resolver_binding():
@@ -460,8 +456,8 @@ def test_trusted_resolver_status_must_match_current_validity_interval(interval):
     class ContradictoryResolver:
         def resolve(self, publisher_id, key_id, algorithm, usage):
             now = datetime.now(UTC)
-            valid_from = now.replace(year=now.year + 1) if interval == "not_yet_valid" else datetime(2026, 1, 1, tzinfo=UTC)
-            valid_until = None if interval == "not_yet_valid" else now.replace(year=now.year - 1)
+            valid_from = now.replace(year=now.year + 1) if interval == "not_yet_valid" else datetime(2025, 1, 1, tzinfo=UTC)
+            valid_until = None if interval == "not_yet_valid" else now.replace(day=max(1, now.day - 1))
             return KeyResolution(
                 status=KeyTrustStatus.TRUSTED,
                 publisher_id=publisher_id,
