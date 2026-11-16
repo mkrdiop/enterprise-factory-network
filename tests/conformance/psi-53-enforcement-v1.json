@@ -2335,8 +2335,8 @@
         }
       },
       "expected": {
-        "result": "rejected",
-        "reason": "RESOURCE_COORDINATES_INVALID"
+        "result": "indeterminate",
+        "reason": "INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR"
       }
     },
     {
