@@ -6,8 +6,8 @@ import pytest
 from jsonschema import Draft202012Validator, FormatChecker
 
 from registry.passports import (
-    build_factory_passport,
     PassportSourceMismatch,
+    build_factory_passport,
     canonical_passport_json,
     render_factory_passport_markdown,
 )
