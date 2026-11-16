@@ -17,6 +17,8 @@ from typing import Any
 import jsonschema
 import rfc8785
 
+from efs.versioning import VersionRangeError, evaluate_efs_version_range
+
 
 class CompatibilityError(ValueError):
     """Invalid compatibility input, report, or unsupported inference."""
@@ -296,6 +298,45 @@ def assess_specification(
     return DimensionAssessment(CompatibilityDimension.SPECIFICATION, Outcome.BREAKING,
                                "EFC-SPEC-004", "Subject EFS version is outside the declared consumer range.",
                                refs, blockers=("unsupported-efs-version",), coordinates=coordinates)
+
+
+def assess_efs_specification(
+    *, subject_efs_version: str, supported_range: str, consumer_profile_id: str,
+    evidence: Iterable[EvidenceReference] = (),
+) -> DimensionAssessment:
+    """Evaluate the EFS v1 range with PSI-47, then apply PSI-48 evidence rules.
+
+    Invalid candidate versions or unsupported range syntax fail closed to
+    unknown. This adapter does not implement or normalize range semantics.
+    """
+    refs = tuple(evidence)
+    if not isinstance(supported_range, str) or not supported_range or not isinstance(consumer_profile_id, str) or not consumer_profile_id:
+        assessment = assess_specification(
+            supported_range=supported_range, consumer_profile_id=consumer_profile_id,
+            range_evaluator_result=None, evidence=refs,
+        )
+    else:
+        try:
+            result = evaluate_efs_version_range(subject_efs_version, supported_range)
+        except VersionRangeError:
+            assessment = assess_specification(
+                supported_range=supported_range, consumer_profile_id=consumer_profile_id,
+                range_evaluator_result=None, evidence=refs,
+            )
+            assessment = replace(
+                assessment,
+                rule_id="EFC-SPEC-005",
+                explanation="Subject efsVersion or supported-range expression is invalid or unsupported; evaluation failed closed.",
+            )
+        else:
+            assessment = assess_specification(
+                supported_range=supported_range, consumer_profile_id=consumer_profile_id,
+                range_evaluator_result=result, evidence=refs,
+            )
+    coordinates = dict(assessment.coordinates)
+    if isinstance(subject_efs_version, str) and subject_efs_version:
+        coordinates["subjectEfsVersion"] = subject_efs_version
+    return replace(assessment, coordinates=tuple(sorted(coordinates.items())))
 
 
 def assess_contract_change(
