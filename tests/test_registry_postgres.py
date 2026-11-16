@@ -42,10 +42,13 @@ def test_duplicate_identity_conflicts(session):
     publishers.create("urn:example:publisher:dup")
     with pytest.raises(RegistryConflict):
         publishers.create("urn:example:publisher:dup")
+    session.rollback()
     factories = FactoryRepository(session)
     factories.create("urn:example:publisher:dup", "f")
+    session.commit()
     with pytest.raises(RegistryConflict):
         factories.create("urn:example:publisher:dup", "f")
+    session.rollback()
 
 
 def test_release_is_immutable_and_digest_bound(session):
