@@ -141,7 +141,9 @@
                         "policy_version",
                         "policy_profile",
                         "digest",
-                        "digest_verified"
+                        "digest_verified",
+                        "digest_profile_id",
+                        "digest_algorithm"
                       ],
                       "properties": {
                         "policy_id": {
@@ -160,6 +162,12 @@
                         },
                         "digest_verified": {
                           "type": "boolean"
+                        },
+                        "digest_profile_id": {
+                          "const": "efs-policy-jcs-sha256-v1"
+                        },
+                        "digest_algorithm": {
+                          "const": "sha-256"
                         }
                       }
                     },
