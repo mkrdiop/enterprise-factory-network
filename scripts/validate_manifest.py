@@ -218,10 +218,6 @@ def canonical_publisher_uri(value: str) -> str | None:
         raw_authority = remainder[2:].split("/", 1)[0]
         if "@" in raw_authority:
             return None
-        try:
-            _ = parsed.port  # validates port syntax and range
-        except ValueError:
-            return None
         if raw_authority.startswith("["):
             close = raw_authority.find("]")
             if close < 0:
