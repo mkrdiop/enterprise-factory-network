@@ -92,7 +92,7 @@ An action/resource mismatch is invalid input and MUST return indeterminate (neve
 
 ## 7. Condition language
 
-Conditions are JSON abstract-syntax trees, not source code. They MUST be finite, acyclic, bounded in depth/size by the implementation's published limits and MUST NOT execute scripts, templates, regular expressions, dynamic property access, arbitrary functions or I/O.
+Conditions are JSON abstract-syntax trees, not source code. The v1 profile has fixed engine-neutral resource limits: maximum depth 16 (root condition is depth 1), maximum 256 condition nodes, maximum 32 children for each `all`/`any`, maximum 64 values in an `in` literal array, and maximum 1,024 Unicode scalar values in any string literal. A condition exceeding any limit MUST be rejected as invalid policy before evaluation; implementations MUST NOT publish different v1 limits. Implementations MAY enforce stricter operational request-size limits, but MUST report resource exhaustion as indeterminate and MUST NOT evaluate a truncated condition. Conditions MUST be acyclic and MUST NOT execute scripts, templates, regular expressions, dynamic property access, arbitrary functions or I/O.
 
 Attribute references are exactly `subject.attributes.<name>`, `resource.coordinates.<name>` or `context.attributes.<name>`. Attribute names are exact case-sensitive strings. The only operators are:
 
@@ -117,11 +117,11 @@ Every evaluation request MUST include:
 - explicit `context.attributes`, each with value, source identifier, observed_at and expires_at;
 - a verified, immutable policy bundle, including every policy required by the operation.
 
-The evaluator MUST NOT obtain missing context implicitly. The PEP supplies source identifiers and verifies them against configured trusted issuers. An attribute is fresh only when its source is trusted, its observation time is not in the future relative to evaluation_time, and evaluation_time is earlier than expires_at. A source-specific maximum age MAY impose a stricter bound; it MUST NOT extend expires_at. Missing or invalid freshness metadata makes the attribute indeterminate when referenced.
+The evaluator MUST NOT obtain missing context implicitly. The PEP supplies source identifiers and verifies them against configured trusted issuers. An attribute is fresh only when its source is trusted, its observation time is not in the future relative to evaluation_time, and evaluation_time is strictly earlier than expires_at; equality with expires_at is stale. Every timestamp MUST be RFC 3339 date-time, and schema validators MUST assert the `date-time` format using an enabled format checker rather than treating `format` as an annotation. A source-specific maximum age MAY impose a stricter bound; it MUST NOT extend expires_at. Missing or invalid freshness metadata makes the attribute indeterminate when referenced.
 
 ## 9. Rule semantics and deterministic policy combination
 
-A rule contains a unique rule_id, effect (`permit` or `deny`), exact subject selector, exact resource selector, one or more finite actions, optional condition and optional obligations.
+A rule contains a unique `rule_id` within its policy document (duplicate identifiers make the policy invalid), effect (`permit` or `deny`), exact subject selector, exact resource selector, one or more finite actions, optional condition and optional obligations.
 
 A rule is:
 - **not applicable** when subject, resource or action selectors do not match, or its valid condition evaluates false;
@@ -168,7 +168,7 @@ PSI-53 MUST NOT redefine policy syntax, combination semantics, action vocabulary
 
 ## 12. Security and conformance
 
-The machine-readable schema is `schemas/efs-policy-v1.schema.json`. The language-neutral test corpus is `tests/conformance/policy-v1.json`. Vectors cover permit, explicit deny, default deny, order independence, indeterminate attributes, unsupported policy, resource/action mismatch, type mismatch, obligation conflict and unavailable resolver. Implementations MUST pass all applicable vectors before claiming `efs-policy-v1` conformance.
+The machine-readable schema is `schemas/efs-policy-v1.schema.json`. The independently validated vector package is `tests/conformance/policy-v1.json`, described by `tests/conformance/policy-v1.schema.json`. CI MUST validate both Draft 2020-12 schemas, apply the policy schema with RFC 3339 `FormatChecker`, validate the complete vector package and every vector record, recompute the `pol-kat-001` JCS/SHA-256 known-answer vector, and execute the policy-structure semantic checks. The package includes explicit negative vectors for every invalid action/resource pair, wildcard identifiers, missing resource coordinates, duplicate rule IDs, AST bounds, malformed timestamps and the exact freshness boundary. Implementations MUST pass all applicable normative vectors before claiming `efs-policy-v1` conformance. These contract-validation tests do not claim to implement a PDP; independent PDP implementations consume the language-neutral vectors as their behavioral oracle.
 
 ## 13. References
 
