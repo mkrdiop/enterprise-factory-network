@@ -1,7 +1,7 @@
 """PSI-51 signing/verifier security and interoperability tests."""
 import base64
 import json
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
@@ -164,7 +164,6 @@ def test_cryptographic_validity_is_separate_from_key_trust(trust, expected):
     assert result.signers[0].code is expected
     assert result.signers[0].cryptographic_valid is True
     assert result.all_keys_trusted is False
-    assert 
 
 def test_unknown_key_is_typed_and_fails_closed():
     raw, _manifest, _envelope, encoded = _signed()
@@ -457,7 +456,7 @@ def test_trusted_resolver_status_must_match_current_validity_interval(interval):
         def resolve(self, publisher_id, key_id, algorithm, usage):
             now = datetime.now(UTC)
             valid_from = now.replace(year=now.year + 1) if interval == "not_yet_valid" else datetime(2025, 1, 1, tzinfo=UTC)
-            valid_until = None if interval == "not_yet_valid" else now.replace(day=max(1, now.day - 1))
+            valid_until = None if interval == "not_yet_valid" else now - timedelta(days=1)
             return KeyResolution(
                 status=KeyTrustStatus.TRUSTED,
                 publisher_id=publisher_id,
