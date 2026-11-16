@@ -28,6 +28,16 @@ def test_invalid_fixture_corpus(fixture):
     assert report["diagnostics"], fixture.name
 
 
+def test_release_signature_member_is_forbidden():
+    fixture = ROOT / "fixtures/invalid/manifest-embedded-signature.json"
+    report = validate_report(fixture, SCHEMA_PATH)
+    assert not report["valid"]
+    assert any(
+        item["code"] == "EFS_SCHEMA_CONSTRAINT" and item["path"] == "/release"
+        for item in report["diagnostics"]
+    )
+
+
 def test_schema_is_draft_2020_12():
     assert SCHEMA["$schema"] == DIALECT
     Draft202012Validator.check_schema(SCHEMA)
