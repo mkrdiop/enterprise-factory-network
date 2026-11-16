@@ -19,6 +19,6 @@ Expected result: 24/24 vectors (14 PSI-53 + 10 PSI-54).
 
 A conforming implementation MUST validate each package against its adjacent JSON Schema (Draft 2020-12), execute every vector and compare both result and stable reason code, and keep PSI-52 policy-v1 PDP vectors as a separate mandatory suite. These vectors do not replace integration tests for route bypass, PostgreSQL transactional outbox, trust/revocation races, commit compare-and-swap, PSI-45 execution hand-off, crash/retry/reconciliation or Registry/Runtime parity.
 
-PSI-53 external effects are not claimed to be atomic with a local database. A durable intent must precede dispatch; an uncertain outcome is indeterminate and reconciled using the same operation/idempotency identity. PSI-45 remains authoritative for execution lifecycle.
+PSI-53 external effects are not claimed to be atomic with a local database. A durable intent, audit reference and PSI-45 revision-one requested snapshot must precede dispatch; an uncertain outcome is indeterminate and reconciled using the same operation/idempotency identity. PSI-45 remains authoritative for execution lifecycle.
 
 PSI-54 idempotency lookup is scoped by tenant, authenticated principal, canonical exact release coordinate (publisher, Factory, version and digest) and operation. It occurs before current-state/revision validation and returns the stored original result, reason and response reference.
