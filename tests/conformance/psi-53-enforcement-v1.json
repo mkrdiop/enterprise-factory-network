@@ -924,8 +924,8 @@
         }
       },
       "expected": {
-        "result": "rejected",
-        "reason": "ACTION_RESOURCE_MISMATCH"
+        "result": "indeterminate",
+        "reason": "PDP_INDETERMINATE"
       }
     },
     {
