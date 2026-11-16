@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 from efs.compatibility import (
-    CompatibilityDimension, EvidenceReference, Outcome, assess_contract_change,
+    CompatibilityDimension, EvidenceReference, assess_contract_change,
     assess_governance, assess_profile_mapping, assess_specification,
 )
 
