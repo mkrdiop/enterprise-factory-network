@@ -46,6 +46,8 @@ def test_catalogued_manifest_fixtures():
                 assert all(stage == "passed" for stage in report["stages"].values())
             else:
                 assert any(stage == "failed" for stage in report["stages"].values())
+                if group["stage"] in report["stages"]:
+                    assert report["stages"][group["stage"]] == "failed"
 
 
 def test_catalogued_raw_parser_inputs(tmp_path):
