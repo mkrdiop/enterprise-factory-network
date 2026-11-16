@@ -75,7 +75,7 @@ def test_capability_execution_profile_must_resolve_exactly(tmp_path):
     assert matches[0]["path"] == "/capabilities/0/executionProfiles/0"
 
     manifest["execution"]["profiles"].append(
-        {"id": "profile-sync", "modes": ["sync"]}
+        {"id": "profile-sync", "modes": ["async"]}
     )
     report = _report(tmp_path, manifest)
     assert "EFS_CAPABILITY_EXECUTION_PROFILE_UNRESOLVED" in {
@@ -189,3 +189,28 @@ def test_publication_rejects_invalid_contract_before_digest_storage_or_commit():
         }
     else:
         raise AssertionError("invalid contract definition was published")
+
+
+def test_validator_acceptance_registry_maps_to_executable_tests():
+    registry = json.loads(
+        (ROOT / "conformance/efs/v1/capability-contract-validator-acceptance.json")
+        .read_text(encoding="utf-8")
+    )
+    names = {
+        "test_duplicate_capability_ids_are_rejected_with_stable_pointer",
+        "test_duplicate_contract_error_codes_are_exact_and_case_sensitive",
+        "test_capability_execution_profile_must_resolve_exactly",
+        "test_schema_reference_profile_rejects_remote_and_unresolved_refs",
+        "test_valid_local_json_pointer_reference_is_accepted",
+        "test_payload_validation_uses_exact_release_contract_and_direction",
+        "test_payload_validation_supports_only_preloaded_local_resource_graph",
+        "test_publication_rejects_invalid_contract_before_digest_storage_or_commit",
+        "test_validator_acceptance_registry_maps_to_executable_tests",
+    }
+    criteria = registry["acceptanceCriteria"]
+    assert [item["id"] for item in criteria] == [
+        f"PSI43-AC-{number:02d}" for number in range(1, 9)
+    ]
+    for item in criteria:
+        assert item["tests"]
+        assert set(item["tests"]) <= names
