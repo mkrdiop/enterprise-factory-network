@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: "22"
       - run: node tests/conformance/verify_psi50_interop.mjs
+      - run: python tests/conformance/verify_psi50_jcs.py
       - run: python scripts/validate_manifest.py fixtures/valid/manifest-minimal.json --json
       - run: python scripts/validate_manifest.py fixtures/valid/manifest-external-execution.json
       - run: python scripts/validate_manifest.py fixtures/boundary/manifest-offset-datetime.json
