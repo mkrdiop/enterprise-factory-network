@@ -285,7 +285,8 @@
               "passport-contract-version",
               "verified-artifact-readback",
               "not-evaluated-by-registry",
-              "excluded-from-digest-artifact"
+              "excluded-from-digest-artifact",
+              "count-endpoint-items"
             ]
           }
         },
@@ -298,7 +299,8 @@
         "capabilityCount",
         "dependencyCount",
         "policyDeclarationCount",
-        "policyReferenceCount"
+        "policyReferenceCount",
+        "endpointCount"
       ],
       "properties": {
         "capabilityCount": {
@@ -314,6 +316,10 @@
           "minimum": 0
         },
         "policyReferenceCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "endpointCount": {
           "type": "integer",
           "minimum": 0
         }
