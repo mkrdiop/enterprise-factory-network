@@ -1,0 +1,82 @@
+{
+  "registryVersion": "1.0",
+  "issue": "PSI-42",
+  "normativeDocument": "docs/efs-v1-capability-contract-model.md",
+  "acceptanceCriteria": [
+    {
+      "id": "PSI42-AC-01",
+      "requirement": "Capability identifiers are exact, case-sensitive and unique within the exact Factory release.",
+      "tests": [
+        "test_contract_model_examples_pass_normative_manifest_validator",
+        "test_contract_model_vectors_are_complete_and_unambiguous"
+      ],
+      "fixtures": [
+        "capabilityContractModel.examples"
+      ]
+    },
+    {
+      "id": "PSI42-AC-02",
+      "requirement": "Contract identity is the exact opaque absolute URI plus independent opaque contract version; no dereference or publisher URI normalization occurs.",
+      "tests": [
+        "test_contract_model_vectors_are_complete_and_unambiguous"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "PSI42-AC-03",
+      "requirement": "Inputs and outputs use Draft 2020-12 schema resources with top-level object payloads.",
+      "tests": [
+        "test_contract_model_examples_pass_normative_manifest_validator"
+      ],
+      "fixtures": [
+        "capabilityContractModel.examples"
+      ]
+    },
+    {
+      "id": "PSI42-AC-04",
+      "requirement": "Error codes use the normative machine-readable grammar, are case-sensitive and unique within one contract; optional error schemas are Draft 2020-12 object schemas.",
+      "tests": [
+        "test_contract_model_error_payload_schema_is_object_schema",
+        "test_contract_model_vectors_are_complete_and_unambiguous"
+      ],
+      "fixtures": [
+        "capabilityContractModel.examples"
+      ]
+    },
+    {
+      "id": "PSI42-AC-05",
+      "requirement": "Guarantees are interpreted only when defined by a governed profile; no guarantee is inferred from omission or interaction mode.",
+      "tests": [
+        "test_contract_model_vectors_are_complete_and_unambiguous"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "PSI42-AC-06",
+      "requirement": "Sync, async, streaming and event examples validate without prescribing a transport protocol.",
+      "tests": [
+        "test_contract_model_examples_pass_normative_manifest_validator",
+        "test_contract_model_examples_cover_all_interaction_modes"
+      ],
+      "fixtures": [
+        "capabilityContractModel.examples"
+      ]
+    },
+    {
+      "id": "PSI42-AC-07",
+      "requirement": "The normative model reserves stable semantic diagnostics and vectors for PSI-43 without claiming the validator is already implemented.",
+      "tests": [
+        "test_contract_model_vectors_are_complete_and_unambiguous"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "PSI42-AC-08",
+      "requirement": "The model preserves the four-product boundary and does not change reportVersion 1.0.",
+      "tests": [
+        "test_contract_model_vectors_are_complete_and_unambiguous"
+      ],
+      "fixtures": []
+    }
+  ]
+}
