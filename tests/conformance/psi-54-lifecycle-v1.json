@@ -1,6 +1,6 @@
 {
   "vector_set": "psi-54-lifecycle-v1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "states": [
     "published",
     "suspended",
@@ -49,8 +49,20 @@
   "vectors": [
     {
       "id": "psi54-001",
-      "scenario": "published to suspended",
+      "scenario": "legal published to suspended",
       "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
         "from": "published",
         "to": "suspended",
         "authorized": true,
@@ -58,7 +70,22 @@
         "evidence_present": true,
         "preconditions_met": true,
         "expected_revision_matches": true,
-        "idempotency_replay": "none"
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true
+        }
       },
       "expected": {
         "result": "accepted",
@@ -67,88 +94,234 @@
     },
     {
       "id": "psi54-002",
-      "scenario": "published to deprecated",
+      "scenario": "revoked cannot be republished",
       "input": {
-        "from": "published",
-        "to": "deprecated",
-        "authorized": true,
-        "reason_present": true,
-        "evidence_present": true,
-        "preconditions_met": true,
-        "expected_revision_matches": true,
-        "idempotency_replay": "none"
-      },
-      "expected": {
-        "result": "accepted",
-        "reason": "TRANSITION_ACCEPTED"
-      }
-    },
-    {
-      "id": "psi54-003",
-      "scenario": "published to revoked",
-      "input": {
-        "from": "published",
-        "to": "revoked",
-        "authorized": true,
-        "reason_present": true,
-        "evidence_present": true,
-        "preconditions_met": true,
-        "expected_revision_matches": true,
-        "idempotency_replay": "none"
-      },
-      "expected": {
-        "result": "accepted",
-        "reason": "TRANSITION_ACCEPTED"
-      }
-    },
-    {
-      "id": "psi54-004",
-      "scenario": "suspended to published re-admission",
-      "input": {
-        "from": "suspended",
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "revoked",
         "to": "published",
         "authorized": true,
         "reason_present": true,
         "evidence_present": true,
         "preconditions_met": true,
         "expected_revision_matches": true,
-        "idempotency_replay": "none"
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true
+        }
       },
       "expected": {
-        "result": "accepted",
-        "reason": "TRANSITION_ACCEPTED"
+        "result": "rejected",
+        "reason": "ILLEGAL_TRANSITION"
+      }
+    },
+    {
+      "id": "psi54-003",
+      "scenario": "reason required",
+      "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "published",
+        "to": "suspended",
+        "authorized": true,
+        "reason_present": false,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "REASON_REQUIRED"
+      }
+    },
+    {
+      "id": "psi54-004",
+      "scenario": "revocation evidence required",
+      "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "published",
+        "to": "revoked",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": false,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "REVOCATION_EVIDENCE_REQUIRED"
       }
     },
     {
       "id": "psi54-005",
-      "scenario": "suspended to deprecated",
+      "scenario": "stale revision",
       "input": {
-        "from": "suspended",
-        "to": "deprecated",
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "published",
+        "to": "suspended",
         "authorized": true,
         "reason_present": true,
         "evidence_present": true,
         "preconditions_met": true,
-        "expected_revision_matches": true,
-        "idempotency_replay": "none"
+        "expected_revision_matches": false,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true
+        }
       },
       "expected": {
-        "result": "accepted",
-        "reason": "TRANSITION_ACCEPTED"
+        "result": "rejected",
+        "reason": "STALE_REVISION"
       }
     },
     {
       "id": "psi54-006",
-      "scenario": "suspended to revoked",
+      "scenario": "replay original accepted result after state advancement",
       "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "same_fingerprint",
+          "record": {
+            "scope": {
+              "tenant_id": "tenant-a",
+              "principal_id": "principal-a",
+              "release_record_id": "release-row-7",
+              "operation": "transition"
+            },
+            "request_fingerprint": "sha256:req-1",
+            "original_result": "accepted",
+            "original_reason": "TRANSITION_ACCEPTED",
+            "response_ref": "response-1"
+          }
+        },
         "from": "suspended",
-        "to": "revoked",
+        "to": "suspended",
         "authorized": true,
         "reason_present": true,
         "evidence_present": true,
         "preconditions_met": true,
-        "expected_revision_matches": true,
-        "idempotency_replay": "none"
+        "expected_revision_matches": false,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true
+        }
       },
       "expected": {
         "result": "accepted",
@@ -157,52 +330,155 @@
     },
     {
       "id": "psi54-007",
-      "scenario": "deprecated to revoked",
+      "scenario": "replay original rejected result after state advancement",
       "input": {
-        "from": "deprecated",
-        "to": "revoked",
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "same_fingerprint",
+          "record": {
+            "scope": {
+              "tenant_id": "tenant-a",
+              "principal_id": "principal-a",
+              "release_record_id": "release-row-7",
+              "operation": "transition"
+            },
+            "request_fingerprint": "sha256:req-1",
+            "original_result": "rejected",
+            "original_reason": "PRECONDITION_FAILED",
+            "response_ref": "response-1"
+          }
+        },
+        "from": "suspended",
+        "to": "suspended",
         "authorized": true,
         "reason_present": true,
         "evidence_present": true,
         "preconditions_met": true,
-        "expected_revision_matches": true,
-        "idempotency_replay": "none"
+        "expected_revision_matches": false,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true
+        }
       },
       "expected": {
-        "result": "accepted",
-        "reason": "TRANSITION_ACCEPTED"
+        "result": "rejected",
+        "reason": "PRECONDITION_FAILED"
       }
     },
     {
       "id": "psi54-008",
-      "scenario": "deprecated to archived",
+      "scenario": "same scoped key with different fingerprint",
       "input": {
-        "from": "deprecated",
-        "to": "archived",
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "different_fingerprint",
+          "record": {
+            "scope": {
+              "tenant_id": "tenant-a",
+              "principal_id": "principal-a",
+              "release_record_id": "release-row-7",
+              "operation": "transition"
+            },
+            "request_fingerprint": "sha256:other",
+            "original_result": "accepted",
+            "original_reason": "TRANSITION_ACCEPTED",
+            "response_ref": "response-1"
+          }
+        },
+        "from": "published",
+        "to": "suspended",
         "authorized": true,
         "reason_present": true,
         "evidence_present": true,
         "preconditions_met": true,
         "expected_revision_matches": true,
-        "idempotency_replay": "none"
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true
+        }
       },
       "expected": {
-        "result": "accepted",
-        "reason": "TRANSITION_ACCEPTED"
+        "result": "rejected",
+        "reason": "IDEMPOTENCY_CONFLICT"
       }
     },
     {
       "id": "psi54-009",
-      "scenario": "revoked to archived",
+      "scenario": "same raw key in other principal scope is not replay",
       "input": {
-        "from": "revoked",
-        "to": "archived",
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-b",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "other_scope_only",
+          "record": null
+        },
+        "from": "published",
+        "to": "suspended",
         "authorized": true,
         "reason_present": true,
         "evidence_present": true,
         "preconditions_met": true,
         "expected_revision_matches": true,
-        "idempotency_replay": "none"
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true
+        }
       },
       "expected": {
         "result": "accepted",
@@ -211,236 +487,47 @@
     },
     {
       "id": "psi54-010",
-      "scenario": "archived is terminal",
+      "scenario": "initial publication atomic revision one event",
       "input": {
-        "from": "archived",
+        "operation": "initial_publication",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "initial_publication"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": null,
         "to": "published",
         "authorized": true,
         "reason_present": true,
         "evidence_present": true,
         "preconditions_met": true,
         "expected_revision_matches": true,
-        "idempotency_replay": "none"
-      },
-      "expected": {
-        "result": "rejected",
-        "reason": "ILLEGAL_TRANSITION"
-      }
-    },
-    {
-      "id": "psi54-011",
-      "scenario": "revoked cannot be republished",
-      "input": {
-        "from": "revoked",
-        "to": "published",
-        "authorized": true,
-        "reason_present": true,
-        "evidence_present": true,
-        "preconditions_met": true,
-        "expected_revision_matches": true,
-        "idempotency_replay": "none"
-      },
-      "expected": {
-        "result": "rejected",
-        "reason": "ILLEGAL_TRANSITION"
-      }
-    },
-    {
-      "id": "psi54-012",
-      "scenario": "draft is not a registered release",
-      "input": {
-        "from": "draft",
-        "to": "validated",
-        "authorized": true,
-        "reason_present": true,
-        "evidence_present": true,
-        "preconditions_met": true,
-        "expected_revision_matches": true,
-        "idempotency_replay": "none"
-      },
-      "expected": {
-        "result": "rejected",
-        "reason": "ILLEGAL_TRANSITION"
-      }
-    },
-    {
-      "id": "psi54-013",
-      "scenario": "validated is not a registered release",
-      "input": {
-        "from": "validated",
-        "to": "published",
-        "authorized": true,
-        "reason_present": true,
-        "evidence_present": true,
-        "preconditions_met": true,
-        "expected_revision_matches": true,
-        "idempotency_replay": "none"
-      },
-      "expected": {
-        "result": "rejected",
-        "reason": "ILLEGAL_TRANSITION"
-      }
-    },
-    {
-      "id": "psi54-014",
-      "scenario": "self transition rejected",
-      "input": {
-        "from": "published",
-        "to": "published",
-        "authorized": true,
-        "reason_present": true,
-        "evidence_present": true,
-        "preconditions_met": true,
-        "expected_revision_matches": true,
-        "idempotency_replay": "none"
-      },
-      "expected": {
-        "result": "rejected",
-        "reason": "ILLEGAL_TRANSITION"
-      }
-    },
-    {
-      "id": "psi54-015",
-      "scenario": "authorization denied",
-      "input": {
-        "from": "published",
-        "to": "suspended",
-        "authorized": false,
-        "reason_present": true,
-        "evidence_present": true,
-        "preconditions_met": true,
-        "expected_revision_matches": true,
-        "idempotency_replay": "none"
-      },
-      "expected": {
-        "result": "rejected",
-        "reason": "AUTHORIZATION_DENIED"
-      }
-    },
-    {
-      "id": "psi54-016",
-      "scenario": "reason required",
-      "input": {
-        "from": "published",
-        "to": "deprecated",
-        "authorized": true,
-        "reason_present": false,
-        "evidence_present": true,
-        "preconditions_met": true,
-        "expected_revision_matches": true,
-        "idempotency_replay": "none"
-      },
-      "expected": {
-        "result": "rejected",
-        "reason": "REASON_REQUIRED"
-      }
-    },
-    {
-      "id": "psi54-017",
-      "scenario": "revocation evidence required",
-      "input": {
-        "from": "published",
-        "to": "revoked",
-        "authorized": true,
-        "reason_present": true,
-        "evidence_present": false,
-        "preconditions_met": true,
-        "expected_revision_matches": true,
-        "idempotency_replay": "none"
-      },
-      "expected": {
-        "result": "rejected",
-        "reason": "REVOCATION_EVIDENCE_REQUIRED"
-      }
-    },
-    {
-      "id": "psi54-018",
-      "scenario": "failed re-admission precondition",
-      "input": {
-        "from": "suspended",
-        "to": "published",
-        "authorized": true,
-        "reason_present": true,
-        "evidence_present": true,
-        "preconditions_met": false,
-        "expected_revision_matches": true,
-        "idempotency_replay": "none"
-      },
-      "expected": {
-        "result": "rejected",
-        "reason": "PRECONDITION_FAILED"
-      }
-    },
-    {
-      "id": "psi54-019",
-      "scenario": "failed retention precondition",
-      "input": {
-        "from": "deprecated",
-        "to": "archived",
-        "authorized": true,
-        "reason_present": true,
-        "evidence_present": true,
-        "preconditions_met": false,
-        "expected_revision_matches": true,
-        "idempotency_replay": "none"
-      },
-      "expected": {
-        "result": "rejected",
-        "reason": "PRECONDITION_FAILED"
-      }
-    },
-    {
-      "id": "psi54-020",
-      "scenario": "stale lifecycle revision",
-      "input": {
-        "from": "published",
-        "to": "suspended",
-        "authorized": true,
-        "reason_present": true,
-        "evidence_present": true,
-        "preconditions_met": true,
-        "expected_revision_matches": false,
-        "idempotency_replay": "none"
-      },
-      "expected": {
-        "result": "rejected",
-        "reason": "STALE_REVISION"
-      }
-    },
-    {
-      "id": "psi54-021",
-      "scenario": "same idempotency key and fingerprint replay",
-      "input": {
-        "from": "published",
-        "to": "suspended",
-        "authorized": true,
-        "reason_present": true,
-        "evidence_present": true,
-        "preconditions_met": true,
-        "expected_revision_matches": true,
-        "idempotency_replay": "same_request"
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true
+        }
       },
       "expected": {
         "result": "accepted",
-        "reason": "IDEMPOTENT_REPLAY"
-      }
-    },
-    {
-      "id": "psi54-022",
-      "scenario": "same idempotency key different fingerprint",
-      "input": {
-        "from": "published",
-        "to": "suspended",
-        "authorized": true,
-        "reason_present": true,
-        "evidence_present": true,
-        "preconditions_met": true,
-        "expected_revision_matches": true,
-        "idempotency_replay": "different_request"
-      },
-      "expected": {
-        "result": "rejected",
-        "reason": "IDEMPOTENCY_CONFLICT"
+        "reason": "PUBLICATION_ACCEPTED"
       }
     }
   ]
