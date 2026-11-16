@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Layered, deterministic EFS v1 manifest conformance validator.
 
 Conformance is structural/profile validation only. It does not verify release
@@ -9,7 +8,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import sys
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
