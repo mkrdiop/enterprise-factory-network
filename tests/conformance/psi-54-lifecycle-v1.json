@@ -823,6 +823,750 @@
         "result": "accepted",
         "reason": "PUBLICATION_ACCEPTED"
       }
+    },
+    {
+      "id": "psi54-013",
+      "scenario": "legal transition published to deprecated",
+      "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "published",
+        "to": "deprecated",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
+        }
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-014",
+      "scenario": "legal transition published to revoked",
+      "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "published",
+        "to": "revoked",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
+        }
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-015",
+      "scenario": "legal transition suspended to published",
+      "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "suspended",
+        "to": "published",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
+        }
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-016",
+      "scenario": "legal transition suspended to deprecated",
+      "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "suspended",
+        "to": "deprecated",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
+        }
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-017",
+      "scenario": "legal transition suspended to revoked",
+      "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "suspended",
+        "to": "revoked",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
+        }
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-018",
+      "scenario": "legal transition deprecated to revoked",
+      "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "deprecated",
+        "to": "revoked",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
+        }
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-019",
+      "scenario": "legal transition deprecated to archived",
+      "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "deprecated",
+        "to": "archived",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
+        }
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-020",
+      "scenario": "legal transition revoked to archived",
+      "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "revoked",
+        "to": "archived",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
+        }
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-021",
+      "scenario": "archived is terminal",
+      "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "archived",
+        "to": "published",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "ILLEGAL_TRANSITION"
+      }
+    },
+    {
+      "id": "psi54-022",
+      "scenario": "transition authorization denied",
+      "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "published",
+        "to": "suspended",
+        "authorized": false,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "AUTHORIZATION_DENIED"
+      }
+    },
+    {
+      "id": "psi54-023",
+      "scenario": "transition precondition failed",
+      "input": {
+        "operation": "transition",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "transition"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": "published",
+        "to": "suspended",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": false,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": true,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "PRECONDITION_FAILED"
+      }
+    },
+    {
+      "id": "psi54-024",
+      "scenario": "publication event and release must commit atomically",
+      "input": {
+        "operation": "initial_publication",
+        "scope": {
+          "tenant_id": "tenant-a",
+          "principal_id": "principal-a",
+          "release_record_id": "release-row-7",
+          "operation": "initial_publication"
+        },
+        "request_fingerprint": "sha256:req-1",
+        "idempotency_lookup": {
+          "status": "none",
+          "record": null
+        },
+        "from": null,
+        "to": "published",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "publication": {
+          "authoring_request_validated": true,
+          "coordinate_exact": true,
+          "digest_verified": true,
+          "signature_verified": true,
+          "actor_id": "principal-a",
+          "event_type": "factory_release.published",
+          "revision": 1,
+          "from_state": null,
+          "authorization_decision_ref": "decision-1",
+          "committed_at": "2026-11-16T12:00:00Z",
+          "release_inserted": true,
+          "event_inserted": false,
+          "audit_outbox_inserted": true,
+          "same_database_transaction": true,
+          "coordinate_snapshot": {
+            "publisher_id": "urn:publisher:acme",
+            "factory_id": "factory-42",
+            "release_version": "7"
+          },
+          "digest_snapshot": {
+            "profile_id": "efs-jcs-sha256-v1",
+            "algorithm": "SHA-256",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          "authorization_actions": [
+            "factory.register",
+            "factory.publish",
+            "release.publish"
+          ],
+          "event_id": "event-release-published-1",
+          "action": "release.publish"
+        }
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "PUBLICATION_INVALID"
+      }
     }
   ]
 }
