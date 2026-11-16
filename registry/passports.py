@@ -227,7 +227,11 @@ def build_factory_passport(
             "target": f"/summary/{field}",
             "source": "manifest",
             "sourcePointer": source_path,
-            "rule": {\n                "endpointCount": "count-endpoint-items",\n                "policyDeclarationCount": "count-policy-declarations",\n                "policyReferenceCount": "count-policy-references",\n            }.get(field, "count-items"),
+            "rule": {
+                "endpointCount": "count-endpoint-items",
+                "policyDeclarationCount": "count-policy-declarations",
+                "policyReferenceCount": "count-policy-references",
+            }.get(field, "count-items"),
         })
 
     if "name" in manifest["publisher"]:
