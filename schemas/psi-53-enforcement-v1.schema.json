@@ -471,7 +471,8 @@
                               "running",
                               "waiting",
                               "succeeded",
-                              "failed"
+                              "failed",
+                              "cancelled"
                             ]
                           },
                           "current_revision": {
@@ -483,6 +484,10 @@
                           },
                           "revision_cas": {
                             "const": true
+                          },
+                          "governance_reference": {
+                            "type": "string",
+                            "minLength": 1
                           }
                         }
                       }
