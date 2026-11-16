@@ -1,0 +1,238 @@
+{
+  "vectorSetVersion": "1.0",
+  "conformanceProfile": "efs-v1-version-dimensions",
+  "authority": "docs/efs-v1-version-dimensions.md",
+  "dimensions": [
+    {
+      "id": "efs-specification",
+      "field": "/efsVersion",
+      "owner": "efs-specification",
+      "scope": "efs-specification-lineage",
+      "grammar": "semver-2.0.0",
+      "comparison": "same-dimension-only",
+      "examples": [
+        "1.0.0",
+        "1.1.0",
+        "2.0.0-rc.1"
+      ]
+    },
+    {
+      "id": "factory-release",
+      "field": "/release/version",
+      "owner": "publisher-release-stream",
+      "scope": "exact-publisher-factory-pair",
+      "grammar": "semver-2.0.0",
+      "comparison": "same-dimension-and-exact-factory-scope-only",
+      "examples": [
+        "1.2.0",
+        "1.3.0-rc.1",
+        "1.2.3+build.7"
+      ]
+    },
+    {
+      "id": "capability-contract",
+      "field": "/capabilities/*/contract/version",
+      "owner": "contract-owner",
+      "scope": "exact-contract-id-and-capability-definition",
+      "grammar": "opaque-non-empty-string",
+      "comparison": "exact-case-sensitive-equality-only",
+      "examples": [
+        "1.0.0",
+        "2026-Q4",
+        "vNext",
+        "vendor:blue"
+      ]
+    },
+    {
+      "id": "implementation-build",
+      "field": "external-provenance-only",
+      "owner": "build-producer",
+      "scope": "producer-defined-build-or-artifact-subject",
+      "grammar": "producer-defined-not-efs-governed",
+      "comparison": "producer-defined-no-efs-inference",
+      "examples": [
+        "build-2026.11.16.4",
+        "git:abc123",
+        "4.8.1+ci.42"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "id": "VD-001",
+      "statement": "No cross-dimension ordering or comparison is defined.",
+      "result": "reject"
+    },
+    {
+      "id": "VD-002",
+      "statement": "Factory release precedence is evaluated only within the exact publisher.id and factory.id pair.",
+      "result": "reject-out-of-scope-comparison"
+    },
+    {
+      "id": "VD-003",
+      "statement": "Contract version is opaque and only exact case-sensitive equality is defined.",
+      "result": "no-ordering"
+    },
+    {
+      "id": "VD-004",
+      "statement": "SemVer build metadata does not affect precedence.",
+      "result": "equal-precedence"
+    },
+    {
+      "id": "VD-005",
+      "statement": "Distinct exact Factory release strings with equal precedence require explicit exact selection.",
+      "result": "no-implicit-selection"
+    },
+    {
+      "id": "VD-006",
+      "statement": "A changed digest for an already registered exact Factory release version is an immutable-release conflict.",
+      "result": "conflict"
+    },
+    {
+      "id": "VD-007",
+      "statement": "Implementation build identity is external provenance and cannot replace release.version.",
+      "result": "reject-substitution"
+    },
+    {
+      "id": "VD-008",
+      "statement": "Execution-profile, policy, protocol and dependency constraint versions retain their owning profile semantics.",
+      "result": "no-coercion"
+    }
+  ],
+  "semverVectors": [
+    {
+      "id": "SEM-001",
+      "dimension": "efs-specification",
+      "value": "1.0.0",
+      "syntax": "valid"
+    },
+    {
+      "id": "SEM-002",
+      "dimension": "factory-release",
+      "value": "1.2.0",
+      "syntax": "valid"
+    },
+    {
+      "id": "SEM-003",
+      "dimension": "factory-release",
+      "value": "1.3.0-rc.1",
+      "syntax": "valid"
+    },
+    {
+      "id": "SEM-004",
+      "dimension": "factory-release",
+      "value": "1.2.3+build.7",
+      "syntax": "valid"
+    },
+    {
+      "id": "SEM-005",
+      "dimension": "factory-release",
+      "value": "v1.2.3",
+      "syntax": "invalid"
+    },
+    {
+      "id": "SEM-006",
+      "dimension": "factory-release",
+      "value": "1.2",
+      "syntax": "invalid"
+    },
+    {
+      "id": "SEM-007",
+      "dimension": "factory-release",
+      "value": "01.2.3",
+      "syntax": "invalid"
+    },
+    {
+      "id": "SEM-008",
+      "dimension": "factory-release",
+      "value": "1.2.3-01",
+      "syntax": "invalid"
+    },
+    {
+      "id": "SEM-009",
+      "dimension": "factory-release",
+      "value": " 1.2.3",
+      "syntax": "invalid"
+    }
+  ],
+  "semanticVectors": [
+    {
+      "id": "SCOPE-001",
+      "case": "same-factory-release-stream",
+      "left": {
+        "publisher": "urn:example:publishers:acme",
+        "factory": "support",
+        "version": "1.2.0"
+      },
+      "right": {
+        "publisher": "urn:example:publishers:acme",
+        "factory": "support",
+        "version": "1.3.0"
+      },
+      "expected": "same-scope-comparable"
+    },
+    {
+      "id": "SCOPE-002",
+      "case": "different-publisher-same-factory-id",
+      "left": {
+        "publisher": "urn:example:publishers:acme",
+        "factory": "support",
+        "version": "1.2.0"
+      },
+      "right": {
+        "publisher": "urn:example:publishers:other",
+        "factory": "support",
+        "version": "9.0.0"
+      },
+      "expected": "not-comparable"
+    },
+    {
+      "id": "CONTRACT-001",
+      "case": "contract-versions-are-opaque",
+      "values": [
+        "1.0.0",
+        "2026-Q4",
+        "vNext",
+        "vendor:blue"
+      ],
+      "expected": "accept-as-opaque-non-empty-values-no-ordering"
+    },
+    {
+      "id": "CONTRACT-002",
+      "case": "contract-version-equality-is-exact",
+      "left": "1.0.0",
+      "right": "1.0.0",
+      "expected": "equal"
+    },
+    {
+      "id": "CONTRACT-003",
+      "case": "contract-version-case-is-significant",
+      "left": "V1",
+      "right": "v1",
+      "expected": "not-equal"
+    },
+    {
+      "id": "BUILD-001",
+      "case": "build-is-not-a-manifest-version-dimension",
+      "value": "build-2026.11.16.4",
+      "expected": "external-provenance-only"
+    },
+    {
+      "id": "DIGEST-001",
+      "case": "same-exact-release-version-different-digest",
+      "publisher": "urn:example:publishers:acme",
+      "factory": "support",
+      "version": "1.2.0",
+      "digestA": "sha256:aaaaaaaa",
+      "digestB": "sha256:bbbbbbbb",
+      "expected": "immutable-release-conflict"
+    },
+    {
+      "id": "PRECEDENCE-001",
+      "case": "build-metadata-does-not-order-releases",
+      "left": "1.2.3+build.7",
+      "right": "1.2.3+build.8",
+      "expected": "equal-precedence-exact-selection-required"
+    }
+  ]
+}
