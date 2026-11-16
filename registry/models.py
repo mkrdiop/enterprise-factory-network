@@ -1,5 +1,6 @@
 """PostgreSQL persistence mappings; UUIDs are local keys, never EFS identities."""
 import uuid
+
 from sqlalchemy import (
     BigInteger,
     CheckConstraint,
