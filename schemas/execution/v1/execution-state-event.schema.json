@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.enterprise-factory.example/execution/v1/state-event.schema.json",
+  "title": "EFS v1 Execution State Transition Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["eventVersion", "eventId", "invocationId", "correlationId", "source", "sourceMessageId", "eventType", "fromState", "toState", "expectedRevision", "reasonCode", "occurredAt", "context"],
+  "properties": {
+    "eventVersion": {"const": "1.0"},
+    "eventId": {"type": "string", "minLength": 1, "maxLength": 255},
+    "invocationId": {"type": "string", "minLength": 1, "maxLength": 255},
+    "correlationId": {"type": "string", "minLength": 1, "maxLength": 255},
+    "causationId": {"type": ["string", "null"], "maxLength": 255},
+    "source": {"enum": ["envelope", "runtime", "governed_control"]},
+    "sourceMessageId": {"type": "string", "minLength": 1, "maxLength": 255},
+    "eventType": {"enum": ["request", "accepted", "queued", "started", "progress", "waiting", "resumed", "succeeded", "failed", "cancelled"]},
+    "fromState": {"enum": ["created", "requested", "accepted", "queued", "running", "waiting", "succeeded", "failed", "cancelled"]},
+    "toState": {"enum": ["created", "requested", "accepted", "queued", "running", "waiting", "succeeded", "failed", "cancelled"]},
+    "expectedRevision": {"type": "integer", "minimum": 0},
+    "reasonCode": {"type": "string", "pattern": "^[a-z][a-z0-9._-]{0,127}$"},
+    "governanceRef": {"type": "string", "minLength": 1, "maxLength": 2048},
+    "occurredAt": {"type": "string", "format": "date-time"},
+    "context": {"$ref": "envelope.schema.json#/$defs/context"}
+  },
+  "allOf": [
+    {"if": {"properties": {"eventType": {"const": "cancelled"}}, "required": ["eventType"]},
+     "then": {"required": ["governanceRef"]}},
+    {"if": {"properties": {"eventType": {"enum": ["waiting", "resumed"]}}, "required": ["eventType"]},
+     "then": {"properties": {"source": {"const": "runtime"}}}}
+  ]
+}

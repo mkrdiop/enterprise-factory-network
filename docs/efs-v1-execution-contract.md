@@ -87,7 +87,7 @@ The following are the allowed message-level patterns in envelope version 1.0:
 - **streaming:** `request -> accepted -> progress* -> result | error`; a receiver MAY produce a terminal result/error directly after acceptance.
 - **event:** `event -> result | error`
 
-The transition helper checks one observed causal edge and propagation of invocation, correlation and context. It is not the execution lifecycle state machine. PSI-45 owns the normative state vocabulary, legal state transitions, terminal-state handling and replay/idempotency semantics. A sequence of envelopes MUST NOT be treated as proof of durable state or successful execution merely because a message is syntactically valid.
+The transition helper checks one observed causal edge and propagation of invocation, correlation and context. The separate PSI-45 state model owns the normative lifecycle vocabulary, legal state transitions, terminal-state handling and event replay semantics. A sequence of envelopes MUST NOT be treated as proof of durable state or successful execution merely because a message is syntactically valid. PSI-45 projects validated envelopes into lifecycle events while preserving exact context; it does not alter envelope v1.0.
 
 EFS v1 envelope version 1.0 does not define a cancellation message or cancellation guarantee. An adapter MUST NOT claim that cancellation is supported or infer cancellation semantics from a transport. A future cancellation contract requires a governed EFS profile/specification change.
 
@@ -131,8 +131,9 @@ The examples cover sync, async, streaming and event modes, including accepted/qu
 
 ## 9. Explicit non-goals
 
-Envelope version 1.0 does not implement or define a runtime engine, workers, scheduling, queues, transports, retries, idempotency, cancellation, durable acceptance, delivery guarantees, policy authorization, publisher trust, signature verification, semantic compatibility or the PSI-45 lifecycle state machine.
+Envelope version 1.0 does not implement or define a runtime engine, workers, scheduling, queues, transports, retries, idempotency, cancellation messages, durable acceptance, delivery guarantees, policy authorization, publisher trust, signature verification or semantic compatibility. The separate PSI-45 state model defines lifecycle transitions; cancellation remains available only through a separately governed control event, not an envelope v1.0 message.
 
 ## 10. Change history
 
 - 2026-11-16 — PSI-44 shared transport-neutral envelope model and executable conformance corpus established.
+- 2026-11-16 — PSI-45 lifecycle state model added as a separate, versioned contract; envelope v1.0 unchanged.

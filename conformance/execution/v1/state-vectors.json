@@ -1,0 +1,40 @@
+{
+  "stateVersion": "1.0",
+  "normativeDocument": "docs/efs-v1-execution-state-model.md",
+  "stateSchema": "schemas/execution/v1/execution-state.schema.json",
+  "eventSchema": "schemas/execution/v1/execution-state-event.schema.json",
+  "states": ["created", "requested", "accepted", "queued", "running", "waiting", "succeeded", "failed", "cancelled"],
+  "terminalStates": ["succeeded", "failed", "cancelled"],
+  "transitions": {
+    "request": {"from": ["created"], "to": "requested", "source": "envelope"},
+    "accepted": {"from": ["requested"], "to": "accepted", "source": "envelope"},
+    "queued": {"from": ["requested"], "to": "queued", "source": "envelope"},
+    "started": {"from": ["requested", "accepted", "queued", "waiting"], "to": "running", "source": "envelope"},
+    "progress": {"from": ["accepted", "queued", "running"], "to": "running", "source": "envelope"},
+    "waiting": {"from": ["running"], "to": "waiting", "source": "runtime"},
+    "resumed": {"from": ["waiting"], "to": "running", "source": "runtime"},
+    "succeeded": {"from": ["requested", "accepted", "queued", "running", "waiting"], "to": "succeeded", "source": "envelope"},
+    "failed": {"from": ["requested", "accepted", "queued", "running", "waiting"], "to": "failed", "source": "envelope"},
+    "cancelled": {"from": ["created", "requested", "accepted", "queued", "running", "waiting"], "to": "cancelled", "source": "governed_control", "requiresGovernanceRef": true}
+  },
+  "replay": {
+    "sameEventIdSameContent": "accepted as replay with no state mutation",
+    "sameEventIdDifferentContent": "rejected with EFS_EXECUTION_STATE_EVENT_ID_CONFLICT",
+    "staleExpectedRevision": "rejected with EFS_EXECUTION_STATE_REVISION_CONFLICT",
+    "concurrentWriters": "caller must atomically compare-and-swap expectedRevision; the pure validator is not a lock"
+  },
+  "ordering": {
+    "stateRevision": "monotonic per-invocation compare-and-swap revision",
+    "streamSequence": "PSI-44 progress sequence is not used as state revision or delivery-order proof"
+  },
+  "correlation": ["invocationId", "correlationId", "context", "causationId"],
+  "nonInferences": {
+    "queuedMeansDurable": false,
+    "acceptedMeansStarted": false,
+    "revisionMeansDeliveryOrder": false,
+    "stateValidatorExecutesWork": false,
+    "stateValidatorAuthorizes": false,
+    "cancellationAvailableInEnvelopeV1": false,
+    "terminalStateCanReopen": false
+  }
+}

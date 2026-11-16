@@ -1,0 +1,13 @@
+{
+  "catalogVersion": "1.0",
+  "stateVersion": "1.0",
+  "vectors": "conformance/execution/v1/state-vectors.json",
+  "acceptance": "conformance/execution/v1/state-acceptance.json",
+  "diagnostics": "conformance/execution/v1/state-diagnostic-catalog.json",
+  "stateSchema": "schemas/execution/v1/execution-state.schema.json",
+  "eventSchema": "schemas/execution/v1/execution-state-event.schema.json",
+  "implementation": "registry/execution_state.py",
+  "testModule": "tests/test_execution_state.py",
+  "states": ["created", "requested", "accepted", "queued", "running", "waiting", "succeeded", "failed", "cancelled"],
+  "terminalStates": ["succeeded", "failed", "cancelled"]
+}
