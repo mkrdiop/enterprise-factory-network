@@ -190,7 +190,7 @@ def test_specification_uses_psi47_range_evaluator_and_fails_closed():
 
 
 def test_breaking_and_conditional_outcomes_keep_diagnostics_in_report():
-    breaking = assess_efs_specification(subject_efs_version="2.0.0", supported_range="<2.0.0",
+    breaking = assess_efs_specification(subject_efs_version=SUBJECT.efs_version, supported_range="<1.0.0",
                                         consumer_profile_id="profile-a", evidence=(EVIDENCE_A,))
     conditional = assess_profile_mapping(
         CompatibilityDimension.RUNTIME, subject_profile_id="runtime-2", consumer_profile_id="runtime-a",
