@@ -191,7 +191,7 @@
           "value": "revoked"
         }
       ],
-      "expected_failure": "EFS_SIGNATURE_TRUST_UNAVAILABLE"
+      "expected_failure": "EFS_SIGNATURE_KEY_REVOKED"
     },
     {
       "id": "sig-neg-012",
@@ -388,6 +388,48 @@
         }
       ],
       "expected_failure": "EFS_SIGNATURE_ENCODING_INVALID"
+    },
+    {
+      "id": "sig-neg-018",
+      "kind": "negative",
+      "target": "resolver",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/trust_state",
+          "value": "expired"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_KEY_EXPIRED"
+    },
+    {
+      "id": "sig-neg-019",
+      "kind": "negative",
+      "target": "resolver",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/trust_state",
+          "value": "unavailable"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_RESOLVER_UNAVAILABLE"
+    },
+    {
+      "id": "sig-neg-020",
+      "kind": "negative",
+      "target": "resolver",
+      "base_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/key_id",
+          "value": "missing-key"
+        }
+      ],
+      "expected_failure": "EFS_SIGNATURE_KEY_NOT_FOUND"
     }
   ],
   "interop_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
