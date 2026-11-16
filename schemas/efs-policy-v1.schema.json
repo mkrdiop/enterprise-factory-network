@@ -6,7 +6,8 @@
     "scalar": {
       "oneOf": [
         {
-          "type": "string"
+          "type": "string",
+          "maxLength": 1024
         },
         {
           "type": "number"
@@ -38,7 +39,8 @@
               "minItems": 1,
               "items": {
                 "$ref": "#/$defs/condition"
-              }
+              },
+              "maxItems": 32
             }
           }
         },
@@ -58,7 +60,8 @@
               "minItems": 1,
               "items": {
                 "$ref": "#/$defs/condition"
-              }
+              },
+              "maxItems": 32
             }
           }
         },
@@ -110,7 +113,8 @@
               "$ref": "#/$defs/attributeRef"
             },
             "value": {
-              "$ref": "#/$defs/scalar"
+              "$ref": "#/$defs/scalar",
+              "maxLength": 1024
             }
           }
         },
@@ -134,7 +138,8 @@
               "minItems": 1,
               "items": {
                 "$ref": "#/$defs/scalar"
-              }
+              },
+              "maxItems": 64
             }
           }
         },
@@ -174,7 +179,8 @@
       "properties": {
         "id": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "pattern": "^[^*?]+$"
         },
         "parameters": {
           "type": "object"
@@ -199,7 +205,8 @@
         },
         "id": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "pattern": "^[^*?]+$"
         }
       }
     },
@@ -223,7 +230,8 @@
         },
         "id": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "pattern": "^[^*?]+$"
         },
         "coordinates": {
           "type": "object",
@@ -255,7 +263,150 @@
             }
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "publisher"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "coordinates": {
+                "required": [
+                  "publisher_id"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "factory"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "coordinates"
+            ],
+            "properties": {
+              "coordinates": {
+                "required": [
+                  "publisher_id",
+                  "factory_id"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "release"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "coordinates"
+            ],
+            "properties": {
+              "coordinates": {
+                "required": [
+                  "publisher_id",
+                  "factory_id",
+                  "release_version"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "capability"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "coordinates"
+            ],
+            "properties": {
+              "coordinates": {
+                "required": [
+                  "publisher_id",
+                  "factory_id",
+                  "release_version",
+                  "capability_id"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "registry"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "coordinates": {
+                "required": [
+                  "registry_id"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "execution_target"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "coordinates": {
+                "required": [
+                  "execution_target_id"
+                ]
+              }
+            }
+          }
+        }
+      ]
     },
     "rule": {
       "type": "object",
@@ -270,7 +421,8 @@
       "properties": {
         "rule_id": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "pattern": "^[^*?]+$"
         },
         "effect": {
           "enum": [
@@ -335,7 +487,8 @@
         },
         "source": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "maxLength": 256
         },
         "observed_at": {
           "type": "string",
@@ -365,7 +518,8 @@
         },
         "id": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "pattern": "^[^*?]+$"
         },
         "attributes": {
           "type": "object",
@@ -414,11 +568,13 @@
         },
         "policy_id": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "pattern": "^[^*?]+$"
         },
         "policy_version": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "maxLength": 128
         },
         "digest": {
           "type": "object",
