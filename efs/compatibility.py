@@ -182,11 +182,11 @@ def assess_specification(
     range_evaluator_result: bool | None, evidence: Iterable[EvidenceReference] = (),
 ) -> DimensionAssessment:
     """Consume a result from the PSI-47 SemVer range evaluator; do not parse versions here."""
-    if not supported_range or not consumer_profile_id:
+    if not isinstance(supported_range, str) or not supported_range or not isinstance(consumer_profile_id, str) or not consumer_profile_id:
         return _unknown(CompatibilityDimension.SPECIFICATION, "EFC-SPEC-001",
                         "No explicit consumer EFS support range/profile was supplied.")
     refs = tuple(evidence)
-    if range_evaluator_result is None or not refs:
+    if not isinstance(range_evaluator_result, bool) or not refs:
         return _unknown(CompatibilityDimension.SPECIFICATION, "EFC-SPEC-002",
                         "EFS range evaluation or its supporting evidence is unavailable.")
     if range_evaluator_result:
