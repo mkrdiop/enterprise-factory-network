@@ -46,20 +46,17 @@ def test_namespaced_extension_payload_is_accepted():
     assert report["valid"], report["diagnostics"]
 
 
-def test_execution_branches_are_mutually_exclusive():
+def test_execution_branches_are_mutually_exclusive(tmp_path):
     doc = load_json(ROOT / "fixtures/valid/manifest-minimal.json")
     doc["execution"]["profileReferences"] = [{
         "id": "https://profiles.example/p", "version": "1.0.0",
         "digest": {"algorithm": "SHA-256", "value": "opaque"}
     }]
-    path = ROOT / "tmp-mixed-execution.json"
+    path = tmp_path / "mixed-execution.json"
     path.write_text(json.dumps(doc), encoding="utf-8")
-    try:
-        report = validate_report(path, SCHEMA_PATH)
-        assert not report["valid"]
-        assert any(d["code"] == "EFS_SCHEMA_INVALID" for d in report["diagnostics"])
-    finally:
-        path.unlink(missing_ok=True)
+    report = validate_report(path, SCHEMA_PATH)
+    assert not report["valid"]
+    assert any(d["code"] == "EFS_SCHEMA_INVALID" for d in report["diagnostics"])
 
 
 @pytest.mark.parametrize("bad_value", ["2026-13-40T25:61:61Z", "2026-11-16T05:30:00"])
