@@ -81,7 +81,7 @@ The storage boundary is digest-only and publisher-agnostic. It SHOULD provide th
 - `describe(digest) -> StoredArtifact | None` (verified receipt for recovery; `None` only when the object is absent)
 - `delete_if_match(stored_artifact_generation) -> bool` (maintenance/GC only; never part of normal publication)
 
-`StoredArtifact` contains the digest identity, byte length, provider identifier, opaque object key and provider generation/version token where available.
+`StoredArtifact` contains the digest identity, byte length, provider identifier, opaque object key and provider generation/version token where available. The registry persists that generation on the artifact-location row so future conditional garbage collection can use the exact object generation.
 
 Required semantics:
 
