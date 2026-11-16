@@ -89,11 +89,11 @@ def validate_execution_envelope(
     payload_validator: Callable | None = None,
     schema_path: str | Path = DEFAULT_SCHEMA,
 ) -> dict:
-    """Validate one envelope against the exact manifest and optional PSI-43 port.
+    """Validate one envelope against the exact manifest and PSI-43 payload contract.
 
-    payload_validator signature:
-      callback(manifest, context, direction, payload, error_code=None) -> report
-    The callback is expected to adapt to registry.capability_contracts.
+    By default, the canonical PSI-43 validator is called through
+    validate_psi43_contract_payload. A callback may be injected for a product
+    adapter or conformance harness, but must preserve the same exact coordinates.
     """
     schema = json.loads(Path(schema_path).read_text(encoding="utf-8"))
     Draft202012Validator.check_schema(schema)
