@@ -33,7 +33,7 @@ A deployment requiring a FIPS-validated algorithm/module MUST use a separately n
 
 The signature envelope is stored as a separate immutable record associated with the release. It MUST NOT be inserted into or mutate the canonical manifest.
 
-The canonical manifest MUST NOT contain `release.signature` under EFS v1. The member is reserved and MUST be rejected by semantic validation if present. ADR-001's accepted digest projection continues to exclude both `release.digest` and `release.signature`; this profile does not change that definition. The exclusion of the reserved field is a digest-profile compatibility rule, not permission to place mutable signature material in the manifest.
+The canonical manifest MUST NOT contain `release.signature` under EFS v1. The member is reserved and MUST be rejected structurally by the normative manifest schema and by semantic validation if present. The manifest schema represents this prohibition as a forbidden property at `/release/signature`; the conformance diagnostic is `EFS_SCHEMA_CONSTRAINT` at that exact JSON Pointer. The PSI-51 implementation MUST preserve this rejection in the reference validator and release-admission pipeline. PSI-50 owns the normative prohibition and schema/vector; PSI-51 owns implementation integration and executable validator/admission tests. PSI-51 MUST NOT begin until PSI-50 acceptance. ADR-001's accepted digest projection continues to exclude both `release.digest` and `release.signature`; this profile does not change that definition. The exclusion of the reserved field is a digest-profile compatibility rule, not permission to place mutable signature material in the manifest.
 
 The manifest's release digest MUST be independently verified under `efs-jcs-sha256-v1` before signature verification. The signature envelope binds the exact digest profile, digest algorithm and digest value. Implementations MUST NOT calculate a second release digest or reinterpret the existing profile.
 
@@ -53,7 +53,7 @@ The statement has exactly:
 - `factory_id`: exact decoded JSON string from the manifest; case-sensitive, with no normalization.
 - `release_version`: exact release version string from the immutable manifest; opaque and not parsed or normalized by this profile.
 - `efs_version`: exact EFS version string from the manifest.
-- `digest`: object with `profile_id` = `efs-jcs-sha256-v1`, `algorithm` = `SHA-256`, and `value` equal to the verified unpadded Base64URL SHA-256 digest. The algorithm token is exactly `SHA-256` (uppercase), matching ADR-001 and PSI-40; `SHA-256` is invalid.
+- `digest`: object with `profile_id` = `efs-jcs-sha256-v1`, `algorithm` = `SHA-256`, and `value` equal to the verified unpadded Base64URL SHA-256 digest. The algorithm token is exactly `SHA-256` (uppercase), matching ADR-001 and PSI-40; the lowercase spelling `sha-256` is invalid.
 
 Each signer entry has exactly:
 
@@ -61,7 +61,7 @@ Each signer entry has exactly:
 - `algorithm`: exactly `Ed25519`.
 - `signature`: unpadded Base64URL encoding of exactly 64 octets.
 
-The envelope MUST reject unknown properties in these objects. It MUST reject duplicate `(key_id, algorithm)` entries. Signature-array order has no semantic meaning and MUST NOT change the verification result. Producers SHOULD sort entries by key_id using ordinal ASCII order for stable storage.
+The envelope MUST reject unknown properties in these objects. It MUST reject duplicate `(key_id, algorithm)` entries. Negative-vector expected failure codes are stable conformance identifiers: `EFS_SIGNATURE_BINDING_MISMATCH`, `EFS_SIGNATURE_INVALID`, `EFS_SIGNATURE_ENCODING_INVALID`, `EFS_SIGNATURE_DUPLICATE_SIGNER`, `EFS_SIGNATURE_UNSUPPORTED_PROFILE`, `EFS_SIGNATURE_KEY_NOT_TRUSTED`, `EFS_SIGNATURE_KEY_BINDING_MISMATCH`, `EFS_SIGNATURE_TRUST_UNAVAILABLE`, `EFS_SCHEMA_CONSTRAINT` and `EFS_SIGNATURE_DIGEST_PROFILE_MISMATCH`. Signature-array order has no semantic meaning and MUST NOT change the verification result. Producers SHOULD sort entries by key_id using ordinal ASCII order for stable storage.
 
 The envelope MUST NOT contain public keys, private keys, credentials, trust claims, authorization claims, caller-controlled trust status or a timestamp that is treated as authoritative.
 
@@ -162,7 +162,7 @@ No signature result may be used as an authorization grant. No signature envelope
 
 ## 10. Conformance
 
-The language-neutral machine-readable vectors are in `tests/conformance/signatures-v1.json`. They include a deterministic Ed25519 known-answer vector, exact JCS preimage, canonical Base64URL boundary vectors, publisher URI canonicalization vectors and negative mutation cases. `tests/conformance/fixtures/psi50-release-interoperability-v1.json` binds a complete EFS manifest to its detached envelope and expected digest/preimage. `tests/conformance/verify_psi50_interop.mjs` independently verifies that fixture using Node.js built-in SHA-256 and Ed25519 APIs; it is intentionally independent of the Python reference KAT generation. Implementations MUST run the vectors and full fixture before claiming conformance. The vector's public/private test key material is synthetic and MUST NOT be used outside testing.
+The language-neutral machine-readable vectors are in `tests/conformance/signatures-v1.json`. They include a deterministic Ed25519 known-answer vector, exact JCS preimage, canonical Base64URL boundary vectors, publisher URI canonicalization vectors, RFC 6902 JSON Patch negative mutation cases with deterministic expected failure categories, and RFC 8785 edge vectors for number serialization, UTF-16 property ordering, escaping and invalid I-JSON strings/numbers. Each negative vector names its base fixture, target document, executable patch and expected failure code. The detached-manifest negative fixture is `tests/conformance/fixtures/psi50-manifest-signature-forbidden-v1.json`. The independent Node verifier MUST implement the RFC 8785 constraints exercised by the edge vectors; a local key-sort-only approximation is not conformant. `tests/conformance/fixtures/psi50-release-interoperability-v1.json` binds a complete EFS manifest to its detached envelope and expected digest/preimage. `tests/conformance/verify_psi50_interop.mjs` independently verifies that fixture using Node.js built-in SHA-256 and Ed25519 APIs; it is intentionally independent of the Python reference KAT generation. Implementations MUST run the vectors and full fixture before claiming conformance. The vector's public/private test key material is synthetic and MUST NOT be used outside testing.
 
 ## 11. References
 
