@@ -13,7 +13,7 @@ From the repository root:
 python tests/conformance/run_psi_53_54_vectors.py
 ```
 
-Expected result: 52/52 vectors (28 PSI-53 + 24 PSI-54).
+Expected result: 53/53 vectors (29 PSI-53 + 24 PSI-54).
 
 ## Independent implementation requirements
 
