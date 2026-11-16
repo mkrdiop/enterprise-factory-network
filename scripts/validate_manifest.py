@@ -103,6 +103,32 @@ def _embedded_schema_checks(manifest):
         contract = capability.get("contract")
         if not isinstance(contract, dict):
             continue
+        resource_graph = {}
+        resource_paths = {}
+        candidate_schemas = [
+            (["capabilities", i, "contract", direction], contract.get(direction))
+            for direction in ("inputs", "outputs")
+        ]
+        errors_for_resources = contract.get("errors", [])
+        if isinstance(errors_for_resources, list):
+            candidate_schemas.extend(
+                (["capabilities", i, "contract", "errors", j, "schema"], error.get("schema"))
+                for j, error in enumerate(errors_for_resources) if isinstance(error, dict)
+            )
+        for resource_path, resource_schema in candidate_schemas:
+            if isinstance(resource_schema, dict) and isinstance(resource_schema.get("$id"), str):
+                resource_id = resource_schema["$id"]
+                if resource_id in resource_graph:
+                    diagnostics.append(diagnostic(
+                        "EFS_SCHEMA_RESOURCE_ID_DUPLICATE", "embedded_schemas",
+                        pointer(resource_path + ["$id"]),
+                        "Schema resource identifier is duplicated within this capability contract resource graph.",
+                        {"firstPath": pointer(resource_paths[resource_id] + ["$id"])},
+                    ))
+                else:
+                    resource_graph[resource_id] = resource_schema
+                    resource_paths[resource_id] = resource_path
+
         for direction in ("inputs", "outputs"):
             schema = contract.get(direction)
             if not isinstance(schema, dict):
@@ -117,7 +143,7 @@ def _embedded_schema_checks(manifest):
                     {"validator": str(exc.validator), "message": exc.message},
                 ))
                 continue
-            for item in validate_schema_references(schema):
+            for item in validate_schema_references(schema, resource_graph):
                 diagnostics.append(diagnostic(
                     item["code"], "embedded_schemas",
                     pointer(base) + item["path"], item["message"], item.get("details"),
@@ -144,7 +170,7 @@ def _embedded_schema_checks(manifest):
                         {"validator": str(exc.validator), "message": exc.message},
                     ))
                     continue
-                for item in validate_schema_references(schema):
+                for item in validate_schema_references(schema, resource_graph):
                     diagnostics.append(diagnostic(
                         item["code"], "embedded_schemas",
                         pointer(base) + item["path"], item["message"], item.get("details"),
