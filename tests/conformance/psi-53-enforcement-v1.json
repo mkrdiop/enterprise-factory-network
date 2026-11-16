@@ -83,8 +83,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -173,8 +179,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -284,8 +296,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -395,8 +413,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -506,8 +530,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -589,8 +619,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -679,8 +715,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -746,8 +788,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -834,8 +882,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -931,8 +985,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -1021,8 +1081,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -1111,8 +1177,14 @@
             "idempotency_key": "op-1",
             "dispatch_attempted": true,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -1198,10 +1270,26 @@
           "operation_kind": "external_effect",
           "side_effect": {
             "intent_durable": true,
-            "idempotency_key": "op-1",
+            "idempotency_key": "op-key-1",
+            "operation_id": "inv-1",
+            "intent_record_id": "intent-1",
+            "audit_record_id": "audit-1",
+            "payload_fingerprint": "sha256:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
             "dispatch_attempted": true,
             "outcome_recorded": true,
+            "outcome_ref": "outcome-1",
             "reconciled": false
+          },
+          "execution_state": {
+            "invocation_id": "inv-1",
+            "correlation_id": "corr-1",
+            "initial_event_id": "event-request-1",
+            "initial_state": "requested",
+            "initial_revision": 1,
+            "current_state": "succeeded",
+            "current_revision": 2,
+            "persisted_with_intent": true,
+            "revision_cas": true
           }
         }
       },
@@ -1291,8 +1379,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -1381,8 +1475,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -1471,8 +1571,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -1561,8 +1667,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -1667,8 +1779,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -1757,8 +1875,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -1844,10 +1968,26 @@
           "operation_kind": "external_effect",
           "side_effect": {
             "intent_durable": true,
-            "idempotency_key": "op-unknown",
+            "idempotency_key": "op-key-unknown",
+            "operation_id": "inv-unknown",
+            "intent_record_id": "intent-unknown",
+            "audit_record_id": "audit-unknown",
+            "payload_fingerprint": "sha256:BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
             "dispatch_attempted": true,
             "outcome_recorded": false,
+            "outcome_ref": "",
             "reconciled": false
+          },
+          "execution_state": {
+            "invocation_id": "inv-unknown",
+            "correlation_id": "corr-unknown",
+            "initial_event_id": "event-request-unknown",
+            "initial_state": "requested",
+            "initial_revision": 1,
+            "current_state": "requested",
+            "current_revision": 1,
+            "persisted_with_intent": true,
+            "revision_cas": true
           }
         }
       },
@@ -1980,8 +2120,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -2083,8 +2229,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -2172,8 +2324,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -2278,8 +2436,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
@@ -2368,8 +2532,14 @@
             "idempotency_key": "",
             "dispatch_attempted": false,
             "outcome_recorded": false,
-            "reconciled": false
-          }
+            "reconciled": false,
+            "operation_id": "",
+            "intent_record_id": "",
+            "audit_record_id": "",
+            "payload_fingerprint": "",
+            "outcome_ref": ""
+          },
+          "execution_state": null
         }
       },
       "expected": {
