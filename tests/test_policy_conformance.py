@@ -39,6 +39,7 @@ def vector_package():
 def validate(instance, schema, definition=None):
     if definition is not None:
         schema = copy.deepcopy(schema)
+        schema.pop("oneOf", None)
         schema["$ref"] = f"#/$defs/{definition}"
     Draft202012Validator(schema, format_checker=FORMAT_CHECKER).validate(instance)
 
