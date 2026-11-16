@@ -132,6 +132,11 @@
       "meaning": "Required property is absent."
     },
     {
+      "code": "EFS_SCHEMA_RESOURCE_ID_DUPLICATE",
+      "stage": "embedded_schemas",
+      "meaning": "Schema resource identifier is duplicated within one capability contract resource graph."
+    },
+    {
       "code": "EFS_SCHEMA_TYPE",
       "stage": "structural",
       "meaning": "Instance has an incorrect JSON type."
