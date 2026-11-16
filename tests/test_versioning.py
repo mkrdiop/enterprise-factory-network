@@ -1,9 +1,17 @@
 import pytest
 
 from efs.versioning import (
-    ChangeKind, ReleaseChangeError, ReleaseCoordinate, SemVer, VersionDimension,
-    VersionError, compare_field_versions, contract_versions_equal,
-    parse_field_version, require_exact_release_selection, validate_manifest_versions,
+    ChangeKind,
+    ReleaseChangeError,
+    ReleaseCoordinate,
+    SemVer,
+    VersionDimension,
+    VersionError,
+    compare_field_versions,
+    contract_versions_equal,
+    parse_field_version,
+    require_exact_release_selection,
+    validate_manifest_versions,
     validate_release_transition,
 )
 
