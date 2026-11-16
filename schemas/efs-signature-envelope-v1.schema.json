@@ -47,7 +47,22 @@
         "publisher_id": {
           "type": "string",
           "minLength": 1,
-          "format": "uri"
+          "format": "uri",
+          "pattern": "^[a-z][A-Za-z0-9+.-]*:[\\x21-\\x7E]+$",
+          "allOf": [
+            {
+              "not": {
+                "pattern": "[?#]"
+              }
+            },
+            {
+              "not": {
+                "pattern": "^[a-z][A-Za-z0-9+.-]*://[^/?#]*@"
+              }
+            }
+          ],
+          "x-efs-canonicalization-profile": "efs-uri-c14n-1",
+          "description": "Must additionally pass the full ADR-003 efs-uri-c14n-1 semantic canonicalizer; format uri alone is insufficient."
         },
         "factory_id": {
           "type": "string",
@@ -74,11 +89,11 @@
               "const": "efs-jcs-sha256-v1"
             },
             "algorithm": {
-              "const": "sha-256"
+              "const": "SHA-256"
             },
             "value": {
               "type": "string",
-              "pattern": "^[A-Za-z0-9_-]{43}$"
+              "pattern": "^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$"
             }
           }
         }
@@ -102,7 +117,8 @@
         },
         "signature": {
           "type": "string",
-          "pattern": "^[A-Za-z0-9_-]{86}$"
+          "pattern": "^[A-Za-z0-9_-]{85}[AQgw]$",
+          "description": "Canonical unpadded Base64URL encoding of exactly 64 octets; decoder MUST re-encode and compare exactly."
         }
       }
     }
