@@ -1,9 +1,12 @@
 """Domain-facing repository operations; callers own the transaction."""
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
-from .models import Publisher, Factory, ArtifactBlob, ArtifactLocation, FactoryRelease
+
 from scripts.validate_manifest import canonical_publisher_uri
+
+from .models import ArtifactBlob, ArtifactLocation, Factory, FactoryRelease, Publisher
 
 class RegistryConflict(Exception): pass
 class RegistryNotFound(Exception): pass
@@ -21,7 +24,7 @@ class PublisherRepository:
     def retire(self,uri):
         row=self.get(uri)
         if row is None: raise RegistryNotFound(uri)
-        if row.lifecycle_state=="active": row.lifecycle_state="retired"; row.retired_at=datetime.now(timezone.utc); self.s.flush()
+        if row.lifecycle_state=="active": row.lifecycle_state="retired"; row.retired_at=datetime.now(UTC); self.s.flush()
         return row
 
 class FactoryRepository:
