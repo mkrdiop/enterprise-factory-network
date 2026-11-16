@@ -100,7 +100,7 @@ def psi54(data):
    data["from"] is None and data["to"]=="published" and
    event["authoring_request_validated"] and event["coordinate_exact"] and
    event["digest_verified"] and event["signature_verified"] and bool(event["actor_id"]) and
-   event["event_type"]=="factory_release.published" and event["revision"]==1 and
+   event["event_type"]=="factory_release.published" and event["event_id"] and event["action"]=="release.publish" and event["revision"]==1 and
    event["from_state"] is None and bool(event["authorization_decision_ref"]) and
    event["release_inserted"] and event["event_inserted"] and
    event["audit_outbox_inserted"] and event["same_database_transaction"] and
