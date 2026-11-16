@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from .models import Publisher, Factory, ArtifactBlob, ArtifactLocation, FactoryRelease
+from scripts.validate_manifest import canonical_publisher_uri
 
 class RegistryConflict(Exception): pass
 class RegistryNotFound(Exception): pass
@@ -15,6 +16,7 @@ class PublisherRepository:
     def __init__(self,session): self.s=session
     def get(self,uri): return self.s.scalar(select(Publisher).where(Publisher.publisher_uri==uri))
     def create(self,uri):
+        if canonical_publisher_uri(uri) != uri: raise ValueError("publisher URI must be canonical under efs-uri-c14n-1")
         row=Publisher(publisher_uri=uri); self.s.add(row); _flush(self.s,"publisher URI already claimed"); return row
     def retire(self,uri):
         row=self.get(uri)
