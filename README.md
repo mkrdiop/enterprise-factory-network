@@ -9,6 +9,7 @@ The repository owns executable contracts and implementation evidence: JSON Schem
 - **EFS requirements:** [EFS v1 Requirements Baseline](https://app.notion.com/p/41af741d651181ee87d5e868b6167d54) — approved requirements and scope boundary.
 - **Canonical object model:** [EFS v1 Canonical Factory Manifest Object Model](https://app.notion.com/p/41af741d651181ac9488d932f13051f0) — approved PSI-34 model.
 - **Normative schema:** `schemas/efs/v1/factory-manifest.schema.json` — JSON Schema Draft 2020-12.
+- **Version dimensions:** [EFS v1 version-dimension model](docs/efs-v1-version-dimensions.md) and [ADR-010](docs/adr/ADR-010-efs-v1-version-dimension-model.md) — PSI-46 normative authority.
 - **Conformance:** [PSI-36 implementation and acceptance traceability](docs/psi-36-conformance.md); language-neutral fixtures and machine-readable registries live under `fixtures/` and `conformance/efs/v1/`.
 - **Architecture decisions:** [ADR index](docs/adr/README.md) and [ADR template](docs/adr/ADR-TEMPLATE.md).
 
