@@ -37,7 +37,7 @@ def test_contract_versions_are_opaque_and_definition_evidence_drives_result():
                                   change_classification=None, evidence=EVIDENCE)
     assert same.outcome is Outcome.COMPATIBLE
     assert dict(same.coordinates)["capabilityId"] == "cap"
-    changed = assess_contract_change(contract_id="c", previous_version="2026-Q4", selected_version="vNext",
+    changed = assess_contract_change(capability_id="cap", contract_id="c", previous_version="2026-Q4", selected_version="vNext",
                                      change_classification="compatible-additive", evidence=EVIDENCE)
     assert changed.outcome is Outcome.COMPATIBLE
     unknown = assess_contract_change(contract_id="c", previous_version="1.0.0", selected_version="2.0.0",
