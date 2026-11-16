@@ -28,7 +28,7 @@
       "id": "PSI44-AC-03",
       "requirement": "Payload-bearing envelopes delegate inputs, outputs and error details to the shared PSI-43 validator port; no second payload validator is implemented.",
       "tests": [
-        "test_payload_bearing_messages_require_and_use_shared_validator_port"
+        "test_payload_bearing_messages_use_the_canonical_psi43_validator_by_default"
       ],
       "fixtures": [
         "executionExamples"
@@ -48,7 +48,8 @@
       "id": "PSI44-AC-05",
       "requirement": "Declared error codes are preserved and undeclared codes rejected; structured details require the declared error schema through PSI-43.",
       "tests": [
-        "test_error_messages_require_declared_contract_error_codes"
+        "test_error_messages_require_declared_contract_error_codes",
+        "test_payload_bearing_messages_use_the_canonical_psi43_validator_by_default"
       ],
       "fixtures": [
         "executionExamples"
