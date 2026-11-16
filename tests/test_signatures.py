@@ -199,6 +199,7 @@ def test_cross_publisher_key_substitution_is_binding_failure():
 
     result = verify_release_signature(raw, encoded, WrongPublisherResolver())
     assert result.signers[0].code is SignatureCode.KEY_BINDING_MISMATCH
+    assert result.signers[0].trust_status is KeyTrustStatus.BINDING_MISMATCH
     assert result.signers[0].cryptographic_valid is None
 
 
@@ -471,6 +472,7 @@ def test_trusted_resolver_status_must_match_current_validity_interval(interval):
     report = verify_release_signature(raw, encoded, ContradictoryResolver())
     assert report.code is SignatureCode.EVALUATED
     assert report.signers[0].code is SignatureCode.KEY_BINDING_MISMATCH
+    assert report.signers[0].trust_status is KeyTrustStatus.BINDING_MISMATCH
     assert report.signers[0].cryptographic_valid is None
 
 
