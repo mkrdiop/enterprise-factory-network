@@ -236,7 +236,9 @@
                   "same_database_transaction",
                   "coordinate_snapshot",
                   "digest_snapshot",
-                  "authorization_actions"
+                  "authorization_actions",
+                  "event_id",
+                  "action"
                 ],
                 "properties": {
                   "authoring_request_validated": {
@@ -333,6 +335,13 @@
                         "release.publish"
                       ]
                     }
+                  },
+                  "event_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "action": {
+                    "const": "release.publish"
                   }
                 }
               }
