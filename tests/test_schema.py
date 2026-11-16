@@ -57,3 +57,29 @@ def test_duplicate_json_members_are_rejected(tmp_path):
 
 def test_schema_uses_draft_2020_12():
     assert SCHEMA["$schema"]=="https://json-schema.org/draft/2020-12/schema"
+
+
+def test_release_created_at_accepts_rfc3339_datetime(tmp_path):
+    doc=load(ROOT/"fixtures/valid/manifest-minimal.json")
+    doc["release"]["createdAt"]="2026-11-16T05:30:00Z"
+    path=tmp_path/"valid-datetime.json"
+    path.write_text(json.dumps(doc),encoding="utf-8")
+    assert validate(path,SCHEMA_PATH)==[]
+
+def test_release_created_at_rejects_invalid_datetime(tmp_path):
+    doc=load(ROOT/"fixtures/valid/manifest-minimal.json")
+    doc["release"]["createdAt"]="2026-13-40T25:61:61Z"
+    path=tmp_path/"invalid-datetime.json"
+    path.write_text(json.dumps(doc),encoding="utf-8")
+    errors=validate(path,SCHEMA_PATH)
+    assert errors
+    assert any("date-time" in error for error in errors)
+
+def test_release_created_at_rejects_datetime_without_timezone(tmp_path):
+    doc=load(ROOT/"fixtures/valid/manifest-minimal.json")
+    doc["release"]["createdAt"]="2026-11-16T05:30:00"
+    path=tmp_path/"timezone-less-datetime.json"
+    path.write_text(json.dumps(doc),encoding="utf-8")
+    errors=validate(path,SCHEMA_PATH)
+    assert errors
+    assert any("date-time" in error for error in errors)
