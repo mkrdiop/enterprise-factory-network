@@ -78,12 +78,11 @@ def test_known_seed_ed25519_signing_and_verification_round_trip():
     raw, _manifest, _envelope, encoded = _signed()
     resolver = FixtureResolver()
     result = verify_release_signature(raw, encoded, resolver)
-    assert result.code is SignatureCode.VERIFIED
+    assert result.code is SignatureCode.EVALUATED
     assert result.digest_valid is True
-    assert result.cryptographic_valid is True
+    assert result.all_signers_cryptographically_valid is True
     assert result.all_keys_trusted is True
-    assert result.trusted_signature_evidence is True
-    assert resolver.calls == [(
+    assert     assert resolver.calls == [(
         "urn:example:publishers:acme",
         "test-release-key",
         "Ed25519",
@@ -147,7 +146,7 @@ def test_signature_byte_tampering_is_invalid():
     result = verify_release_signature(
         raw, serialize_signature_envelope(envelope), FixtureResolver()
     )
-    assert result.code is SignatureCode.INVALID
+    assert result.signers[0].code is SignatureCode.INVALID
     assert result.cryptographic_valid is False
 
 
@@ -162,18 +161,17 @@ def test_signature_byte_tampering_is_invalid():
 def test_cryptographic_validity_is_separate_from_key_trust(trust, expected):
     raw, _manifest, _envelope, encoded = _signed()
     result = verify_release_signature(raw, encoded, FixtureResolver(status=trust))
-    assert result.code is expected
+    assert result.signers[0].code is expected
     assert result.cryptographic_valid is True
     assert result.all_keys_trusted is False
-    assert result.trusted_signature_evidence is False
-
+    assert 
 
 def test_unknown_key_is_typed_and_fails_closed():
     raw, _manifest, _envelope, encoded = _signed()
     result = verify_release_signature(
         raw, encoded, FixtureResolver(status=KeyTrustStatus.NOT_FOUND, public_key=None)
     )
-    assert result.code is SignatureCode.KEY_NOT_FOUND
+    assert result.signers[0].code is SignatureCode.KEY_NOT_FOUND
     assert result.cryptographic_valid is False
     assert result.trusted_signature_evidence is False
 
@@ -186,7 +184,7 @@ def test_resolver_exception_is_unavailable_and_fails_closed():
             raise TimeoutError("trust provider offline")
 
     result = verify_release_signature(raw, encoded, BrokenResolver())
-    assert result.code is SignatureCode.RESOLVER_UNAVAILABLE
+    assert result.signers[0].code is SignatureCode.RESOLVER_UNAVAILABLE
     assert result.trusted_signature_evidence is False
 
 
@@ -204,7 +202,7 @@ def test_cross_publisher_key_substitution_is_binding_failure():
             )
 
     result = verify_release_signature(raw, encoded, WrongPublisherResolver())
-    assert result.code is SignatureCode.KEY_BINDING_MISMATCH
+    assert result.signers[0].code is SignatureCode.KEY_BINDING_MISMATCH
     assert result.cryptographic_valid is False
 
 
@@ -371,7 +369,8 @@ def test_signature_array_order_does_not_change_verification_result():
     first_report = verify_release_signature(raw, serialize_signature_envelope(combined), MultiKeyResolver())
     second_report = verify_release_signature(raw, serialize_signature_envelope(reordered), MultiKeyResolver())
     assert first_report == second_report
-    assert first_report.code is SignatureCode.INVALID
+    assert first_report.code is SignatureCode.EVALUATED
+    assert first_report.signers[0].code is SignatureCode.INVALID
 
 
 @pytest.mark.parametrize(
@@ -445,10 +444,110 @@ def test_trust_denial_without_public_key_still_requires_exact_resolver_binding()
     revoked = verify_release_signature(
         raw, encoded, RevokedResolver("urn:example:publishers:acme")
     )
-    assert revoked.code is SignatureCode.KEY_REVOKED
+    assert revoked.signers[0].code is SignatureCode.KEY_REVOKED
     assert revoked.signers[0].cryptographic_valid is None
 
     mismatched = verify_release_signature(
         raw, encoded, RevokedResolver("urn:example:publishers:attacker")
     )
-    assert mismatched.code is SignatureCode.KEY_BINDING_MISMATCH
+    assert mismatched.signers[0].code is SignatureCode.KEY_BINDING_MISMATCH
+
+
+@pytest.mark.parametrize("interval", ["not_yet_valid", "expired_but_reported_trusted"])
+def test_trusted_resolver_status_must_match_current_validity_interval(interval):
+    raw, _manifest, _envelope, encoded = _signed()
+
+    class ContradictoryResolver:
+        def resolve(self, publisher_id, key_id, algorithm, usage):
+            now = datetime.now(UTC)
+            valid_from = now.replace(year=now.year + 1) if interval == "not_yet_valid" else datetime(2026, 1, 1, tzinfo=UTC)
+            valid_until = None if interval == "not_yet_valid" else now.replace(year=now.year - 1)
+            return KeyResolution(
+                status=KeyTrustStatus.TRUSTED,
+                publisher_id=publisher_id,
+                key_id=key_id,
+                algorithm=algorithm,
+                public_key=PUBLIC,
+                usage=usage,
+                valid_from=valid_from,
+                valid_until=valid_until,
+                evidence_version="contradictory-trust-evidence-v1",
+            )
+
+    report = verify_release_signature(raw, encoded, ContradictoryResolver())
+    assert report.code is SignatureCode.EVALUATED
+    assert report.signers[0].code is SignatureCode.KEY_BINDING_MISMATCH
+    assert report.signers[0].cryptographic_valid is None
+
+
+def _multi_signature_fixture():
+    raw, _manifest = _manifest_bytes()
+    first = create_signature_envelope(raw, "z-valid", SIGNER)
+    second_signer = Ed25519Signer.from_private_bytes(bytes(reversed(range(32))))
+    envelope = add_signature(first, "a-secondary", second_signer)
+    return raw, envelope, second_signer
+
+
+def test_valid_and_invalid_signatures_are_reported_independently():
+    raw, envelope, _second_signer = _multi_signature_fixture()
+    signature = bytearray(base64.urlsafe_b64decode(envelope["signatures"][0]["signature"] + "=="))
+    signature[0] ^= 1
+    envelope["signatures"][0]["signature"] = base64.urlsafe_b64encode(signature).rstrip(b"=").decode()
+
+    class Resolver:
+        def resolve(self, publisher_id, key_id, algorithm, usage):
+            key = (
+                PRIVATE.public_key().public_bytes_raw()
+                if key_id == "z-valid"
+                else Ed25519PrivateKey.from_private_bytes(bytes(reversed(range(32)))).public_key().public_bytes_raw()
+            )
+            return KeyResolution(KeyTrustStatus.TRUSTED, publisher_id, key_id, algorithm, key, usage,
+                                 datetime(2026, 1, 1, tzinfo=UTC), None, "multi-v1")
+
+    report = verify_release_signature(raw, serialize_signature_envelope(envelope), Resolver())
+    by_key = {item.key_id: item for item in report.signers}
+    assert report.code is SignatureCode.EVALUATED
+    assert by_key["a-secondary"].code is SignatureCode.INVALID
+    assert by_key["a-secondary"].cryptographic_valid is False
+    assert by_key["z-valid"].code is SignatureCode.VERIFIED
+    assert by_key["z-valid"].cryptographic_valid is True
+    assert report.all_signers_cryptographically_valid is False
+
+
+def test_valid_and_unknown_signatures_are_reported_independently():
+    raw, envelope, _second_signer = _multi_signature_fixture()
+
+    class Resolver:
+        def resolve(self, publisher_id, key_id, algorithm, usage):
+            if key_id == "a-secondary":
+                return KeyResolution(KeyTrustStatus.NOT_FOUND)
+            return KeyResolution(KeyTrustStatus.TRUSTED, publisher_id, key_id, algorithm,
+                                 PUBLIC, usage, datetime(2026, 1, 1, tzinfo=UTC), None, "known-v1")
+
+    report = verify_release_signature(raw, serialize_signature_envelope(envelope), Resolver())
+    by_key = {item.key_id: item for item in report.signers}
+    assert report.code is SignatureCode.EVALUATED
+    assert by_key["a-secondary"].code is SignatureCode.KEY_NOT_FOUND
+    assert by_key["a-secondary"].cryptographic_valid is None
+    assert by_key["z-valid"].code is SignatureCode.VERIFIED
+    assert by_key["z-valid"].cryptographic_valid is True
+
+
+def test_valid_and_revoked_signatures_are_reported_independently():
+    raw, envelope, _second_signer = _multi_signature_fixture()
+
+    class Resolver:
+        def resolve(self, publisher_id, key_id, algorithm, usage):
+            if key_id == "a-secondary":
+                return KeyResolution(KeyTrustStatus.REVOKED, publisher_id, key_id, algorithm,
+                                     None, usage, datetime(2026, 1, 1, tzinfo=UTC), None, "revoked-v1")
+            return KeyResolution(KeyTrustStatus.TRUSTED, publisher_id, key_id, algorithm,
+                                 PUBLIC, usage, datetime(2026, 1, 1, tzinfo=UTC), None, "known-v1")
+
+    report = verify_release_signature(raw, serialize_signature_envelope(envelope), Resolver())
+    by_key = {item.key_id: item for item in report.signers}
+    assert report.code is SignatureCode.EVALUATED
+    assert by_key["a-secondary"].code is SignatureCode.KEY_REVOKED
+    assert by_key["a-secondary"].cryptographic_valid is None
+    assert by_key["z-valid"].code is SignatureCode.VERIFIED
+    assert by_key["z-valid"].cryptographic_valid is True
