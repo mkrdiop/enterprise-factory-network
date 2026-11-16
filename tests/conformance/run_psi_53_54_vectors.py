@@ -38,7 +38,7 @@ def psi53(data):
   if not resource["id"] or not COORD[kind].issubset(resource["coordinates"]):
    return "indeterminate","INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR"
   policy=check["policy"]
-  if policy["policy_profile"]!="efs-policy-v1" or not policy.get("digest_verified") or not all(policy.get(k) for k in ("policy_id","policy_version","digest")):
+  if policy["policy_profile"]!="efs-policy-v1" or policy["digest_profile_id"]!="efs-policy-jcs-sha256-v1" or policy["digest_algorithm"]!="sha-256" or not policy.get("digest_verified") or not all(policy.get(k) for k in ("policy_id","policy_version","digest")):
    return "indeterminate","PDP_INDETERMINATE"
  if any(c["pdp_outcome"]=="deny" for c in checks): return "rejected","POLICY_DENIED"
  if any(c["pdp_outcome"]=="indeterminate" for c in checks): return "indeterminate","PDP_INDETERMINATE"
