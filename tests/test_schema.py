@@ -157,8 +157,9 @@ def test_diagnostics_are_machine_readable_and_deterministic(tmp_path):
     first = validate_report(path, SCHEMA_PATH)
     second = validate_report(path, SCHEMA_PATH)
     assert first == second
-    assert first["diagnostics"]
+    assert len(first["diagnostics"]) >= 2
     assert all(set(d) >= {"code", "stage", "path", "message"} for d in first["diagnostics"])
+    assert all(d["path"] == "" or d["path"].startswith("/") for d in first["diagnostics"])
     assert first["stages"]["embedded_schemas"] == "not_run"
 
 
@@ -210,3 +211,8 @@ def test_cli_failure_exit_and_json_report_for_invalid_manifest():
     report = json.loads(machine.stdout)
     assert report["valid"] is False
     assert report["diagnostics"][0]["code"] == "EFS_SCHEMA_INVALID"
+
+
+def test_json_pointer_escaping_is_rfc6901():
+    from validate_manifest import pointer
+    assert pointer(["a/b", "~key", 0]) == "/a~1b/~0key/0"
