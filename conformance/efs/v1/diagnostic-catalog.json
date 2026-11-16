@@ -1,0 +1,75 @@
+{
+  "catalogVersion": "1.0",
+  "diagnostics": [
+    {
+      "code": "EFS_JSON_INVALID",
+      "stage": "parsing",
+      "meaning": "Malformed JSON, unreadable input, or non-JSON numeric constant."
+    },
+    {
+      "code": "EFS_JSON_INVALID_ENCODING",
+      "stage": "parsing",
+      "meaning": "Input is not strict UTF-8."
+    },
+    {
+      "code": "EFS_JSON_DUPLICATE_MEMBER",
+      "stage": "parsing",
+      "meaning": "Duplicate JSON object member; parser cannot always identify the containing pointer, so root pointer is used when unavailable."
+    },
+    {
+      "code": "EFS_SCHEMA_INVALID",
+      "stage": "structural",
+      "meaning": "Normative schema cannot be loaded or validated as Draft 2020-12."
+    },
+    {
+      "code": "EFS_SCHEMA_REQUIRED",
+      "stage": "structural",
+      "meaning": "Required property is absent."
+    },
+    {
+      "code": "EFS_SCHEMA_TYPE",
+      "stage": "structural",
+      "meaning": "Instance has an incorrect JSON type."
+    },
+    {
+      "code": "EFS_SCHEMA_ENUM",
+      "stage": "structural",
+      "meaning": "Instance violates enum or const."
+    },
+    {
+      "code": "EFS_SCHEMA_FORMAT",
+      "stage": "structural",
+      "meaning": "Instance violates an asserted JSON Schema format."
+    },
+    {
+      "code": "EFS_SCHEMA_CONSTRAINT",
+      "stage": "structural",
+      "meaning": "Instance violates another normative JSON Schema constraint."
+    },
+    {
+      "code": "EFS_EMBEDDED_SCHEMA_INVALID",
+      "stage": "embedded_schemas",
+      "meaning": "Embedded contract schema is not valid Draft 2020-12."
+    },
+    {
+      "code": "EFS_SCHEMA_REF_REMOTE",
+      "stage": "embedded_schemas",
+      "meaning": "Absolute or network schema reference is prohibited."
+    },
+    {
+      "code": "EFS_SCHEMA_REF_UNSUPPORTED",
+      "stage": "embedded_schemas",
+      "meaning": "Dynamic reference keyword is outside the profiled EFS v1 subset."
+    },
+    {
+      "code": "EFS_PROFILE_INVARIANT_FAILED",
+      "stage": "profile",
+      "meaning": "A governed EFS v1 profile invariant failed."
+    },
+    {
+      "code": "EFS_VALIDATOR_INTERNAL_ERROR",
+      "stage": "internal",
+      "meaning": "Unexpected validator implementation failure; never use to disguise invalid input."
+    }
+  ]
+}
