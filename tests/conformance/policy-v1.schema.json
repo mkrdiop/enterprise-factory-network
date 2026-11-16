@@ -176,6 +176,15 @@
         "expires_at": {
           "type": "string",
           "format": "date-time"
+        },
+        "policy": {
+          "type": "object"
+        },
+        "condition": {
+          "type": "object"
+        },
+        "attribute": {
+          "type": "object"
         }
       },
       "additionalProperties": true
