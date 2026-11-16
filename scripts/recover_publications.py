@@ -13,14 +13,13 @@ if str(ROOT) not in sys.path:
 
 from sqlalchemy.orm import sessionmaker
 
-from registry.artifact_store import LocalFilesystemArtifactStore
-from registry.db import make_engine
-from registry.digests import EFSReleaseDigestService
-from registry.publication_repository import SQLPublicationOperationRepository
-from registry.publication_service import RegistryPublicationService
-
-
 def main() -> int:
+    from registry.artifact_store import LocalFilesystemArtifactStore
+    from registry.db import make_engine
+    from registry.digests import EFSReleaseDigestService
+    from registry.publication_repository import SQLPublicationOperationRepository
+    from registry.publication_service import RegistryPublicationService
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--limit", type=int, default=50, help="maximum pending operations to inspect (1..500)")
     args = parser.parse_args()
