@@ -226,6 +226,13 @@
         "valid": false,
         "canonical": "https://identity.example/publishers/%2F"
       }
+    },
+    {
+      "id": "sig-neg-013",
+      "kind": "negative",
+      "mutation": "Change the digest algorithm identifier from the exact ADR-001 token SHA-256 to sha-256.",
+      "expected": "malformed-envelope-or-digest-profile-mismatch",
+      "valid": false
     }
   ],
   "interop_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
