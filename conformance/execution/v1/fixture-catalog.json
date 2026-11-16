@@ -19,5 +19,14 @@
     "progress",
     "result",
     "error"
-  ]
+  ],
+  "stateModel": {
+    "vectors": "conformance/execution/v1/state-vectors.json",
+    "acceptance": "conformance/execution/v1/state-acceptance.json",
+    "diagnostics": "conformance/execution/v1/state-diagnostic-catalog.json",
+    "fixtureCatalog": "conformance/execution/v1/state-fixture-catalog.json",
+    "stateSchema": "schemas/execution/v1/execution-state.schema.json",
+    "eventSchema": "schemas/execution/v1/execution-state-event.schema.json",
+    "testModule": "tests/test_execution_state.py"
+  }
 }
