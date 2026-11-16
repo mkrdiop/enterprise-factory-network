@@ -1,73 +1,62 @@
 # PSI-54 — Registered Factory Release lifecycle
 
-- **Status:** Normative specification proposal; pending owner and independent review
-- **Version:** 1.0.0
-- **Date:** 2026-11-16
-- **Dependencies:** PSI-37, PSI-40, PSI-51, PSI-52, PSI-53
-- **Conformance:** `schemas/psi-54-lifecycle-v1.schema.json`; `tests/conformance/psi-54-lifecycle-v1.json`
+- **Status:** Normative specification proposal; pending explicit acceptance and independent review
+- **Version:** 1.1.0
+- **Dependencies:** PSI-37, PSI-40, PSI-45, PSI-51, PSI-52, PSI-53
 
-## 1. Settled candidate-versus-release decision
+## 1. Candidate versus registered release
+The Network `FactoryRelease` aggregate has exactly five states: `published`, `suspended`, `deprecated`, `revoked`, `archived`. `draft` and `validated` are authoring-side workflow states and are not persisted Network release states or members of this aggregate. The owning authoring workflow is outside PSI-54; PSI-54 defines no candidate persistence or candidate state machine.
 
-The Network's registered `FactoryRelease` lifecycle contains exactly five states: `published`, `suspended`, `deprecated`, `revoked`, `archived`.
+Network accepts a publication request only after the authoring boundary asserts validation and Network independently verifies canonical manifest identity, PSI-40 immutable digest, PSI-51 signature evidence, PSI-53 authorization and obligations. Network does not accept or persist a mutable candidate. Persisted candidates require a separate aggregate and promotion contract.
 
-The proposed `draft` and `validated` states are **not** states of a registered FactoryRelease. They belong to the authoring/candidate workflow before publication. Network creates a FactoryRelease only after manifest/schema/semantic validation, immutable PSI-40 digest verification and storage, PSI-51 signature verification, PSI-53 authorization and successful publication finalization. The row is created directly in `published` with its initial event in one atomic commit.
+## 2. Exact identity and separation
+Lifecycle attaches to one exact persisted release coordinate: canonical publisher URI, exact Factory ID, opaque release version and immutable digest, internally keyed by `release_record_id`. It never attaches to latest, a mutable Factory pointer, signature envelope, key or execution. Lifecycle metadata never changes canonical manifest bytes or digest.
 
-This aligns with PSI-39/40: there is no persisted release candidate today, and a release row is created only after artifact persistence/finalization. It preserves immutable artifact semantics and avoids mutable candidate state masquerading as a registered immutable release. If server-side candidates are later needed, define a separate `ReleaseCandidate` aggregate and promotion protocol; do not add candidate states to FactoryRelease.
+PSI-45 execution state, PSI-51 signature validity, PSI-53 publisher/key trust, PSI-52 authorization, compatibility and publisher namespace retirement remain separate facts. PSI-54 does not cancel, retry, or rewrite an existing execution; PSI-45 owns execution behavior.
 
-## 2. Identity and separation
-
-Lifecycle attaches to one exact persisted coordinate: canonical publisher URI, exact Factory ID, opaque release version and immutable digest, internally keyed by `release_record_id`. Never attach it to “latest”, a mutable Factory pointer, signature envelope, key or execution.
-
-Lifecycle metadata MUST NOT change canonical manifest bytes, digest, publisher ID, Factory ID or release version. PSI-45 execution state, PSI-51 signature validity, PSI-53 publisher/key trust, PSI-52 authorization, PSI-49 compatibility and PSI-37 publisher namespace retirement remain separate facts.
-
-## 3. State semantics
-
+## 3. State semantics and transitions
 | State | Discovery | Exact retrieval | New invocation |
 |---|---|---|---|
-| published | ordinary discovery subject to authorization | allowed subject to authorization | eligible subject to policy, trust and compatibility |
-| suspended | hidden from ordinary discovery | authorized administrative/audit reads only | denied |
-| deprecated | discoverable with explicit deprecation metadata | allowed subject to authorization | eligible subject to policy, trust and compatibility |
-| revoked | hidden from ordinary discovery | authorized security/audit reads only | denied |
-| archived | hidden from ordinary discovery | retention/audit access only | denied |
+| published | ordinary discovery subject to authorization | authorized | eligible subject to policy, trust and compatibility |
+| suspended | hidden from ordinary discovery | authorized administrative/audit reads | denied |
+| deprecated | discoverable with deprecation metadata | authorized | eligible subject to policy, trust and compatibility |
+| revoked | hidden from ordinary discovery | authorized security/audit reads | denied |
+| archived | hidden from ordinary discovery | retention/audit access | denied |
 
-Lifecycle is admission, not authorization. Published/deprecated never grant access by themselves. Artifact bytes in object storage do not imply publication or invocation eligibility. Existing executions are not automatically canceled; PSI-45 governs execution state unless a separate cancellation contract is approved.
+Legal transitions only: published → suspended/deprecated/revoked; suspended → published/deprecated/revoked; deprecated → revoked/archived; revoked → archived. All other transitions, self-transitions, transitions from archived and transitions to/from draft or validated are rejected. Revoked cannot be restored; replacement requires a new exact release coordinate. Every transition invokes PSI-53 with the exact PSI-52 lifecycle action.
 
-## 4. Legal transition matrix
+## 4. Idempotency contract
+An idempotency record is scoped by `(tenant_id, authenticated_principal_id, release_record_id, operation)`. The key is unique only within that scope and is bound to a canonical request fingerprint. Lookup occurs after authentication and scope derivation but **before** reading current lifecycle state or checking expected revision.
 
-| From | To | Preconditions |
-|---|---|---|
-| published | suspended | explicit reason; PSI-53 `release.suspend` permits |
-| published | deprecated | explicit reason; PSI-53 `release.deprecate` permits |
-| published | revoked | explicit reason + evidence reference; PSI-53 `release.revoke` permits |
-| suspended | published | fresh re-admission + PSI-53 authorization; never if revoked |
-| suspended | deprecated | explicit reason; PSI-53 authorization |
-| suspended | revoked | explicit reason + evidence; PSI-53 authorization |
-| deprecated | revoked | explicit reason + evidence; PSI-53 authorization |
-| deprecated | archived | retention preconditions + PSI-53 `release.archive` authorization |
-| revoked | archived | retention preconditions + PSI-53 `release.archive` authorization |
+- Same scoped key + same fingerprint: return the persisted original result, stable reason and response reference exactly, whether originally accepted or rejected. Do not re-run transition validation or authorization.
+- Same scoped key + different fingerprint: return `IDEMPOTENCY_CONFLICT`.
+- Same raw key in a different tenant/principal/release/operation scope is a distinct key, not a collision or replay.
+- No matching scoped key: evaluate the new request normally.
 
-All unlisted transitions, self-transitions, transitions from archived and transitions to draft/validated are rejected. Revoked is terminal except archival; archived is terminal. Replacement requires a new exact release coordinate.
+The idempotency record and original outcome are persisted atomically with the corresponding transition result. A replay MUST NOT manufacture an accepted result or replace the original reason with a generic replay reason.
 
 ## 5. Transition transaction and event
+Transition request fields: exact release coordinate, expected revision, target state, non-empty reason, stable reason code, scoped idempotency key and correlation ID. Revocation additionally requires an evidence reference. Actor identity comes from PSI-53 authenticated principal, never the request body.
 
-Request fields: exact release coordinate, expected lifecycle revision, target state, explicit non-empty reason, stable reason code, idempotency key and correlation ID. Revocation also requires an evidence reference. Actor identity comes from the PSI-53 authenticated principal, never the request body.
+After idempotency lookup, validate legal transition, authorization, reason/evidence and transition-specific preconditions, then compare expected revision. At commit recheck consumed evidence generations/freshness and use optimistic concurrency. Append immutable event, update current-state projection, persist idempotency outcome and PSI-53 audit outbox in one DB transaction. At most one concurrent request using a given expected revision succeeds. Corrections are compensating events, never history edits/deletes.
 
-Service steps: resolve exact release; validate revision and transition matrix; evaluate the matching PSI-52 action through PSI-53 PEP; check transition-specific preconditions (fresh re-admission for suspended→published; retention eligibility for archive); at commit recheck evidence freshness and expected revision; append immutable event and update current-state projection in one DB transaction including PSI-53 audit outbox.
+Lifecycle event fields include event ID, release record ID, exact coordinate/digest snapshot, from/to, revision, actor, exact PSI-52 action, reason/reason code, evidence reference, authorization decision reference, policy digest/version, evidence generations, correlation ID, scoped idempotency identity, request fingerprint and UTC committed timestamp.
 
-Event fields: event ID, release record ID and exact coordinate snapshot, from/to, revision, actor, action, reason/reason code, evidence reference, authorization decision reference, policy digest/version, trust/lifecycle evidence versions, correlation ID, idempotency key, request fingerprint and UTC committed timestamp. History is append-only; corrections are compensating events, never edits/deletes.
+## 6. Initial publication event
+Creation is not a transition from a prior registered lifecycle state. Network inserts the release directly in `published` and writes the initial event in the same database transaction as the release row and PSI-53 audit outbox:
+- event type: `factory_release.published`;
+- revision: `1`;
+- `from_state: null`, `to_state: published`;
+- actor: authenticated PSI-53 principal;
+- exact publisher/Factory/release coordinate and immutable digest snapshot;
+- exact authorization decision reference covering required publication checks;
+- UTC committed timestamp;
+- durable idempotency outcome and audit outbox record.
 
-Concurrent requests with same expected revision: at most one succeeds; others get deterministic stale-revision conflict. Same idempotency key + identical request fingerprint returns original result. Same key + different fingerprint conflicts. Never authorize from stale preflight permit.
+The publication request must be authoring-validated; digest and signature verified; exact coordinate established; and all applicable `factory.register`, `factory.publish`, `release.publish` checks permitted. Release insertion, revision-1 event and audit outbox are atomic. Object-store I/O is outside the DB transaction; a failed final commit exposes no registered release.
 
-## 6. Publication and initial state
+## 7. Lifecycle admission and PSI-45 boundary
+Lifecycle admission is `eligible` for published/deprecated, `denied` for suspended/revoked/archived and `indeterminate` when authoritative release/lifecycle evidence is unavailable, malformed or stale. Eligibility is not authorization. Runtime uses PSI-54 admission before PSI-45 execution admission. PSI-54 does not define PSI-45 scheduling, retries, cancellation or terminal execution statuses.
 
-Publication requires PSI-37 identity admission; PSI-40 immutable digest verification/artifact persistence; PSI-51 signature verification (required signer identities come from policy, not envelope quorum semantics); PSI-53 authorization for applicable `factory.register`, `factory.publish`, `release.publish` checks and obligation enforcement; final freshness check; atomic FactoryRelease insertion in `published` with revision-1 initial lifecycle event and audit outbox. Object-store I/O is outside DB transaction. Failed final commit cannot expose a partial release.
-
-## 7. Lifecycle admission
-
-Transport-neutral result: `eligible` for published/deprecated (authorization, trust and compatibility still required); `denied` for suspended/revoked/archived; `indeterminate` if release/lifecycle evidence unavailable, malformed or stale. Registry discovery, retrieval and Runtime invocation use this shared contract. Runtime must not implement product-local states or infer published from artifact presence. PSI-54 never rewrites PSI-45 execution state.
-
-## 8. Conformance
-
-Every vector in `tests/conformance/psi-54-lifecycle-v1.json` MUST be consumed and validated against its schema. Test all legal/illegal transitions, exact-coordinate isolation, immutable digest preservation, authorization deny/indeterminate/obligation failure, stale revisions, idempotency, concurrency, outbox atomicity and Registry/Runtime parity.
-
-Invariants: no FactoryRelease in draft/validated; every registered release starts published with atomic event; coordinate and digest never change; revoked/archived never restored; every transition uses PSI-53; durable audit for every mutation; no implicit PSI-45 execution transition; consumers follow state semantics above.
+## 8. Conformance and acceptance
+The v1.1 vectors cover legal/illegal transitions, original accepted and rejected idempotent replays, scoped key isolation, same-key/different-fingerprint conflict, and atomic initial publication event creation. Independent implementations MUST validate schemas and execute every vector. Integration acceptance additionally requires concurrent revision tests, persistence/transaction tests, exact-coordinate isolation and Registry/Runtime parity.
