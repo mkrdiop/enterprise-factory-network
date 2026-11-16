@@ -73,13 +73,15 @@ LEGAL = {
 
 
 def psi54_decide(data: dict) -> tuple[str, str]:
-    transition = (data["from"], data["to"])
-    if transition not in LEGAL:
-        return "rejected", "ILLEGAL_TRANSITION"
+    # Idempotency lookup precedes current-state/revision validation: a replay
+    # returns the original result even after the first request advanced state.
     if data["idempotency_replay"] == "same_request":
         return "accepted", "IDEMPOTENT_REPLAY"
     if data["idempotency_replay"] == "different_request":
         return "rejected", "IDEMPOTENCY_CONFLICT"
+    transition = (data["from"], data["to"])
+    if transition not in LEGAL:
+        return "rejected", "ILLEGAL_TRANSITION"
     if not data["authorized"]:
         return "rejected", "AUTHORIZATION_DENIED"
     if not data["reason_present"]:
