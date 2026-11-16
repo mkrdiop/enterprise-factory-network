@@ -408,561 +408,4638 @@
       "id": "pair-publisher-read-factory",
       "kind": "action-resource-compatibility",
       "action": "publisher.read",
-      "resource_type": "factory",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "factory",
+          "id": "factory:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments"
+          }
+        },
+        "action": "publisher.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-publisher-read-release",
       "kind": "action-resource-compatibility",
       "action": "publisher.read",
-      "resource_type": "release",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "release",
+          "id": "release:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0"
+          }
+        },
+        "action": "publisher.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-publisher-read-capability",
       "kind": "action-resource-compatibility",
       "action": "publisher.read",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "publisher.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-publisher-read-registry",
       "kind": "action-resource-compatibility",
       "action": "publisher.read",
-      "resource_type": "registry",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "registry",
+          "id": "registry:conformance",
+          "coordinates": {
+            "registry_id": "registry:primary"
+          }
+        },
+        "action": "publisher.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-publisher-read-execution_target",
       "kind": "action-resource-compatibility",
       "action": "publisher.read",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "publisher.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-publisher-manage-factory",
       "kind": "action-resource-compatibility",
       "action": "publisher.manage",
-      "resource_type": "factory",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "factory",
+          "id": "factory:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments"
+          }
+        },
+        "action": "publisher.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-publisher-manage-release",
       "kind": "action-resource-compatibility",
       "action": "publisher.manage",
-      "resource_type": "release",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "release",
+          "id": "release:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0"
+          }
+        },
+        "action": "publisher.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-publisher-manage-capability",
       "kind": "action-resource-compatibility",
       "action": "publisher.manage",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "publisher.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-publisher-manage-registry",
       "kind": "action-resource-compatibility",
       "action": "publisher.manage",
-      "resource_type": "registry",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "registry",
+          "id": "registry:conformance",
+          "coordinates": {
+            "registry_id": "registry:primary"
+          }
+        },
+        "action": "publisher.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-publisher-manage-execution_target",
       "kind": "action-resource-compatibility",
       "action": "publisher.manage",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "publisher.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-publisher-key-manage-factory",
       "kind": "action-resource-compatibility",
       "action": "publisher.key.manage",
-      "resource_type": "factory",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "factory",
+          "id": "factory:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments"
+          }
+        },
+        "action": "publisher.key.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-publisher-key-manage-release",
       "kind": "action-resource-compatibility",
       "action": "publisher.key.manage",
-      "resource_type": "release",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "release",
+          "id": "release:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0"
+          }
+        },
+        "action": "publisher.key.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-publisher-key-manage-capability",
       "kind": "action-resource-compatibility",
       "action": "publisher.key.manage",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "publisher.key.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-publisher-key-manage-registry",
       "kind": "action-resource-compatibility",
       "action": "publisher.key.manage",
-      "resource_type": "registry",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "registry",
+          "id": "registry:conformance",
+          "coordinates": {
+            "registry_id": "registry:primary"
+          }
+        },
+        "action": "publisher.key.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-publisher-key-manage-execution_target",
       "kind": "action-resource-compatibility",
       "action": "publisher.key.manage",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "publisher.key.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-discover-publisher",
       "kind": "action-resource-compatibility",
       "action": "factory.discover",
-      "resource_type": "publisher",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "publisher",
+          "id": "publisher:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme"
+          }
+        },
+        "action": "factory.discover",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-discover-release",
       "kind": "action-resource-compatibility",
       "action": "factory.discover",
-      "resource_type": "release",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "release",
+          "id": "release:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0"
+          }
+        },
+        "action": "factory.discover",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-discover-capability",
       "kind": "action-resource-compatibility",
       "action": "factory.discover",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "factory.discover",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-discover-registry",
       "kind": "action-resource-compatibility",
       "action": "factory.discover",
-      "resource_type": "registry",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "registry",
+          "id": "registry:conformance",
+          "coordinates": {
+            "registry_id": "registry:primary"
+          }
+        },
+        "action": "factory.discover",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-discover-execution_target",
       "kind": "action-resource-compatibility",
       "action": "factory.discover",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "factory.discover",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-read-publisher",
       "kind": "action-resource-compatibility",
       "action": "factory.read",
-      "resource_type": "publisher",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "publisher",
+          "id": "publisher:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme"
+          }
+        },
+        "action": "factory.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-read-release",
       "kind": "action-resource-compatibility",
       "action": "factory.read",
-      "resource_type": "release",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "release",
+          "id": "release:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0"
+          }
+        },
+        "action": "factory.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-read-capability",
       "kind": "action-resource-compatibility",
       "action": "factory.read",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "factory.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-read-registry",
       "kind": "action-resource-compatibility",
       "action": "factory.read",
-      "resource_type": "registry",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "registry",
+          "id": "registry:conformance",
+          "coordinates": {
+            "registry_id": "registry:primary"
+          }
+        },
+        "action": "factory.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-read-execution_target",
       "kind": "action-resource-compatibility",
       "action": "factory.read",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "factory.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-register-publisher",
       "kind": "action-resource-compatibility",
       "action": "factory.register",
-      "resource_type": "publisher",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "publisher",
+          "id": "publisher:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme"
+          }
+        },
+        "action": "factory.register",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-register-release",
       "kind": "action-resource-compatibility",
       "action": "factory.register",
-      "resource_type": "release",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "release",
+          "id": "release:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0"
+          }
+        },
+        "action": "factory.register",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-register-capability",
       "kind": "action-resource-compatibility",
       "action": "factory.register",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "factory.register",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-register-registry",
       "kind": "action-resource-compatibility",
       "action": "factory.register",
-      "resource_type": "registry",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "registry",
+          "id": "registry:conformance",
+          "coordinates": {
+            "registry_id": "registry:primary"
+          }
+        },
+        "action": "factory.register",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-register-execution_target",
       "kind": "action-resource-compatibility",
       "action": "factory.register",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "factory.register",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-publish-publisher",
       "kind": "action-resource-compatibility",
       "action": "factory.publish",
-      "resource_type": "publisher",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "publisher",
+          "id": "publisher:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme"
+          }
+        },
+        "action": "factory.publish",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-publish-release",
       "kind": "action-resource-compatibility",
       "action": "factory.publish",
-      "resource_type": "release",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "release",
+          "id": "release:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0"
+          }
+        },
+        "action": "factory.publish",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-publish-capability",
       "kind": "action-resource-compatibility",
       "action": "factory.publish",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "factory.publish",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-publish-registry",
       "kind": "action-resource-compatibility",
       "action": "factory.publish",
-      "resource_type": "registry",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "registry",
+          "id": "registry:conformance",
+          "coordinates": {
+            "registry_id": "registry:primary"
+          }
+        },
+        "action": "factory.publish",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-factory-publish-execution_target",
       "kind": "action-resource-compatibility",
       "action": "factory.publish",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "factory.publish",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-read-publisher",
       "kind": "action-resource-compatibility",
       "action": "release.read",
-      "resource_type": "publisher",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "publisher",
+          "id": "publisher:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme"
+          }
+        },
+        "action": "release.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-read-factory",
       "kind": "action-resource-compatibility",
       "action": "release.read",
-      "resource_type": "factory",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "factory",
+          "id": "factory:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments"
+          }
+        },
+        "action": "release.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-read-capability",
       "kind": "action-resource-compatibility",
       "action": "release.read",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "release.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-read-registry",
       "kind": "action-resource-compatibility",
       "action": "release.read",
-      "resource_type": "registry",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "registry",
+          "id": "registry:conformance",
+          "coordinates": {
+            "registry_id": "registry:primary"
+          }
+        },
+        "action": "release.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-read-execution_target",
       "kind": "action-resource-compatibility",
       "action": "release.read",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "release.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-publish-publisher",
       "kind": "action-resource-compatibility",
       "action": "release.publish",
-      "resource_type": "publisher",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "publisher",
+          "id": "publisher:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme"
+          }
+        },
+        "action": "release.publish",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-publish-factory",
       "kind": "action-resource-compatibility",
       "action": "release.publish",
-      "resource_type": "factory",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "factory",
+          "id": "factory:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments"
+          }
+        },
+        "action": "release.publish",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-publish-capability",
       "kind": "action-resource-compatibility",
       "action": "release.publish",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "release.publish",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-publish-registry",
       "kind": "action-resource-compatibility",
       "action": "release.publish",
-      "resource_type": "registry",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "registry",
+          "id": "registry:conformance",
+          "coordinates": {
+            "registry_id": "registry:primary"
+          }
+        },
+        "action": "release.publish",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-publish-execution_target",
       "kind": "action-resource-compatibility",
       "action": "release.publish",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "release.publish",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-suspend-publisher",
       "kind": "action-resource-compatibility",
       "action": "release.suspend",
-      "resource_type": "publisher",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "publisher",
+          "id": "publisher:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme"
+          }
+        },
+        "action": "release.suspend",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-suspend-factory",
       "kind": "action-resource-compatibility",
       "action": "release.suspend",
-      "resource_type": "factory",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "factory",
+          "id": "factory:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments"
+          }
+        },
+        "action": "release.suspend",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-suspend-capability",
       "kind": "action-resource-compatibility",
       "action": "release.suspend",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "release.suspend",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-suspend-registry",
       "kind": "action-resource-compatibility",
       "action": "release.suspend",
-      "resource_type": "registry",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "registry",
+          "id": "registry:conformance",
+          "coordinates": {
+            "registry_id": "registry:primary"
+          }
+        },
+        "action": "release.suspend",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-suspend-execution_target",
       "kind": "action-resource-compatibility",
       "action": "release.suspend",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "release.suspend",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-deprecate-publisher",
       "kind": "action-resource-compatibility",
       "action": "release.deprecate",
-      "resource_type": "publisher",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "publisher",
+          "id": "publisher:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme"
+          }
+        },
+        "action": "release.deprecate",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-deprecate-factory",
       "kind": "action-resource-compatibility",
       "action": "release.deprecate",
-      "resource_type": "factory",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "factory",
+          "id": "factory:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments"
+          }
+        },
+        "action": "release.deprecate",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-deprecate-capability",
       "kind": "action-resource-compatibility",
       "action": "release.deprecate",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "release.deprecate",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-deprecate-registry",
       "kind": "action-resource-compatibility",
       "action": "release.deprecate",
-      "resource_type": "registry",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "registry",
+          "id": "registry:conformance",
+          "coordinates": {
+            "registry_id": "registry:primary"
+          }
+        },
+        "action": "release.deprecate",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-deprecate-execution_target",
       "kind": "action-resource-compatibility",
       "action": "release.deprecate",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "release.deprecate",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-revoke-publisher",
       "kind": "action-resource-compatibility",
       "action": "release.revoke",
-      "resource_type": "publisher",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "publisher",
+          "id": "publisher:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme"
+          }
+        },
+        "action": "release.revoke",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-revoke-factory",
       "kind": "action-resource-compatibility",
       "action": "release.revoke",
-      "resource_type": "factory",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "factory",
+          "id": "factory:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments"
+          }
+        },
+        "action": "release.revoke",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-revoke-capability",
       "kind": "action-resource-compatibility",
       "action": "release.revoke",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "release.revoke",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-revoke-registry",
       "kind": "action-resource-compatibility",
       "action": "release.revoke",
-      "resource_type": "registry",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "registry",
+          "id": "registry:conformance",
+          "coordinates": {
+            "registry_id": "registry:primary"
+          }
+        },
+        "action": "release.revoke",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-revoke-execution_target",
       "kind": "action-resource-compatibility",
       "action": "release.revoke",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "release.revoke",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-archive-publisher",
       "kind": "action-resource-compatibility",
       "action": "release.archive",
-      "resource_type": "publisher",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "publisher",
+          "id": "publisher:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme"
+          }
+        },
+        "action": "release.archive",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-archive-factory",
       "kind": "action-resource-compatibility",
       "action": "release.archive",
-      "resource_type": "factory",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "factory",
+          "id": "factory:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments"
+          }
+        },
+        "action": "release.archive",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-archive-capability",
       "kind": "action-resource-compatibility",
       "action": "release.archive",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "release.archive",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-archive-registry",
       "kind": "action-resource-compatibility",
       "action": "release.archive",
-      "resource_type": "registry",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "registry",
+          "id": "registry:conformance",
+          "coordinates": {
+            "registry_id": "registry:primary"
+          }
+        },
+        "action": "release.archive",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-release-archive-execution_target",
       "kind": "action-resource-compatibility",
       "action": "release.archive",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "release.archive",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-capability-invoke-publisher",
       "kind": "action-resource-compatibility",
       "action": "capability.invoke",
-      "resource_type": "publisher",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "publisher",
+          "id": "publisher:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme"
+          }
+        },
+        "action": "capability.invoke",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-capability-invoke-factory",
       "kind": "action-resource-compatibility",
       "action": "capability.invoke",
-      "resource_type": "factory",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "factory",
+          "id": "factory:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments"
+          }
+        },
+        "action": "capability.invoke",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-capability-invoke-release",
       "kind": "action-resource-compatibility",
       "action": "capability.invoke",
-      "resource_type": "release",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "release",
+          "id": "release:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0"
+          }
+        },
+        "action": "capability.invoke",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-capability-invoke-registry",
       "kind": "action-resource-compatibility",
       "action": "capability.invoke",
-      "resource_type": "registry",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "registry",
+          "id": "registry:conformance",
+          "coordinates": {
+            "registry_id": "registry:primary"
+          }
+        },
+        "action": "capability.invoke",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-capability-invoke-execution_target",
       "kind": "action-resource-compatibility",
       "action": "capability.invoke",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "capability.invoke",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-registry-policy-read-publisher",
       "kind": "action-resource-compatibility",
       "action": "registry.policy.read",
-      "resource_type": "publisher",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "publisher",
+          "id": "publisher:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme"
+          }
+        },
+        "action": "registry.policy.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-registry-policy-read-factory",
       "kind": "action-resource-compatibility",
       "action": "registry.policy.read",
-      "resource_type": "factory",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "factory",
+          "id": "factory:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments"
+          }
+        },
+        "action": "registry.policy.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-registry-policy-read-release",
       "kind": "action-resource-compatibility",
       "action": "registry.policy.read",
-      "resource_type": "release",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "release",
+          "id": "release:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0"
+          }
+        },
+        "action": "registry.policy.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-registry-policy-read-capability",
       "kind": "action-resource-compatibility",
       "action": "registry.policy.read",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "registry.policy.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-registry-policy-read-execution_target",
       "kind": "action-resource-compatibility",
       "action": "registry.policy.read",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "registry.policy.read",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-registry-policy-manage-publisher",
       "kind": "action-resource-compatibility",
       "action": "registry.policy.manage",
-      "resource_type": "publisher",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "publisher",
+          "id": "publisher:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme"
+          }
+        },
+        "action": "registry.policy.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-registry-policy-manage-factory",
       "kind": "action-resource-compatibility",
       "action": "registry.policy.manage",
-      "resource_type": "factory",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "factory",
+          "id": "factory:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments"
+          }
+        },
+        "action": "registry.policy.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-registry-policy-manage-release",
       "kind": "action-resource-compatibility",
       "action": "registry.policy.manage",
-      "resource_type": "release",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "release",
+          "id": "release:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0"
+          }
+        },
+        "action": "registry.policy.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-registry-policy-manage-capability",
       "kind": "action-resource-compatibility",
       "action": "registry.policy.manage",
-      "resource_type": "capability",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "capability",
+          "id": "capability:conformance",
+          "coordinates": {
+            "publisher_id": "urn:example:publishers:acme",
+            "factory_id": "payments",
+            "release_version": "1.0.0",
+            "capability_id": "charge"
+          }
+        },
+        "action": "registry.policy.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "pair-registry-policy-manage-execution_target",
       "kind": "action-resource-compatibility",
       "action": "registry.policy.manage",
-      "resource_type": "execution_target",
-      "expected": "invalid"
+      "expected": {
+        "classification": "invalid-input",
+        "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
+      },
+      "evaluation_request": {
+        "subject": {
+          "type": "user",
+          "id": "user:alice",
+          "attributes": {}
+        },
+        "resource": {
+          "type": "execution_target",
+          "id": "execution_target:conformance",
+          "coordinates": {
+            "execution_target_id": "target:prod"
+          }
+        },
+        "action": "registry.policy.manage",
+        "context": {
+          "evaluation_time": "2026-11-16T12:00:00Z",
+          "attributes": {}
+        },
+        "policies": [
+          {
+            "policy_profile": "efs-policy-v1",
+            "policy_id": "p1",
+            "policy_version": "1",
+            "digest": {
+              "profile_id": "efs-policy-jcs-sha256-v1",
+              "algorithm": "sha-256",
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "rules": [
+              {
+                "rule_id": "r1",
+                "effect": "permit",
+                "subject": {
+                  "type": "user",
+                  "id": "user:alice"
+                },
+                "resource": {
+                  "type": "factory",
+                  "id": "factory:acme:payments"
+                },
+                "actions": [
+                  "factory.publish"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "selector-subject-wildcard",
@@ -1071,7 +5148,10 @@
     {
       "id": "duplicate-rule-id",
       "kind": "semantic-policy",
-      "expected": "semantic-invalid",
+      "expected": {
+        "classification": "semantic-invalid",
+        "reason_code": "DUPLICATE_RULE_ID"
+      },
       "policy": {
         "policy_profile": "efs-policy-v1",
         "policy_id": "p1",
