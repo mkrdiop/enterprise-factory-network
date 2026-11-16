@@ -145,20 +145,21 @@ def validate_contract_payload(
     payload,
     *,
     schema_resources: Mapping[str, dict] | None = None,
+    error_code: str | None = None,
 ) -> dict:
-    """Validate one input/output payload against one exact manifest contract.
+    """Validate one input/output/error-details payload against an exact contract.
 
     The caller must obtain the manifest from a verified immutable registry
     release. This function compares every coordinate exactly and never queries
     a registry, selects a release, retrieves a URI, or falls back to latest.
     """
     diagnostics: list[PayloadDiagnostic] = []
-    if direction not in {"inputs", "outputs"}:
+    if direction not in {"inputs", "outputs", "errors"}:
         return {
             "valid": False,
             "diagnostics": [PayloadDiagnostic(
                 "EFS_CONTRACT_DIRECTION_INVALID", "payload", "",
-                "Direction must be exactly 'inputs' or 'outputs'.",
+                "Direction must be exactly 'inputs', 'outputs' or 'errors'.",
             ).as_dict()],
         }
 
@@ -215,14 +216,36 @@ def validate_contract_payload(
         ))
         return {"valid": False, "diagnostics": [item.as_dict() for item in diagnostics]}
 
-    schema = contract.get(direction)
-    if not isinstance(schema, dict):
-        diagnostics.append(PayloadDiagnostic(
-            "EFS_CONTRACT_SCHEMA_MISSING", "payload",
-            f"/capabilities/{index}/contract/{direction}",
-            "Selected capability contract has no object schema for this direction.",
-        ))
-        return {"valid": False, "diagnostics": [item.as_dict() for item in diagnostics]}
+    if direction == "errors":
+        declared_errors = contract.get("errors", [])
+        matches = [
+            item for item in declared_errors
+            if isinstance(item, dict) and item.get("code") == error_code
+        ]
+        if not error_code or len(matches) != 1:
+            diagnostics.append(PayloadDiagnostic(
+                "EFS_CONTRACT_ERROR_CODE_UNDECLARED", "payload",
+                f"/capabilities/{index}/contract/errors",
+                "Error details require exactly one declared error code.",
+            ))
+            return {"valid": False, "diagnostics": [item.as_dict() for item in diagnostics]}
+        schema = matches[0].get("schema")
+        if not isinstance(schema, dict):
+            diagnostics.append(PayloadDiagnostic(
+                "EFS_CONTRACT_SCHEMA_MISSING", "payload",
+                f"/capabilities/{index}/contract/errors",
+                "Declared error has no structured details schema.",
+            ))
+            return {"valid": False, "diagnostics": [item.as_dict() for item in diagnostics]}
+    else:
+        schema = contract.get(direction)
+        if not isinstance(schema, dict):
+            diagnostics.append(PayloadDiagnostic(
+                "EFS_CONTRACT_SCHEMA_MISSING", "payload",
+                f"/capabilities/{index}/contract/{direction}",
+                "Selected capability contract has no object schema for this direction.",
+            ))
+            return {"valid": False, "diagnostics": [item.as_dict() for item in diagnostics]}
 
     try:
         Draft202012Validator.check_schema(schema)
