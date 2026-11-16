@@ -11,7 +11,7 @@ import json
 import re
 from copy import deepcopy
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import Enum
 from pathlib import Path
 from typing import Protocol, runtime_checkable
@@ -53,6 +53,7 @@ SCHEMA_PATH = (
 
 class SignatureCode(str, Enum):
     VERIFIED = "EFS_SIGNATURE_VERIFIED"
+    EVALUATED = "EFS_SIGNATURES_EVALUATED"
     ENVELOPE_INVALID = "EFS_SIGNATURE_ENVELOPE_INVALID"
     ENVELOPE_ENCODING_INVALID = "EFS_SIGNATURE_ENCODING_INVALID"
     UNSUPPORTED_PROFILE = "EFS_SIGNATURE_UNSUPPORTED_PROFILE"
@@ -163,25 +164,17 @@ class SignatureVerificationReport:
     signers: tuple[SignerVerification, ...] = ()
 
     @property
-    def cryptographic_valid(self) -> bool:
+    def all_signers_cryptographically_valid(self) -> bool:
+        """Diagnostic aggregate only; not a PSI-50 signer-selection rule."""
         return bool(self.signers) and all(
             item.cryptographic_valid is True for item in self.signers
         )
 
     @property
     def all_keys_trusted(self) -> bool:
+        """Diagnostic aggregate only; policy decides which signer identities matter."""
         return bool(self.signers) and all(
             item.trust_status is KeyTrustStatus.TRUSTED for item in self.signers
-        )
-
-    @property
-    def trusted_signature_evidence(self) -> bool:
-        """Cryptographic + resolver trust evidence; never an authorization grant."""
-        return (
-            self.digest_valid
-            and self.cryptographic_valid
-            and self.all_keys_trusted
-            and self.code is SignatureCode.VERIFIED
         )
 
 
@@ -465,6 +458,19 @@ def _valid_resolution_metadata(
     )
 
 
+def _trusted_interval_is_current(
+    resolution: KeyResolution, verification_time: datetime
+) -> bool:
+    """A resolver may not call a not-yet-valid or expired key trusted."""
+    valid_from = resolution.valid_from
+    valid_until = resolution.valid_until
+    return (
+        isinstance(valid_from, datetime)
+        and valid_from <= verification_time
+        and (valid_until is None or valid_until > verification_time)
+    )
+
+
 def _key_result(resolver: PublisherKeyResolver, publisher_id: str, key_id: str) -> KeyResolution:
     try:
         result = resolver.resolve(publisher_id, key_id, "Ed25519", KEY_USAGE)
@@ -519,6 +525,7 @@ def verify_release_signature(
 
     results: list[SignerVerification] = []
     publisher_id = expected_statement["publisher_id"]
+    verification_time = datetime.now(UTC)
     for entry in sorted(
         envelope["signatures"], key=lambda item: item["key_id"].encode("ascii")
     ):
@@ -567,6 +574,10 @@ def verify_release_signature(
             not _valid_resolution_metadata(resolution, publisher_id, key_id)
             or not isinstance(resolution.public_key, bytes)
             or len(resolution.public_key) != 32
+            or (
+                trust is KeyTrustStatus.TRUSTED
+                and not _trusted_interval_is_current(resolution, verification_time)
+            )
         ):
             results.append(SignerVerification(
                 key_id, None, KeyTrustStatus.BINDING_MISMATCH,
@@ -603,16 +614,10 @@ def verify_release_signature(
             key_id, crypto_valid, trust, code, resolution.evidence_version
         ))
 
-    if results and all(item.code is SignatureCode.VERIFIED for item in results):
-        overall = SignatureCode.VERIFIED
-    else:
-        # Preserve per-signer typed outcomes; overall is the first failure in
-        # envelope order, not a quorum or "any signer" authorization rule.
-        overall = next(
-            (item.code for item in results if item.code is not SignatureCode.VERIFIED),
-            SignatureCode.ENVELOPE_INVALID,
-        )
-    return SignatureVerificationReport(overall, True, tuple(results))
+    # EVALUATED means the envelope and release binding were valid and every
+    # signer entry received an independent result. It deliberately says
+    # nothing about which signer(s) a consuming policy requires.
+    return SignatureVerificationReport(SignatureCode.EVALUATED, True, tuple(results))
 
 
 class EFSReleaseSignatureVerifier:
