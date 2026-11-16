@@ -33,15 +33,12 @@ def test_schema_is_draft_2020_12():
     Draft202012Validator.check_schema(SCHEMA)
 
 
-def test_unknown_core_field_remains_open_pending_governance():
+def test_unknown_core_field_remains_open_pending_governance(tmp_path):
     doc = load_json(ROOT / "fixtures/valid/manifest-minimal.json")
     doc["futureCoreField"] = {"opaque": True}
-    path = ROOT / "fixtures/extensions/manifest-unknown-core-field.json"
+    path = tmp_path / "unknown-core-field.json"
     path.write_text(json.dumps(doc), encoding="utf-8")
-    try:
-        assert validate_report(path, SCHEMA_PATH)["valid"]
-    finally:
-        path.unlink(missing_ok=True)
+    assert validate_report(path, SCHEMA_PATH)["valid"]
 
 
 def test_namespaced_extension_payload_is_accepted():
@@ -74,6 +71,12 @@ def test_date_time_requires_valid_rfc3339_timestamp_with_timezone(tmp_path, bad_
     report = validate_report(path, SCHEMA_PATH)
     assert not report["valid"]
     assert any(d["path"] == "/release/createdAt" for d in report["diagnostics"])
+
+
+@pytest.mark.parametrize("fixture", sorted((ROOT / "fixtures/boundary").glob("*.json")))
+def test_boundary_fixture_corpus(fixture):
+    report = validate_report(fixture, SCHEMA_PATH)
+    assert report["valid"], (fixture.name, report["diagnostics"])
 
 
 def test_offset_datetime_is_accepted():
