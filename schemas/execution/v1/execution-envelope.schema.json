@@ -1,0 +1,391 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.enterprise-factory.example/execution/v1/envelope.schema.json",
+  "title": "EFS v1 Shared Execution Envelope",
+  "description": "Transport-neutral execution message schema. Payloads are validated separately against the exact capability contract by the shared PSI-43 validator.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/request"
+    },
+    {
+      "$ref": "#/$defs/event"
+    },
+    {
+      "$ref": "#/$defs/accepted"
+    },
+    {
+      "$ref": "#/$defs/progress"
+    },
+    {
+      "$ref": "#/$defs/result"
+    },
+    {
+      "$ref": "#/$defs/error"
+    }
+  ],
+  "$defs": {
+    "digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "algorithm",
+        "value"
+      ],
+      "properties": {
+        "profile": {
+          "const": "efs-jcs-sha256-v1"
+        },
+        "algorithm": {
+          "const": "SHA-256"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{43}$"
+        }
+      }
+    },
+    "contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uri",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "publisherId",
+        "factoryId",
+        "releaseVersion",
+        "releaseDigest",
+        "capabilityId",
+        "contract",
+        "executionProfileId",
+        "executionMode"
+      ],
+      "properties": {
+        "publisherId": {
+          "type": "string",
+          "format": "uri",
+          "minLength": 1
+        },
+        "factoryId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "releaseVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "releaseDigest": {
+          "$ref": "#/$defs/digest"
+        },
+        "capabilityId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contract": {
+          "$ref": "#/$defs/contract"
+        },
+        "executionProfileId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "executionMode": {
+          "enum": [
+            "sync",
+            "async",
+            "streaming",
+            "event"
+          ]
+        }
+      }
+    },
+    "base": {
+      "type": "object",
+      "required": [
+        "envelopeVersion",
+        "messageType",
+        "messageId",
+        "invocationId",
+        "context",
+        "correlationId",
+        "occurredAt"
+      ],
+      "properties": {
+        "envelopeVersion": {
+          "const": "1.0"
+        },
+        "messageType": {
+          "type": "string"
+        },
+        "messageId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "invocationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "correlationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "causationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "occurredAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "request": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "required": [
+            "payload"
+          ],
+          "properties": {
+            "messageType": {
+              "const": "request"
+            },
+            "context": {
+              "properties": {
+                "executionMode": {
+                  "enum": [
+                    "sync",
+                    "async",
+                    "streaming"
+                  ]
+                }
+              }
+            },
+            "payload": {
+              "type": "object"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "event": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "required": [
+            "payload"
+          ],
+          "properties": {
+            "messageType": {
+              "const": "event"
+            },
+            "context": {
+              "properties": {
+                "executionMode": {
+                  "const": "event"
+                }
+              }
+            },
+            "payload": {
+              "type": "object"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "accepted": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "required": [
+            "causationId",
+            "disposition"
+          ],
+          "properties": {
+            "messageType": {
+              "const": "accepted"
+            },
+            "context": {
+              "properties": {
+                "executionMode": {
+                  "enum": [
+                    "async",
+                    "streaming"
+                  ]
+                }
+              }
+            },
+            "disposition": {
+              "enum": [
+                "accepted",
+                "queued"
+              ]
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "progress": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "required": [
+            "causationId",
+            "sequence",
+            "eventKind"
+          ],
+          "properties": {
+            "messageType": {
+              "const": "progress"
+            },
+            "context": {
+              "properties": {
+                "executionMode": {
+                  "const": "streaming"
+                }
+              }
+            },
+            "sequence": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "eventKind": {
+              "enum": [
+                "progress",
+                "data"
+              ]
+            },
+            "payload": {
+              "type": "object"
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "eventKind": {
+                "const": "data"
+              }
+            },
+            "required": [
+              "eventKind"
+            ]
+          },
+          "then": {
+            "required": [
+              "payload"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "payload"
+              ]
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "result": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "required": [
+            "causationId",
+            "payload"
+          ],
+          "properties": {
+            "messageType": {
+              "const": "result"
+            },
+            "payload": {
+              "type": "object"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "error": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "type": "object",
+          "required": [
+            "causationId",
+            "error"
+          ],
+          "properties": {
+            "messageType": {
+              "const": "error"
+            },
+            "error": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "code"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,127}$"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}
