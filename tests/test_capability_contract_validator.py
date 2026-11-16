@@ -3,9 +3,12 @@ import copy
 import json
 from pathlib import Path
 
-from scripts.validate_manifest import validate_report
 from registry.capability_contracts import ContractCoordinate, validate_contract_payload
-from registry.publication_service import ManifestValidationError, RegistryPublicationService
+from registry.publication_service import (
+    ManifestValidationError,
+    RegistryPublicationService,
+)
+from scripts.validate_manifest import validate_report
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = ROOT / "schemas/efs/v1/factory-manifest.schema.json"
