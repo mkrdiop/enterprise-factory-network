@@ -1,0 +1,105 @@
+{
+  "efsVersion": "1.0.0",
+  "publisher": {
+    "id": "urn:example:publishers:acme",
+    "name": "Acme Example"
+  },
+  "factory": {
+    "id": "customer-support",
+    "name": "Customer Support Factory"
+  },
+  "release": {
+    "version": "1.2.0",
+    "digest": {
+      "profile": "efs-jcs-sha256-v1",
+      "algorithm": "SHA-256",
+      "value": "hROVecZSWoQuNQ3GSNaxPx73s9m8-PtehAKXaHG7f2c"
+    },
+    "signature": {
+      "algorithm": "Ed25519",
+      "keyId": "release-2026-01",
+      "value": "not-allowed"
+    }
+  },
+  "capabilities": [
+    {
+      "id": "answer-customer",
+      "name": "Answer customer",
+      "contract": {
+        "id": "https://schemas.example.org/contracts/customer-answer",
+        "version": "1.0.0",
+        "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+        "inputs": {
+          "type": "object",
+          "properties": {
+            "question": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "question"
+          ]
+        },
+        "outputs": {
+          "type": "object",
+          "properties": {
+            "answer": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "answer"
+          ]
+        },
+        "errors": [
+          {
+            "code": "INVALID_REQUEST",
+            "description": "Invalid request"
+          }
+        ],
+        "guarantees": {}
+      },
+      "endpoints": [
+        {
+          "id": "invoke",
+          "type": "invocation",
+          "protocol": "example-protocol"
+        }
+      ],
+      "executionProfiles": [
+        "standard"
+      ]
+    }
+  ],
+  "execution": {
+    "source": "manifest",
+    "profiles": [
+      {
+        "id": "standard",
+        "modes": [
+          "sync",
+          "async"
+        ],
+        "guarantees": {
+          "idempotency": "supported"
+        }
+      }
+    ]
+  },
+  "dependencies": [],
+  "policies": {
+    "references": [
+      {
+        "id": "https://policy.example.org/access",
+        "profile": "https://profiles.example.org/policy/access/v1",
+        "version": "1.0.0",
+        "digest": {
+          "algorithm": "SHA-256",
+          "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        },
+        "uri": "https://policy.example.org/artifacts/access/1.0.0",
+        "enforcement": "mandatory"
+      }
+    ]
+  }
+}

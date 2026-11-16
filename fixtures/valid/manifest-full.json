@@ -15,14 +15,7 @@
       "algorithm": "SHA-256",
       "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
-    "createdAt": "2026-11-16T05:30:00Z",
-    "signature": {
-      "algorithm": "Ed25519",
-      "keyId": "urn:example:keys:acme-1",
-      "value": "c2lnbmF0dXJl",
-      "signedAt": "2026-11-16T05:31:00Z",
-      "profile": "example-signature-v1"
-    }
+    "createdAt": "2026-11-16T05:30:00Z"
   },
   "capabilities": [
     {
