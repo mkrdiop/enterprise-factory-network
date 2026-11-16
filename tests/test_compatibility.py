@@ -3,9 +3,18 @@ import json
 import pytest
 
 from efs.compatibility import (
-    CompatibilityDimension, CompatibilityError, ConsumerProfile, DimensionAssessment,
-    EvidenceReference, Outcome, ReleaseCoordinates, assess_contract_change,
-    assess_governance, assess_profile_mapping, assess_specification, evaluate_compatibility,
+    CompatibilityDimension,
+    CompatibilityError,
+    ConsumerProfile,
+    DimensionAssessment,
+    EvidenceReference,
+    Outcome,
+    ReleaseCoordinates,
+    assess_contract_change,
+    assess_governance,
+    assess_profile_mapping,
+    assess_specification,
+    evaluate_compatibility,
 )
 
 
