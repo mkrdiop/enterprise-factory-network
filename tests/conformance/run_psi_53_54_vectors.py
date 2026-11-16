@@ -84,6 +84,8 @@ def psi53(data):
  side=commit_data["side_effect"]
  if commit_data["operation_kind"]=="external_effect":
   execution=commit_data["execution_state"]
+  if not (side["intent_durable"] and side["idempotency_key"] and side["operation_id"] and side["intent_record_id"] and side["audit_record_id"] and side["payload_fingerprint"].startswith("sha256:") and len(side["payload_fingerprint"])==50) or execution is None:
+   return "rejected","EXECUTION_INTENT_NOT_DURABLE"
   request=execution["request_event"]
   initial=execution["initial_snapshot"]
   current=execution["current_snapshot"]
