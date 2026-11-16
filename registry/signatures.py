@@ -509,6 +509,20 @@ def verify_release_signature(
         if trust is KeyTrustStatus.BINDING_MISMATCH:
             results.append(SignerVerification(key_id, None, trust, SignatureCode.KEY_BINDING_MISMATCH))
             continue
+        if trust in {
+            KeyTrustStatus.NOT_TRUSTED,
+            KeyTrustStatus.EXPIRED,
+            KeyTrustStatus.REVOKED,
+        } and resolution.public_key is None:
+            trust_code = {
+                KeyTrustStatus.NOT_TRUSTED: SignatureCode.KEY_NOT_TRUSTED,
+                KeyTrustStatus.EXPIRED: SignatureCode.KEY_EXPIRED,
+                KeyTrustStatus.REVOKED: SignatureCode.KEY_REVOKED,
+            }[trust]
+            results.append(SignerVerification(
+                key_id, None, trust, trust_code, resolution.evidence_version
+            ))
+            continue
 
         if (
             resolution.publisher_id != publisher_id
