@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.enterprise-factory.network/passport/v1/factory-passport.schema.json",
+  "title": "Enterprise Factory Factory Passport",
+  "description": "Deterministic derived read model of one exact registry-verified EFS release. Not an identity, release, trust, certification or authorization authority.",
+  "type": "object",
+  "required": ["passportVersion", "source", "publisher", "factory", "release", "capabilities", "execution", "dependencies", "policies", "assurance", "provenance"],
+  "properties": {
+    "passportVersion": {"const": "1.0"},
+    "source": {
+      "type": "object",
+      "required": ["efsVersion", "publisherId", "factoryId", "releaseVersion", "digest", "registry"],
+      "properties": {
+        "efsVersion": {"type": "string"},
+        "publisherId": {"type": "string"},
+        "factoryId": {"type": "string"},
+        "releaseVersion": {"type": "string"},
+        "digest": {"$ref": "#/$defs/digest"},
+        "registry": {
+          "type": "object",
+          "required": ["releaseRecordId", "publishedAt", "artifactByteLength"],
+          "properties": {
+            "releaseRecordId": {"type": "string", "format": "uuid"},
+            "publishedAt": {"type": "string", "format": "date-time"},
+            "artifactByteLength": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "publisher": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {"id": {"type": "string"}, "name": {"type": "string"}},
+      "additionalProperties": false
+    },
+    "factory": {"$ref": "https://schemas.enterprise-factory.network/efs/v1/factory-manifest.schema.json#/$defs/factory"},
+    "release": {
+      "type": "object",
+      "properties": {"createdAt": {"type": "string", "format": "date-time"}},
+      "additionalProperties": false
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {"$ref": "https://schemas.enterprise-factory.network/efs/v1/factory-manifest.schema.json#/$defs/capability"}
+    },
+    "execution": {"$ref": "https://schemas.enterprise-factory.network/efs/v1/factory-manifest.schema.json#/$defs/execution"},
+    "dependencies": {
+      "type": "array",
+      "items": {"$ref": "https://schemas.enterprise-factory.network/efs/v1/factory-manifest.schema.json#/$defs/dependency"}
+    },
+    "policies": {"$ref": "https://schemas.enterprise-factory.network/efs/v1/factory-manifest.schema.json#/$defs/policies"},
+    "extensions": {"type": "object"},
+    "assurance": {
+      "type": "object",
+      "required": ["artifactIntegrity", "publisherAuthentication", "publisherTrust", "signatureVerification", "authorization", "signatureMaterial"],
+      "properties": {
+        "artifactIntegrity": {"const": "verified"},
+        "publisherAuthentication": {"const": "not_evaluated"},
+        "publisherTrust": {"const": "not_evaluated"},
+        "signatureVerification": {"const": "not_evaluated"},
+        "authorization": {"const": "not_evaluated"},
+        "signatureMaterial": {"const": "not_part_of_digest_artifact"}
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["target", "source", "sourcePointer", "rule"],
+        "properties": {
+          "target": {"type": "string", "pattern": "^/"},
+          "source": {"enum": ["manifest", "registry"]},
+          "sourcePointer": {"type": "string", "pattern": "^/"},
+          "rule": {"const": "copy"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "digest": {
+      "type": "object",
+      "required": ["profile", "algorithm", "value"],
+      "properties": {
+        "profile": {"const": "efs-jcs-sha256-v1"},
+        "algorithm": {"const": "SHA-256"},
+        "value": {"type": "string", "pattern": "^[A-Za-z0-9_-]{43}$"}
+      },
+      "additionalProperties": false
+    }
+  }
+}
