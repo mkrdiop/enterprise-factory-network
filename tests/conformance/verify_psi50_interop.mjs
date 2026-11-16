@@ -26,14 +26,40 @@ function applyPatch(document, operations){
  }
  return root;
 }
+function classifyMutation(vector, base) {
+ const document=vector.target==="manifest"?JSON.parse(JSON.stringify(base.manifest)):vector.target==="envelope"?JSON.parse(JSON.stringify(base.envelope)):JSON.parse(JSON.stringify(base.resolver));
+ applyPatch(document,vector.patch);
+ if(vector.target==="manifest") return Object.hasOwn(document.release,"signature")?"EFS_SCHEMA_CONSTRAINT":"VALID";
+ const envelope=vector.target==="envelope"?document:base.envelope;
+ const resolver=vector.target==="resolver"?document:base.resolver;
+ const statement=envelope.statement, signer=envelope.signatures[0];
+ if(envelope.profile_id!=="efs-ed25519-jcs-v1")return "EFS_SIGNATURE_UNSUPPORTED_PROFILE";
+ const seen=new Set();
+ for(const item of envelope.signatures){const id=item.key_id+"\\u0000"+item.algorithm;if(seen.has(id))return "EFS_SIGNATURE_DUPLICATE_SIGNER";seen.add(id);}
+ if(statement.digest.profile_id!=="efs-jcs-sha256-v1"||statement.digest.algorithm!=="SHA-256")return "EFS_SIGNATURE_DIGEST_PROFILE_MISMATCH";
+ if(statement.publisher_id!==base.manifest.publisher.id||statement.factory_id!==base.manifest.factory.id||statement.release_version!==base.manifest.release.version||statement.efs_version!==base.manifest.efsVersion)return "EFS_SIGNATURE_BINDING_MISMATCH";
+ if(statement.digest.value!==base.manifest.release.digest.value)return "EFS_SIGNATURE_BINDING_MISMATCH";
+ if(resolver.publisher_id!==statement.publisher_id)return "EFS_SIGNATURE_KEY_BINDING_MISMATCH";
+ if(resolver.key_id!==signer.key_id)return "EFS_SIGNATURE_KEY_NOT_FOUND";
+ if(resolver.trust_state==="untrusted")return "EFS_SIGNATURE_KEY_NOT_TRUSTED";
+ if(resolver.trust_state==="revoked")return "EFS_SIGNATURE_KEY_REVOKED";
+ if(resolver.trust_state==="expired")return "EFS_SIGNATURE_KEY_EXPIRED";
+ if(resolver.trust_state==="unavailable")return "EFS_SIGNATURE_RESOLVER_UNAVAILABLE";
+ try {
+  const raw=decodeCanonical(resolver.public_key_base64url,32),sig=decodeCanonical(signer.signature,64);
+  const key=createPublicKey({key:Buffer.concat([Buffer.from("302a300506032b6570032100","hex"),raw]),format:"der",type:"spki"});
+  const object={domain:"efs.release.signature.v1",signer:{algorithm:signer.algorithm,key_id:signer.key_id},statement};
+  const preimage=Buffer.concat([Buffer.from("EFS-SIGNATURE-V1\\n","ascii"),Buffer.from(canonicalize(object),"utf8")]);
+  return verify(null,preimage,key,sig)?"VALID":"EFS_SIGNATURE_INVALID";
+ } catch { return "EFS_SIGNATURE_ENCODING_INVALID"; }
+}
 function testNegativeVectors(){
  const set=JSON.parse(readFileSync(new URL("./signatures-v1.json",import.meta.url),"utf8"));
  const base=JSON.parse(readFileSync(new URL("./fixtures/psi50-release-interoperability-v1.json",import.meta.url),"utf8"));
  for(const v of set.vectors.filter(x=>x.kind==="negative")){
   if(v.base_fixture!=="tests/conformance/fixtures/psi50-release-interoperability-v1.json"||!Array.isArray(v.patch)||!v.expected_failure)throw Error("incomplete executable negative vector "+v.id);
-  const target=v.target==="manifest"?base.manifest:v.target==="envelope"?base.envelope:v.target==="resolver"?base.resolver:null;
-  if(!target)throw Error("unknown mutation target "+v.target);
-  applyPatch(JSON.parse(JSON.stringify(target)),v.patch);
+  const actual=classifyMutation(v,base);
+  if(actual!==v.expected_failure)throw Error("negative vector "+v.id+" expected "+v.expected_failure+" got "+actual);
  }
 }
 function testDetachedManifestProhibition(){
