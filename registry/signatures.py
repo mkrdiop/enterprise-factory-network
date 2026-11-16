@@ -163,21 +163,6 @@ class SignatureVerificationReport:
     digest_valid: bool
     signers: tuple[SignerVerification, ...] = ()
 
-    @property
-    def all_signers_cryptographically_valid(self) -> bool:
-        """Diagnostic aggregate only; not a PSI-50 signer-selection rule."""
-        return bool(self.signers) and all(
-            item.cryptographic_valid is True for item in self.signers
-        )
-
-    @property
-    def all_keys_trusted(self) -> bool:
-        """Diagnostic aggregate only; policy decides which signer identities matter."""
-        return bool(self.signers) and all(
-            item.trust_status is KeyTrustStatus.TRUSTED for item in self.signers
-        )
-
-
 class SignatureEnvelopeError(ValueError):
     """Raised by producers when input cannot produce a normative envelope."""
 
