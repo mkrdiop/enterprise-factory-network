@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://enterprise-factory.example/schemas/efs-signature-envelope-v1.schema.json",
+  "$id": "urn:efs:schema:signature-envelope:1",
   "title": "EFS v1 Detached Release Signature Envelope",
   "type": "object",
   "additionalProperties": false,
