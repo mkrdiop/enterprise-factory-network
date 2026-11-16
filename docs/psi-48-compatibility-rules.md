@@ -42,3 +42,26 @@ No automatic latest/latest-compatible resolution, negotiation, release selection
 ## 6. Verification
 
 `tests/test_compatibility.py` covers explicit range/evidence, opaque contract handling, runtime/protocol mappings, M5 boundary, conservative aggregation, duplicate rejection and deterministic output. Run `python -m pytest tests/test_compatibility.py -q` and `python -m ruff check scripts tests efs`.
+
+
+## 7. Normative EFS v1 supported-range profile
+
+The supported range applies only to the candidate `efsVersion` value. Its version tokens use strict SemVer 2.0.0 as defined by PSI-46/PSI-47. SemVer 2.0.0 does not itself define a range language; this section defines the EFS v1 range expression profile consumed by PSI-47's `evaluate_efs_version_range(candidate, supported_range)` API.
+
+The grammar is intentionally small and deterministic:
+
+| Form | Meaning |
+| --- | --- |
+| `*` | Any valid SemVer candidate, including prereleases |
+| `MAJOR.x` | Any candidate with that exact numeric MAJOR |
+| `MAJOR.MINOR.x` | Any candidate with that exact numeric MAJOR and MINOR |
+| `VERSION` | Candidate has equal SemVer precedence to the exact full SemVer token |
+| `OP VERSION [OP VERSION ...]` | All comparisons must match (logical AND); OP is `>`, `>=`, `<`, `<=` or `=` |
+
+MAJOR and MINOR wildcard components use canonical non-negative decimal integers (no leading zero except `0`); the wildcard token is lowercase `x`. Full VERSION tokens are strict SemVer 2.0.0 values, never partial versions. Each comparison term concatenates its operator directly with its full SemVer bound (for example, `>=1.0.0`); terms are separated by exactly one ASCII space. Empty terms, repeated spaces, tabs, newlines and leading/trailing whitespace are invalid.
+
+The profile does not support OR, comma separators, hyphen ranges, tilde, caret, implicit comparator operators, shorthand/partial comparator versions, aliases or normalization. An unsupported expression is an invalid range, not an empty match and not a compatible result. The evaluator raises PSI-47 `VersionRangeError`; PSI-49 and product adapters must convert missing or invalid range evaluation to `unknown`, never `compatible`.
+
+All comparisons use SemVer 2.0.0 precedence. Build metadata is ignored. Prerelease values participate according to normal SemVer precedence; there is no npm-style special prerelease exclusion. Wildcard forms match prereleases whose numeric core components satisfy the wildcard. Exact expressions compare precedence, so build metadata differences do not affect a match; the report still retains the exact candidate version string. The `*` wildcard matches every valid SemVer candidate, including prereleases.
+
+The machine-readable vectors are in `conformance/efs/v1/version-range-vectors.json`. PSI-47 implements the evaluator; PSI-48 consumes its Boolean result and owns the outcome/evidence rules. This range profile does not apply to Factory release versions, opaque capability contract versions, dependency constraints, runtime profiles, protocols or policy versions.
