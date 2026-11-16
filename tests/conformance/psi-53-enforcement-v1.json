@@ -40,17 +40,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -141,17 +130,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -263,17 +241,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -385,17 +352,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -507,17 +463,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -608,10 +553,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": null,
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -695,17 +636,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:58:00Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -794,10 +724,6 @@
         ],
         "trust": {
           "required": false,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "",
-          "status": "not_required",
-          "evidence": null,
           "required_signers": []
         },
         "lifecycle": {
@@ -865,17 +791,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -925,7 +840,7 @@
       },
       "expected": {
         "result": "indeterminate",
-        "reason": "PDP_INDETERMINATE"
+        "reason": "INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR"
       }
     },
     {
@@ -973,17 +888,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -1074,17 +978,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -1175,17 +1068,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -1276,17 +1158,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -1377,17 +1248,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "revoked",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "revoked",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -1478,17 +1338,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -1579,17 +1428,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -1680,17 +1518,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -1781,17 +1608,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -1898,17 +1714,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
@@ -1999,17 +1804,6 @@
         ],
         "trust": {
           "required": true,
-          "publisher_id": "urn:publisher:acme",
-          "key_id": "key-1",
-          "status": "trusted",
-          "evidence": {
-            "publisher_id": "urn:publisher:acme",
-            "key_id": "key-1",
-            "status": "trusted",
-            "observed_at": "2026-11-16T11:59:50Z",
-            "expires_at": "2026-11-16T12:05:00Z",
-            "version": 7
-          },
           "required_signers": [
             {
               "publisher_id": "urn:publisher:acme",
