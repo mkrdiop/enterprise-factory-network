@@ -259,13 +259,17 @@
       ],
       "properties": {
         "code": {
-          "$ref": "#/$defs/nonEmptyString"
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,127}$",
+          "description": "Stable ASCII machine-readable error identifier. Exact, case-sensitive comparison applies."
         },
         "description": {
           "type": "string"
         },
         "schema": {
-          "type": "object"
+          "$ref": "#/$defs/objectPayloadSchema"
         }
       }
     },
