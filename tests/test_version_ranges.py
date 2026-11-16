@@ -1,6 +1,11 @@
+import json
+from pathlib import Path
 import pytest
 
 from efs.versioning import VersionRangeError, evaluate_efs_version_range
+
+ROOT = Path(__file__).resolve().parents[1]
+VECTORS = json.loads((ROOT / "conformance/efs/v1/version-range-vectors.json").read_text(encoding="utf-8"))
 
 
 @pytest.mark.parametrize(
@@ -63,3 +68,12 @@ def test_empty_or_non_string_inputs_fail_closed():
     for candidate, expression in ((None, "*"), ("1.2.3", None), ("1.2.3", "")):
         with pytest.raises(VersionRangeError):
             evaluate_efs_version_range(candidate, expression)
+
+
+def test_machine_readable_supported_range_vectors():
+    for vector in VECTORS["vectors"]:
+        if "error" in vector:
+            with pytest.raises(VersionRangeError):
+                evaluate_efs_version_range(vector["candidate"], vector["range"])
+        else:
+            assert evaluate_efs_version_range(vector["candidate"], vector["range"]) is vector["expected"], vector["id"]
