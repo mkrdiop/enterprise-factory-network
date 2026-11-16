@@ -199,3 +199,17 @@ def test_cli_json_report_contract():
     assert set(report) == {"conformanceProfile", "schemaDialect", "valid", "stages", "diagnostics"}
     assert report["conformanceProfile"] == "efs-v1"
     assert report["valid"] is True
+
+
+def test_cli_failure_exit_and_json_report_for_invalid_manifest():
+    import subprocess
+    command = [sys.executable, str(ROOT / "scripts/validate_manifest.py"),
+               str(ROOT / "fixtures/invalid/manifest-invalid-digest-length.json")]
+    human = subprocess.run(command, capture_output=True, text=True)
+    assert human.returncode == 1
+    assert "EFS v1 NOT CONFORMANT" in human.stdout
+    machine = subprocess.run(command + ["--json"], capture_output=True, text=True)
+    assert machine.returncode == 1
+    report = json.loads(machine.stdout)
+    assert report["valid"] is False
+    assert report["diagnostics"][0]["code"] == "EFS_SCHEMA_INVALID"
