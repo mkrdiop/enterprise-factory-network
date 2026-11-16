@@ -519,7 +519,7 @@
       ],
       "properties": {
         "id": {
-          "$ref": "#/$defs/absoluteUri"
+          "$ref": "#/$defs/nonEmptyString"
         },
         "profile": {
           "$ref": "#/$defs/absoluteUri"
