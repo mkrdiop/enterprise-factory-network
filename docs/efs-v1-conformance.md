@@ -73,7 +73,7 @@ python scripts/validate_manifest.py fixtures/valid/manifest-minimal.json --json
 ## Reference implementation constraints
 
 - Python is a reference consumer, not the normative definition of EFS.
-- Draft 2020-12 `date-time` format assertion is explicitly enabled; timezone-less
+- JSON parsing rejects duplicate object members, invalid UTF-8, malformed JSON and non-standard numeric constants (NaN/Infinity).\n- Draft 2020-12 `date-time` format assertion is explicitly enabled; timezone-less
   timestamps are invalid.
 - Embedded input, output and optional error schemas are meta-validated.
 - External/network schema retrieval is never attempted.
