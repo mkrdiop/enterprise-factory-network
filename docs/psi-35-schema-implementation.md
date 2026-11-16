@@ -15,4 +15,4 @@ Unknown core-field behavior and extension namespace handling remain open in PSI-
 
 Validation layers remain distinct: structural JSON Schema validation; embedded contract schema validation; semantic/reference validation; digest/signature verification; policy evaluation; compatibility assessment; runtime admission.
 
-The format keyword is an annotation unless the Draft 2020-12 format-assertion vocabulary is explicitly enabled. Consumers must not assume identical format assertion behavior across validators.
+The JSON Schema `format` keyword remains an annotation at the schema-language level. The EFS v1 reference validator explicitly enables `FormatChecker` and installs `jsonschema[format]`, so `date-time` values such as `release.createdAt` are asserted as RFC 3339 date-times (including a required timezone). This is a deliberate EFS validator conformance profile, not a claim that every generic Draft 2020-12 validator asserts formats by default. Other conforming implementations must enable equivalent format assertion and test the same positive/negative vectors.
