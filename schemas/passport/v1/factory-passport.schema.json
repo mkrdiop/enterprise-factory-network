@@ -286,7 +286,9 @@
               "verified-artifact-readback",
               "not-evaluated-by-registry",
               "excluded-from-digest-artifact",
-              "count-endpoint-items"
+              "count-endpoint-items",
+              "count-policy-declarations",
+              "count-policy-references"
             ]
           }
         },
