@@ -4,12 +4,101 @@
   "authority": "docs/efs-v1-version-dimensions.md",
   "decisionRecord": "docs/adr/ADR-010-efs-v1-version-dimension-model.md",
   "criteria": [
-    {"id":"PSI48-AC-01","requirement":"Five assessment axes consume fixed PSI-46 coordinates; no new version grammar or dimension is created.","tests":["test_report_is_deterministic_and_retains_exact_coordinates"],"vectors":[]},
-    {"id":"PSI48-AC-02","requirement":"Specification assessment requires an explicit consumer-supported range and PSI-47 evaluator result.","tests":["test_specification_requires_explicit_range_and_evidence","test_specification_range_mismatch_is_breaking_not_unknown"],"vectors":["SPEC-001","SPEC-002"]},
-    {"id":"PSI48-AC-03","requirement":"Contract version remains opaque; contract definition/change evidence, not version ordering, determines compatibility.","tests":["test_contract_versions_are_opaque_and_definition_evidence_drives_result"],"vectors":["CONTRACT-001","CONTRACT-002","CONTRACT-003"]},
-    {"id":"PSI48-AC-04","requirement":"Runtime and protocol compatibility require explicit profiles, mapping and evidence.","tests":["test_runtime_and_protocol_need_explicit_mapping_evidence"],"vectors":["RUNTIME-001","PROTOCOL-001"]},
-    {"id":"PSI48-AC-05","requirement":"Governance outcomes are bounded by M5 authority and evidence.","tests":["test_governance_is_unknown_without_m5_authority_and_evidence"],"vectors":["GOV-001","GOV-002"]},
-    {"id":"PSI48-AC-06","requirement":"Only four outcomes exist; aggregation is deterministic and missing evidence is never compatible.","tests":["test_aggregate_is_conservative_and_missing_evidence_is_unknown","test_breaking_dominates_other_outcomes","test_conditional_requires_actionable_conditions"],"vectors":[]},
-    {"id":"PSI48-AC-07","requirement":"Reports preserve exact subject/consumer coordinates and deterministic canonical content.","tests":["test_report_is_deterministic_and_retains_exact_coordinates"],"vectors":[]}
+    {
+      "id": "PSI48-AC-01",
+      "requirement": "Five assessment axes consume fixed PSI-46 coordinates; no new version grammar or dimension is created.",
+      "tests": [
+        "test_report_is_deterministic_and_retains_exact_coordinates"
+      ],
+      "vectors": []
+    },
+    {
+      "id": "PSI48-AC-02",
+      "requirement": "Specification assessment requires an explicit consumer-supported range, the PSI-47 evaluator result and evidence; invalid or missing range evaluation is unknown.",
+      "tests": [
+        "test_specification_requires_explicit_range_and_evidence",
+        "test_specification_range_mismatch_is_breaking_not_unknown",
+        "test_machine_readable_compatibility_vectors"
+      ],
+      "vectors": [
+        "SPEC-001",
+        "SPEC-002"
+      ]
+    },
+    {
+      "id": "PSI48-AC-03",
+      "requirement": "Contract version remains opaque; contract definition/change evidence, not version ordering, determines compatibility.",
+      "tests": [
+        "test_contract_versions_are_opaque_and_definition_evidence_drives_result"
+      ],
+      "vectors": [
+        "CONTRACT-001",
+        "CONTRACT-002",
+        "CONTRACT-003"
+      ]
+    },
+    {
+      "id": "PSI48-AC-04",
+      "requirement": "Runtime and protocol compatibility require explicit profiles, mapping and evidence.",
+      "tests": [
+        "test_runtime_and_protocol_need_explicit_mapping_evidence"
+      ],
+      "vectors": [
+        "RUNTIME-001",
+        "PROTOCOL-001"
+      ]
+    },
+    {
+      "id": "PSI48-AC-05",
+      "requirement": "Governance outcomes are bounded by M5 authority and evidence.",
+      "tests": [
+        "test_governance_is_unknown_without_m5_authority_and_evidence"
+      ],
+      "vectors": [
+        "GOV-001",
+        "GOV-002"
+      ]
+    },
+    {
+      "id": "PSI48-AC-06",
+      "requirement": "Only four outcomes exist; aggregation is deterministic and missing evidence is never compatible.",
+      "tests": [
+        "test_aggregate_is_conservative_and_missing_evidence_is_unknown",
+        "test_breaking_dominates_other_outcomes",
+        "test_conditional_requires_actionable_conditions"
+      ],
+      "vectors": []
+    },
+    {
+      "id": "PSI48-AC-07",
+      "requirement": "Reports preserve exact subject/consumer coordinates and deterministic canonical content.",
+      "tests": [
+        "test_report_is_deterministic_and_retains_exact_coordinates"
+      ],
+      "vectors": []
+    },
+    {
+      "id": "PSI48-AC-08",
+      "requirement": "Supported EFS range syntax is explicit, deterministic and separate from SemVer version syntax; unsupported expressions fail closed.",
+      "tests": [
+        "test_machine_readable_supported_range_vectors",
+        "test_unsupported_range_syntax_fails_closed"
+      ],
+      "vectors": [
+        "RANGE-001",
+        "RANGE-002",
+        "RANGE-003",
+        "RANGE-004",
+        "RANGE-005",
+        "RANGE-006",
+        "RANGE-007",
+        "RANGE-008",
+        "RANGE-009",
+        "RANGE-010",
+        "RANGE-NEG-001",
+        "RANGE-NEG-002",
+        "RANGE-NEG-003"
+      ]
+    }
   ]
 }
