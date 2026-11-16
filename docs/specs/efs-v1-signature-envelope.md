@@ -1,9 +1,9 @@
 # EFS v1 — Detached Release Signature Envelope
 
-- **Status:** Proposed normative specification; requires architecture-owner approval
+- **Status:** Draft normative specification; pending independent review and PR acceptance
 - **Profile:** `efs-ed25519-jcs-v1`
 - **Owner:** PSI-50
-- **Related ADR:** ADR-004 (Proposed)
+- **Related ADR:** ADR-004 (Accepted)
 - **Normative dependencies:** EFS v1 Baseline, PSI-34, PSI-37, PSI-40, ADR-001, ADR-003
 
 The key words MUST, MUST NOT, REQUIRED, SHOULD, SHOULD NOT and MAY are normative.
