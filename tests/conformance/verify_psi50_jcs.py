@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Independent RFC 8785 cross-language conformance check for PSI-50 vectors."""
 import json
 import math
