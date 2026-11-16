@@ -407,7 +407,6 @@
     {
       "id": "pair-publisher-read-factory",
       "kind": "action-resource-compatibility",
-      "action": "publisher.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -465,7 +464,6 @@
     {
       "id": "pair-publisher-read-release",
       "kind": "action-resource-compatibility",
-      "action": "publisher.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -524,7 +522,6 @@
     {
       "id": "pair-publisher-read-capability",
       "kind": "action-resource-compatibility",
-      "action": "publisher.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -584,7 +581,6 @@
     {
       "id": "pair-publisher-read-registry",
       "kind": "action-resource-compatibility",
-      "action": "publisher.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -641,7 +637,6 @@
     {
       "id": "pair-publisher-read-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "publisher.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -698,7 +693,6 @@
     {
       "id": "pair-publisher-manage-factory",
       "kind": "action-resource-compatibility",
-      "action": "publisher.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -756,7 +750,6 @@
     {
       "id": "pair-publisher-manage-release",
       "kind": "action-resource-compatibility",
-      "action": "publisher.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -815,7 +808,6 @@
     {
       "id": "pair-publisher-manage-capability",
       "kind": "action-resource-compatibility",
-      "action": "publisher.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -875,7 +867,6 @@
     {
       "id": "pair-publisher-manage-registry",
       "kind": "action-resource-compatibility",
-      "action": "publisher.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -932,7 +923,6 @@
     {
       "id": "pair-publisher-manage-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "publisher.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -989,7 +979,6 @@
     {
       "id": "pair-publisher-key-manage-factory",
       "kind": "action-resource-compatibility",
-      "action": "publisher.key.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1047,7 +1036,6 @@
     {
       "id": "pair-publisher-key-manage-release",
       "kind": "action-resource-compatibility",
-      "action": "publisher.key.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1106,7 +1094,6 @@
     {
       "id": "pair-publisher-key-manage-capability",
       "kind": "action-resource-compatibility",
-      "action": "publisher.key.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1166,7 +1153,6 @@
     {
       "id": "pair-publisher-key-manage-registry",
       "kind": "action-resource-compatibility",
-      "action": "publisher.key.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1223,7 +1209,6 @@
     {
       "id": "pair-publisher-key-manage-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "publisher.key.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1280,7 +1265,6 @@
     {
       "id": "pair-factory-discover-publisher",
       "kind": "action-resource-compatibility",
-      "action": "factory.discover",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1337,7 +1321,6 @@
     {
       "id": "pair-factory-discover-release",
       "kind": "action-resource-compatibility",
-      "action": "factory.discover",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1396,7 +1379,6 @@
     {
       "id": "pair-factory-discover-capability",
       "kind": "action-resource-compatibility",
-      "action": "factory.discover",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1456,7 +1438,6 @@
     {
       "id": "pair-factory-discover-registry",
       "kind": "action-resource-compatibility",
-      "action": "factory.discover",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1513,7 +1494,6 @@
     {
       "id": "pair-factory-discover-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "factory.discover",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1570,7 +1550,6 @@
     {
       "id": "pair-factory-read-publisher",
       "kind": "action-resource-compatibility",
-      "action": "factory.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1627,7 +1606,6 @@
     {
       "id": "pair-factory-read-release",
       "kind": "action-resource-compatibility",
-      "action": "factory.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1686,7 +1664,6 @@
     {
       "id": "pair-factory-read-capability",
       "kind": "action-resource-compatibility",
-      "action": "factory.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1746,7 +1723,6 @@
     {
       "id": "pair-factory-read-registry",
       "kind": "action-resource-compatibility",
-      "action": "factory.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1803,7 +1779,6 @@
     {
       "id": "pair-factory-read-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "factory.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1860,7 +1835,6 @@
     {
       "id": "pair-factory-register-publisher",
       "kind": "action-resource-compatibility",
-      "action": "factory.register",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1917,7 +1891,6 @@
     {
       "id": "pair-factory-register-release",
       "kind": "action-resource-compatibility",
-      "action": "factory.register",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -1976,7 +1949,6 @@
     {
       "id": "pair-factory-register-capability",
       "kind": "action-resource-compatibility",
-      "action": "factory.register",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2036,7 +2008,6 @@
     {
       "id": "pair-factory-register-registry",
       "kind": "action-resource-compatibility",
-      "action": "factory.register",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2093,7 +2064,6 @@
     {
       "id": "pair-factory-register-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "factory.register",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2150,7 +2120,6 @@
     {
       "id": "pair-factory-publish-publisher",
       "kind": "action-resource-compatibility",
-      "action": "factory.publish",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2207,7 +2176,6 @@
     {
       "id": "pair-factory-publish-release",
       "kind": "action-resource-compatibility",
-      "action": "factory.publish",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2266,7 +2234,6 @@
     {
       "id": "pair-factory-publish-capability",
       "kind": "action-resource-compatibility",
-      "action": "factory.publish",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2326,7 +2293,6 @@
     {
       "id": "pair-factory-publish-registry",
       "kind": "action-resource-compatibility",
-      "action": "factory.publish",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2383,7 +2349,6 @@
     {
       "id": "pair-factory-publish-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "factory.publish",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2440,7 +2405,6 @@
     {
       "id": "pair-release-read-publisher",
       "kind": "action-resource-compatibility",
-      "action": "release.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2497,7 +2461,6 @@
     {
       "id": "pair-release-read-factory",
       "kind": "action-resource-compatibility",
-      "action": "release.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2555,7 +2518,6 @@
     {
       "id": "pair-release-read-capability",
       "kind": "action-resource-compatibility",
-      "action": "release.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2615,7 +2577,6 @@
     {
       "id": "pair-release-read-registry",
       "kind": "action-resource-compatibility",
-      "action": "release.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2672,7 +2633,6 @@
     {
       "id": "pair-release-read-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "release.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2729,7 +2689,6 @@
     {
       "id": "pair-release-publish-publisher",
       "kind": "action-resource-compatibility",
-      "action": "release.publish",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2786,7 +2745,6 @@
     {
       "id": "pair-release-publish-factory",
       "kind": "action-resource-compatibility",
-      "action": "release.publish",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2844,7 +2802,6 @@
     {
       "id": "pair-release-publish-capability",
       "kind": "action-resource-compatibility",
-      "action": "release.publish",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2904,7 +2861,6 @@
     {
       "id": "pair-release-publish-registry",
       "kind": "action-resource-compatibility",
-      "action": "release.publish",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -2961,7 +2917,6 @@
     {
       "id": "pair-release-publish-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "release.publish",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3018,7 +2973,6 @@
     {
       "id": "pair-release-suspend-publisher",
       "kind": "action-resource-compatibility",
-      "action": "release.suspend",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3075,7 +3029,6 @@
     {
       "id": "pair-release-suspend-factory",
       "kind": "action-resource-compatibility",
-      "action": "release.suspend",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3133,7 +3086,6 @@
     {
       "id": "pair-release-suspend-capability",
       "kind": "action-resource-compatibility",
-      "action": "release.suspend",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3193,7 +3145,6 @@
     {
       "id": "pair-release-suspend-registry",
       "kind": "action-resource-compatibility",
-      "action": "release.suspend",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3250,7 +3201,6 @@
     {
       "id": "pair-release-suspend-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "release.suspend",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3307,7 +3257,6 @@
     {
       "id": "pair-release-deprecate-publisher",
       "kind": "action-resource-compatibility",
-      "action": "release.deprecate",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3364,7 +3313,6 @@
     {
       "id": "pair-release-deprecate-factory",
       "kind": "action-resource-compatibility",
-      "action": "release.deprecate",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3422,7 +3370,6 @@
     {
       "id": "pair-release-deprecate-capability",
       "kind": "action-resource-compatibility",
-      "action": "release.deprecate",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3482,7 +3429,6 @@
     {
       "id": "pair-release-deprecate-registry",
       "kind": "action-resource-compatibility",
-      "action": "release.deprecate",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3539,7 +3485,6 @@
     {
       "id": "pair-release-deprecate-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "release.deprecate",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3596,7 +3541,6 @@
     {
       "id": "pair-release-revoke-publisher",
       "kind": "action-resource-compatibility",
-      "action": "release.revoke",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3653,7 +3597,6 @@
     {
       "id": "pair-release-revoke-factory",
       "kind": "action-resource-compatibility",
-      "action": "release.revoke",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3711,7 +3654,6 @@
     {
       "id": "pair-release-revoke-capability",
       "kind": "action-resource-compatibility",
-      "action": "release.revoke",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3771,7 +3713,6 @@
     {
       "id": "pair-release-revoke-registry",
       "kind": "action-resource-compatibility",
-      "action": "release.revoke",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3828,7 +3769,6 @@
     {
       "id": "pair-release-revoke-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "release.revoke",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3885,7 +3825,6 @@
     {
       "id": "pair-release-archive-publisher",
       "kind": "action-resource-compatibility",
-      "action": "release.archive",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -3942,7 +3881,6 @@
     {
       "id": "pair-release-archive-factory",
       "kind": "action-resource-compatibility",
-      "action": "release.archive",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4000,7 +3938,6 @@
     {
       "id": "pair-release-archive-capability",
       "kind": "action-resource-compatibility",
-      "action": "release.archive",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4060,7 +3997,6 @@
     {
       "id": "pair-release-archive-registry",
       "kind": "action-resource-compatibility",
-      "action": "release.archive",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4117,7 +4053,6 @@
     {
       "id": "pair-release-archive-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "release.archive",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4174,7 +4109,6 @@
     {
       "id": "pair-capability-invoke-publisher",
       "kind": "action-resource-compatibility",
-      "action": "capability.invoke",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4231,7 +4165,6 @@
     {
       "id": "pair-capability-invoke-factory",
       "kind": "action-resource-compatibility",
-      "action": "capability.invoke",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4289,7 +4222,6 @@
     {
       "id": "pair-capability-invoke-release",
       "kind": "action-resource-compatibility",
-      "action": "capability.invoke",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4348,7 +4280,6 @@
     {
       "id": "pair-capability-invoke-registry",
       "kind": "action-resource-compatibility",
-      "action": "capability.invoke",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4405,7 +4336,6 @@
     {
       "id": "pair-capability-invoke-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "capability.invoke",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4462,7 +4392,6 @@
     {
       "id": "pair-registry-policy-read-publisher",
       "kind": "action-resource-compatibility",
-      "action": "registry.policy.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4519,7 +4448,6 @@
     {
       "id": "pair-registry-policy-read-factory",
       "kind": "action-resource-compatibility",
-      "action": "registry.policy.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4577,7 +4505,6 @@
     {
       "id": "pair-registry-policy-read-release",
       "kind": "action-resource-compatibility",
-      "action": "registry.policy.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4636,7 +4563,6 @@
     {
       "id": "pair-registry-policy-read-capability",
       "kind": "action-resource-compatibility",
-      "action": "registry.policy.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4696,7 +4622,6 @@
     {
       "id": "pair-registry-policy-read-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "registry.policy.read",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4753,7 +4678,6 @@
     {
       "id": "pair-registry-policy-manage-publisher",
       "kind": "action-resource-compatibility",
-      "action": "registry.policy.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4810,7 +4734,6 @@
     {
       "id": "pair-registry-policy-manage-factory",
       "kind": "action-resource-compatibility",
-      "action": "registry.policy.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4868,7 +4791,6 @@
     {
       "id": "pair-registry-policy-manage-release",
       "kind": "action-resource-compatibility",
-      "action": "registry.policy.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4927,7 +4849,6 @@
     {
       "id": "pair-registry-policy-manage-capability",
       "kind": "action-resource-compatibility",
-      "action": "registry.policy.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
@@ -4987,7 +4908,6 @@
     {
       "id": "pair-registry-policy-manage-execution_target",
       "kind": "action-resource-compatibility",
-      "action": "registry.policy.manage",
       "expected": {
         "classification": "invalid-input",
         "reason_code": "INVALID_ACTION_RESOURCE_COMBINATION"
