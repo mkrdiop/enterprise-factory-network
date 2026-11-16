@@ -1,4 +1,6 @@
+# ruff: noqa: I001
 import json
+import pytest
 
 from efs.compatibility import (
     CompatibilityDimension,
