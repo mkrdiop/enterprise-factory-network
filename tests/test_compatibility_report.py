@@ -11,6 +11,7 @@ from efs.compatibility import (
     Outcome,
     ReleaseCoordinates,
     assess_contract_change,
+    assess_efs_specification,
     assess_governance,
     assess_profile_mapping,
     assess_specification,
@@ -35,8 +36,9 @@ CONSUMER = ConsumerProfile("consumer-a", "profile-a", "1", ">=1.0.0 <2.0.0", "ru
 
 def make_report():
     assessments = [
-        assess_specification(supported_range=">=1.0.0 <2.0.0", consumer_profile_id="profile-a",
-                             range_evaluator_result=True, evidence=(EVIDENCE_A,)),
+        assess_efs_specification(subject_efs_version=SUBJECT.efs_version,
+                                 supported_range=CONSUMER.supported_efs_range,
+                                 consumer_profile_id=CONSUMER.profile_id, evidence=(EVIDENCE_A,)),
         assess_contract_change(capability_id="search", contract_id="search-input",
                                previous_version="2026-Q4", selected_version="2026-Q4",
                                change_classification="unchanged", evidence=(EVIDENCE_B,)),
@@ -146,9 +148,41 @@ def test_unknown_or_non_boolean_range_evaluator_result_stays_unknown():
         assert assessment.outcome is Outcome.UNKNOWN
 
 
+
+def test_specification_uses_psi47_range_evaluator_and_fails_closed():
+    supported = assess_efs_specification(
+        subject_efs_version="1.4.0", supported_range=">=1.0.0 <2.0.0",
+        consumer_profile_id="profile-a", evidence=(EVIDENCE_A,),
+    )
+    assert supported.outcome is Outcome.COMPATIBLE
+    assert dict(supported.coordinates)["subjectEfsVersion"] == "1.4.0"
+
+    unsupported = assess_efs_specification(
+        subject_efs_version="2.0.0", supported_range=">=1.0.0 <2.0.0",
+        consumer_profile_id="profile-a", evidence=(EVIDENCE_A,),
+    )
+    assert unsupported.outcome is Outcome.BREAKING
+    assert unsupported.blockers == ("unsupported-efs-version",)
+
+    invalid = assess_efs_specification(
+        subject_efs_version="1.4.0", supported_range="^1.0.0",
+        consumer_profile_id="profile-a", evidence=(EVIDENCE_A,),
+    )
+    assert invalid.outcome is Outcome.UNKNOWN
+    assert invalid.rule_id == "EFC-SPEC-005"
+    assert "invalid or unsupported" in invalid.explanation
+
+    missing = assess_efs_specification(
+        subject_efs_version="1.4.0", supported_range="",
+        consumer_profile_id="profile-a", evidence=(EVIDENCE_A,),
+    )
+    assert missing.outcome is Outcome.UNKNOWN
+    assert missing.rule_id == "EFC-SPEC-001"
+
+
 def test_breaking_and_conditional_outcomes_keep_diagnostics_in_report():
-    breaking = assess_specification(supported_range="<1.0.0", consumer_profile_id="profile-a",
-                                    range_evaluator_result=False, evidence=(EVIDENCE_A,))
+    breaking = assess_efs_specification(subject_efs_version="2.0.0", supported_range="<2.0.0",
+                                        consumer_profile_id="profile-a", evidence=(EVIDENCE_A,))
     conditional = assess_profile_mapping(
         CompatibilityDimension.RUNTIME, subject_profile_id="runtime-2", consumer_profile_id="runtime-a",
         mapping_id="adapter-v1", mapping_outcome=Outcome.CONDITIONAL,
