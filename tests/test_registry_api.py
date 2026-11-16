@@ -6,9 +6,7 @@ from fastapi.testclient import TestClient
 
 from registry.api import create_app
 from registry.digests import canonicalize_and_verify
-from registry.publication_contracts import (
-    PublicationResult,
-)
+from registry.publication_contracts import PublicationResult
 
 ROOT = Path(__file__).resolve().parents[1]
 VECTOR = json.loads(
