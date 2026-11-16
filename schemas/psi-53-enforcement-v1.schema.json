@@ -317,10 +317,12 @@
                                   "minimum": 1
                                 },
                                 "algorithm": {
-                                  "const": "Ed25519"
+                                  "type": "string",
+                                  "minLength": 1
                                 },
                                 "usage": {
-                                  "const": "efs-release-signing"
+                                  "type": "string",
+                                  "minLength": 1
                                 },
                                 "valid_from": {
                                   "type": "string",
