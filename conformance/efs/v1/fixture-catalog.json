@@ -70,5 +70,16 @@
     "vectors": "conformance/efs/v1/publisher-identity-vectors.json",
     "acceptance": "conformance/efs/v1/publisher-identity-acceptance.json",
     "testModule": "tests/test_publisher_identity.py"
+  },
+  "capabilityContractModel": {
+    "vectors": "conformance/efs/v1/capability-contract-model-vectors.json",
+    "acceptance": "conformance/efs/v1/capability-contract-model-acceptance.json",
+    "testModule": "tests/test_capability_contract_model.py",
+    "examples": [
+      "fixtures/valid/capability-contract-sync.json",
+      "fixtures/valid/capability-contract-async.json",
+      "fixtures/valid/capability-contract-streaming.json",
+      "fixtures/valid/capability-contract-event.json"
+    ]
   }
 }
