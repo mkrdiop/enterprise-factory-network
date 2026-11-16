@@ -17,7 +17,13 @@ from typing import Any
 import jsonschema
 import rfc8785
 
-from efs.versioning import VersionRangeError, evaluate_efs_version_range
+from efs.versioning import (
+    VersionDimension,
+    VersionError,
+    VersionRangeError,
+    evaluate_efs_version_range,
+    parse_field_version,
+)
 
 
 class CompatibilityError(ValueError):
@@ -87,6 +93,11 @@ class ReleaseCoordinates:
             self.digest_profile, self.digest_algorithm, self.digest_value, self.efs_version,
         )):
             raise CompatibilityError("all exact release coordinates must be non-empty strings")
+        try:
+            parse_field_version(VersionDimension.FACTORY_RELEASE, self.release_version)
+            parse_field_version(VersionDimension.EFS_SPECIFICATION, self.efs_version)
+        except VersionError as exc:
+            raise CompatibilityError(f"subject release coordinate contains an invalid SemVer value: {exc}") from exc
 
     def as_dict(self) -> dict[str, Any]:
         return {
