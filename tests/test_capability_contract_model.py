@@ -51,6 +51,8 @@ def test_contract_model_error_payload_schema_is_object_schema():
     Draft202012Validator.check_schema(schema)
     error_schema_ref = schema["$defs"]["contractError"]["properties"]["schema"]
     assert error_schema_ref == {"$ref": "#/$defs/objectPayloadSchema"}
+    code_schema = schema["$defs"]["contractError"]["properties"]["code"]
+    assert code_schema["pattern"] == "^[A-Za-z][A-Za-z0-9._-]{0,127}$"
     object_schema = schema["$defs"]["objectPayloadSchema"]
     assert object_schema["properties"]["type"]["const"] == "object"
     assert "type" in object_schema["required"]
@@ -59,6 +61,7 @@ def test_contract_model_error_payload_schema_is_object_schema():
         manifest = _json(ROOT / relative)
         for capability in manifest["capabilities"]:
             for error in capability["contract"]["errors"]:
+                assert re.fullmatch(code_schema["pattern"], error["code"])
                 if "schema" in error:
                     assert error["schema"].get("type") == "object"
                     Draft202012Validator.check_schema(error["schema"])
