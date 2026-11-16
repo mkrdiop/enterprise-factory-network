@@ -10,7 +10,7 @@ import hashlib
 import json
 from dataclasses import asdict, dataclass
 from enum import Enum
-from typing import Iterable, Mapping
+from typing import Iterable
 
 
 class CompatibilityError(ValueError):
@@ -48,7 +48,6 @@ class EvidenceReference:
     source: str
     digest: str | None = None
     authority: str | None = None
-    coordinates: tuple[tuple[str, str], ...] = ()
 
     def __post_init__(self) -> None:
         if not self.evidence_id or not self.source:
@@ -113,6 +112,7 @@ class DimensionAssessment:
     blockers: tuple[str, ...] = ()
     mappings: tuple[str, ...] = ()
     authority: str | None = None
+    coordinates: tuple[tuple[str, str], ...] = ()
 
     def __post_init__(self) -> None:
         if not self.rule_id or not self.explanation:
