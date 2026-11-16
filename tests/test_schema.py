@@ -161,6 +161,10 @@ def test_diagnostics_are_machine_readable_and_deterministic(tmp_path):
     assert all(set(d) >= {"code", "stage", "path", "message"} for d in first["diagnostics"])
     assert all(d["path"] == "" or d["path"].startswith("/") for d in first["diagnostics"])
     assert first["stages"]["embedded_schemas"] == "not_run"
+    assert any(d["code"] == "EFS_SCHEMA_REQUIRED" and d["path"] == "/factory/name" for d in first["diagnostics"])
+    assert any(d["code"] == "EFS_SCHEMA_FORMAT" and d["path"] == "/release/createdAt" for d in first["diagnostics"])
+    sort_key = lambda d: (d["stage"], d["path"], d["code"], d["message"], json.dumps(d.get("details", {}), sort_keys=True, ensure_ascii=False))
+    assert first["diagnostics"] == sorted(first["diagnostics"], key=sort_key)
 
 
 def test_report_marks_dependent_stages_not_run_after_parse_failure(tmp_path):
