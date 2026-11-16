@@ -3,8 +3,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 import tempfile
 from pathlib import Path
+
+from sqlalchemy.exc import SQLAlchemyError
 
 from scripts.validate_manifest import validate_report
 
@@ -18,6 +21,9 @@ from .publication_contracts import (
     ReleaseDigestService,
 )
 from .repositories import RegistryConflict
+
+
+logger = logging.getLogger(__name__)
 
 
 class ManifestValidationError(ValueError):
@@ -148,17 +154,17 @@ class RegistryPublicationService:
                 operation_id=operation.operation_id,
                 error_code="EFS_ARTIFACT_INTEGRITY_FAILURE",
             )
-        except Exception:
+        except (OSError, TimeoutError, ConnectionError, SQLAlchemyError):
             # The outcome of a failed/timeout put may be unknown. Keep the
             # operation pending; a retry repeats put-if-absent and verifies.
             try:
                 self.operation_repository.record_retryable_failure(
                     operation.operation_id, "EFS_ARTIFACT_UNAVAILABLE"
                 )
-            except Exception:
+            except SQLAlchemyError:
                 # The already-committed pending intent is the recovery anchor;
                 # if the DB is unavailable, do not hide the original pending state.
-                pass
+                logger.exception("Could not persist retryable publication failure")
             return PublicationResult(
                 state="pending",
                 operation_id=operation.operation_id,
@@ -199,12 +205,12 @@ class RegistryPublicationService:
                     operation.operation_id, "EFS_ARTIFACT_INTEGRITY_FAILURE"
                 )
                 counts["conflict"] += 1
-            except Exception:
+            except (OSError, TimeoutError, ConnectionError, SQLAlchemyError):
                 try:
                     self.operation_repository.record_retryable_failure(
                         operation.operation_id, "EFS_ARTIFACT_UNAVAILABLE"
                     )
-                except Exception:
-                    pass
+                except SQLAlchemyError:
+                    logger.exception("Could not persist recovery retry diagnostic")
                 counts["pending"] += 1
         return counts
