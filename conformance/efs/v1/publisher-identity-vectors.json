@@ -1,0 +1,156 @@
+{
+  "profile": "efs-uri-c14n-1",
+  "specification": "RFC 3986 absolute URI with the EFS v1 opaque publisher identifier restrictions and canonical serialization.",
+  "vectors": [
+    {
+      "id": "urn-basic",
+      "input": "urn:example:publishers:acme",
+      "valid": true,
+      "canonical": "urn:example:publishers:acme"
+    },
+    {
+      "id": "https-basic",
+      "input": "https://identity.example/publishers/acme",
+      "valid": true,
+      "canonical": "https://identity.example/publishers/acme"
+    },
+    {
+      "id": "scheme-and-host-case",
+      "input": "https://example.com/publishers/acme",
+      "valid": true,
+      "canonical": "https://example.com/publishers/acme"
+    },
+    {
+      "id": "path-case-preserved",
+      "input": "https://example.com/Publishers/Acme",
+      "valid": true,
+      "canonical": "https://example.com/Publishers/Acme"
+    },
+    {
+      "id": "explicit-default-port-preserved",
+      "input": "https://example.com:443/publisher",
+      "valid": true,
+      "canonical": "https://example.com:443/publisher"
+    },
+    {
+      "id": "empty-path-preserved",
+      "input": "https://example.com",
+      "valid": true,
+      "canonical": "https://example.com"
+    },
+    {
+      "id": "slash-path-preserved",
+      "input": "https://example.com/",
+      "valid": true,
+      "canonical": "https://example.com/"
+    },
+    {
+      "id": "ipv6-host-lowercase",
+      "input": "https://[2001:DB8::1]/publisher",
+      "valid": false,
+      "canonical": "https://[2001:db8::1]/publisher"
+    },
+    {
+      "id": "uppercase-scheme-noncanonical",
+      "input": "HTTPS://example.com/publisher",
+      "valid": false,
+      "canonical": "https://example.com/publisher"
+    },
+    {
+      "id": "uppercase-host-noncanonical",
+      "input": "https://EXAMPLE.com/publisher",
+      "valid": false,
+      "canonical": "https://example.com/publisher"
+    },
+    {
+      "id": "decode-unreserved-noncanonical",
+      "input": "https://example.com/%7Ealice",
+      "valid": false,
+      "canonical": "https://example.com/~alice"
+    },
+    {
+      "id": "uppercase-percent-hex-noncanonical",
+      "input": "https://example.com/%2f",
+      "valid": false,
+      "canonical": "https://example.com/%2F"
+    },
+    {
+      "id": "dot-segment-noncanonical",
+      "input": "https://example.com/a/../b",
+      "valid": false,
+      "canonical": "https://example.com/b"
+    },
+    {
+      "id": "relative-reference",
+      "input": "../publisher",
+      "valid": false,
+      "canonical": null
+    },
+    {
+      "id": "missing-scheme",
+      "input": "example.com/publisher",
+      "valid": false,
+      "canonical": null
+    },
+    {
+      "id": "query-component",
+      "input": "https://example.com/publisher?tenant=1",
+      "valid": false,
+      "canonical": null
+    },
+    {
+      "id": "empty-query-component",
+      "input": "https://example.com/publisher?",
+      "valid": false,
+      "canonical": null
+    },
+    {
+      "id": "fragment-component",
+      "input": "https://example.com/publisher#identity",
+      "valid": false,
+      "canonical": null
+    },
+    {
+      "id": "userinfo-component",
+      "input": "https://user@example.com/publisher",
+      "valid": false,
+      "canonical": null
+    },
+    {
+      "id": "space",
+      "input": "https://example.com/publisher name",
+      "valid": false,
+      "canonical": null
+    },
+    {
+      "id": "literal-nonascii",
+      "input": "https://example.com/publishér",
+      "valid": false,
+      "canonical": null
+    },
+    {
+      "id": "malformed-percent",
+      "input": "https://example.com/%2G",
+      "valid": false,
+      "canonical": null
+    },
+    {
+      "id": "control-character",
+      "input": "https://example.com/publisher\\n",
+      "valid": false,
+      "canonical": null
+    },
+    {
+      "id": "invalid-ipv6",
+      "input": "https://[2001:db8::zz]/publisher",
+      "valid": false,
+      "canonical": null
+    },
+    {
+      "id": "invalid-port",
+      "input": "https://example.com:99999/publisher",
+      "valid": false,
+      "canonical": null
+    }
+  ]
+}
