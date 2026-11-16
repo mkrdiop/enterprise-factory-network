@@ -1835,12 +1835,12 @@
           "at": "2026-11-16T12:00:00Z",
           "max_evidence_age_seconds": 30,
           "evidence_versions": {
-            "trust": 7,
+            "trust": 8,
             "policy": 3,
             "authorization": 4
           },
           "current_evidence_versions": {
-            "trust": 7,
+            "trust": 8,
             "policy": 3,
             "authorization": 4
           },
