@@ -539,11 +539,14 @@ def verify_release_signature(
             or len(resolution.public_key) != 32
             or not isinstance(resolution.valid_from, datetime)
             or resolution.valid_from.tzinfo is None
+            or resolution.valid_from.utcoffset() is None
             or (
                 resolution.valid_until is not None
                 and (
                     not isinstance(resolution.valid_until, datetime)
                     or resolution.valid_until.tzinfo is None
+                    or resolution.valid_until.utcoffset() is None
+                    or resolution.valid_until <= resolution.valid_from
                 )
             )
             or not isinstance(resolution.evidence_version, str)
