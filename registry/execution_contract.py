@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Callable
+from collections.abc import Callable
 
 from jsonschema import Draft202012Validator, FormatChecker
 
@@ -104,7 +104,7 @@ def validate_execution_envelope(
         ))
         return {"valid": False, "diagnostics": diagnostics}
 
-    capability_index, capability = selected[0]
+    _capability_index, capability = selected[0]
     contract = capability.get("contract", {})
     contract_context = context["contract"]
     if (
@@ -155,9 +155,9 @@ def validate_execution_envelope(
     error_code = None
     if message_type in {"request", "event"}:
         direction, payload = "inputs", envelope["payload"]
-    elif message_type == "result":
-        direction, payload = "outputs", envelope["payload"]
-    elif message_type == "progress" and envelope["eventKind"] == "data":
+    elif message_type == "result" or (
+        message_type == "progress" and envelope["eventKind"] == "data"
+    ):
         direction, payload = "outputs", envelope["payload"]
     elif message_type == "error":
         error_code = envelope["error"]["code"]
