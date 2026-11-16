@@ -246,7 +246,7 @@ def test_malformed_signature_encoding_is_rejected():
     envelope["signatures"][0]["signature"] = "A" * 85 + "="
     # Schema rejects padded and non-canonical Base64URL before key lookup.
     result = verify_release_signature(raw, json.dumps(envelope).encode(), FixtureResolver())
-    assert result.code is SignatureCode.ENVELOPE_INVALID
+    assert result.code is SignatureCode.ENVELOPE_ENCODING_INVALID
 
 
 def test_unknown_signature_profile_fails_without_resolver_lookup():
