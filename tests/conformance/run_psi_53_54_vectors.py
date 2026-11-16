@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Dependency-free reference oracle for PSI-53 and PSI-54 conformance vectors.
 
 Run from any directory:
@@ -19,7 +18,7 @@ CONFORMANCE = ROOT / "tests" / "conformance"
 
 
 def instant(value: str) -> datetime:
-    return datetime.fromisoformat(value.replace("Z", "+00:00"))
+    return datetime.fromisoformat(value)
 
 
 def psi53_decide(data: dict) -> tuple[str, str]:
