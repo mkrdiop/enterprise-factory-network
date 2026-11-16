@@ -109,6 +109,8 @@ def test_optional_fields_are_omitted_and_extensions_are_preserved():
     assert "createdAt" not in passport["release"]
     assert passport["extensions"] == manifest["extensions"]
     assert any(item["target"].startswith("/extensions/") for item in passport["provenance"])
+    assert "## Extensions" in render_factory_passport_markdown(passport)
+    assert '"theme": "dark"' in render_factory_passport_markdown(passport)
 
 
 def test_machine_readable_passport_is_canonical_and_deterministic():
