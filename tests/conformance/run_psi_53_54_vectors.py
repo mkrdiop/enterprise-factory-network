@@ -84,7 +84,7 @@ def psi53(data):
 
 def psi54(data):
  lookup=data["idempotency_lookup"]
- # Authenticated scope has already been derived. Replay lookup precedes state/revision checks.
+ # Scope is derived after authentication. Lookup precedes state and revision reads.
  if lookup["status"]=="same_fingerprint":
   record=lookup["record"]
   if record is None or record["scope"]!=data["scope"] or record["request_fingerprint"]!=data["request_fingerprint"]:
@@ -93,6 +93,8 @@ def psi54(data):
  if lookup["status"]=="different_fingerprint": return "rejected","IDEMPOTENCY_CONFLICT"
  if data["operation"]=="initial_publication":
   event=data["publication"]
+  coordinate=event["coordinate_snapshot"]
+  digest=event["digest_snapshot"]
   valid=(
    data["from"] is None and data["to"]=="published" and
    event["authoring_request_validated"] and event["coordinate_exact"] and
@@ -100,7 +102,11 @@ def psi54(data):
    event["event_type"]=="factory_release.published" and event["revision"]==1 and
    event["from_state"] is None and bool(event["authorization_decision_ref"]) and
    event["release_inserted"] and event["event_inserted"] and
-   event["audit_outbox_inserted"] and event["same_database_transaction"]
+   event["audit_outbox_inserted"] and event["same_database_transaction"] and
+   all(coordinate.get(k) for k in ("publisher_id","factory_id","release_version")) and
+   digest["profile_id"]=="efs-jcs-sha256-v1" and digest["algorithm"]=="SHA-256" and
+   len(digest["value"])==43 and
+   event["authorization_actions"]==["factory.register","factory.publish","release.publish"]
   )
   return ("accepted","PUBLICATION_ACCEPTED") if valid else ("rejected","PUBLICATION_INVALID")
  if (data["from"],data["to"]) not in LEGAL: return "rejected","ILLEGAL_TRANSITION"
