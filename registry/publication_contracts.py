@@ -64,6 +64,7 @@ class PublicationOperation:
     request: PublicationRequest
     state: PublicationState
     failure_code: str | None = None
+    release_record_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -91,6 +92,10 @@ class ArtifactStore(Protocol):
 
     def read(self, digest: DigestIdentity) -> bytes:
         """Return object bytes; caller independently recomputes the digest."""
+        ...
+
+    def describe(self, digest: DigestIdentity) -> StoredArtifact | None:
+        """Return verified storage metadata, or None when the object is absent."""
         ...
 
     def delete_if_match(self, artifact: StoredArtifact) -> bool:
