@@ -1,0 +1,87 @@
+{
+  "registryVersion": "1.0",
+  "issue": "PSI-44",
+  "normativeDocument": "docs/efs-v1-execution-contract.md",
+  "acceptanceCriteria": [
+    {
+      "id": "PSI44-AC-01",
+      "requirement": "Versioned transport-neutral request, event, accepted, progress, result and error envelope schemas are published.",
+      "tests": [
+        "test_execution_envelope_schema_and_examples_conform"
+      ],
+      "fixtures": [
+        "executionExamples"
+      ]
+    },
+    {
+      "id": "PSI44-AC-02",
+      "requirement": "Every envelope carries the exact immutable publisher/factory/release digest/capability/contract/profile/mode context.",
+      "tests": [
+        "test_envelope_binds_exact_manifest_and_contract_coordinates"
+      ],
+      "fixtures": [
+        "executionExamples"
+      ]
+    },
+    {
+      "id": "PSI44-AC-03",
+      "requirement": "Payload-bearing envelopes delegate inputs, outputs and error details to the shared PSI-43 validator port; no second payload validator is implemented.",
+      "tests": [
+        "test_payload_bearing_messages_require_and_use_shared_validator_port"
+      ],
+      "fixtures": [
+        "executionExamples"
+      ]
+    },
+    {
+      "id": "PSI44-AC-04",
+      "requirement": "Correlation and invocation IDs remain stable and causation references the preceding message in an observed chain.",
+      "tests": [
+        "test_causal_transition_propagates_correlation_and_causation"
+      ],
+      "fixtures": [
+        "executionExamples"
+      ]
+    },
+    {
+      "id": "PSI44-AC-05",
+      "requirement": "Declared error codes are preserved and undeclared codes rejected; structured details require the declared error schema through PSI-43.",
+      "tests": [
+        "test_error_messages_require_declared_contract_error_codes"
+      ],
+      "fixtures": [
+        "executionExamples"
+      ]
+    },
+    {
+      "id": "PSI44-AC-06",
+      "requirement": "Mode-specific message shapes and observed transitions are explicit without implementing the PSI-45 state machine.",
+      "tests": [
+        "test_mode_specific_envelopes_and_transition_rules"
+      ],
+      "fixtures": [
+        "executionExamples"
+      ]
+    },
+    {
+      "id": "PSI44-AC-07",
+      "requirement": "No ambient guarantees, protocol selection, durable queue claim, retry, idempotency or cancellation behavior are introduced.",
+      "tests": [
+        "test_vectors_make_transport_and_guarantee_non_inference_explicit"
+      ],
+      "fixtures": [
+        "executionExamples"
+      ]
+    },
+    {
+      "id": "PSI44-AC-08",
+      "requirement": "Examples and machine-readable vectors are language-neutral and acceptance-traceable.",
+      "tests": [
+        "test_execution_acceptance_registry_maps_to_executable_tests"
+      ],
+      "fixtures": [
+        "executionExamples"
+      ]
+    }
+  ]
+}
