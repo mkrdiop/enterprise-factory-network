@@ -1,0 +1,94 @@
+{
+  "acceptanceSetVersion": "1.0",
+  "issue": "PSI-46",
+  "authority": "docs/efs-v1-version-dimensions.md",
+  "criteria": [
+    {
+      "id": "PSI46-AC-01",
+      "requirement": "The four independent dimensions have one canonical field/representation, owner and scope.",
+      "tests": [
+        "test_version_dimensions_are_complete_and_unique"
+      ],
+      "vectors": []
+    },
+    {
+      "id": "PSI46-AC-02",
+      "requirement": "SemVer 2.0.0 applies only to efsVersion and release.version.",
+      "tests": [
+        "test_semver_is_limited_to_spec_and_factory_release"
+      ],
+      "vectors": [
+        "SEM-001",
+        "SEM-002",
+        "SEM-005",
+        "SEM-006",
+        "SEM-007",
+        "SEM-008",
+        "SEM-009"
+      ]
+    },
+    {
+      "id": "PSI46-AC-03",
+      "requirement": "Capability contract version remains opaque, non-empty and exact; no SemVer ordering is defined.",
+      "tests": [
+        "test_contract_version_remains_opaque_and_exact"
+      ],
+      "vectors": [
+        "CONTRACT-001",
+        "CONTRACT-002",
+        "CONTRACT-003"
+      ]
+    },
+    {
+      "id": "PSI46-AC-04",
+      "requirement": "Implementation build identity remains external provenance and is not a core manifest field.",
+      "tests": [
+        "test_build_identity_is_external_provenance"
+      ],
+      "vectors": [
+        "BUILD-001"
+      ]
+    },
+    {
+      "id": "PSI46-AC-05",
+      "requirement": "No cross-dimension comparisons; Factory release comparison is scoped to exact publisher/Factory identity.",
+      "tests": [
+        "test_release_comparison_scope_is_exact_factory_identity",
+        "test_cross_dimension_comparison_is_prohibited"
+      ],
+      "vectors": [
+        "SCOPE-001",
+        "SCOPE-002"
+      ]
+    },
+    {
+      "id": "PSI46-AC-06",
+      "requirement": "SemVer build metadata does not affect precedence; equal-precedence exact release labels are never implicitly selected.",
+      "tests": [
+        "test_build_metadata_precedence_requires_exact_selection"
+      ],
+      "vectors": [
+        "SEM-004",
+        "PRECEDENCE-001"
+      ]
+    },
+    {
+      "id": "PSI46-AC-07",
+      "requirement": "Release version and digest remain distinct; a different digest for an existing exact release version is a conflict.",
+      "tests": [
+        "test_release_version_and_digest_are_independent_immutable_coordinates"
+      ],
+      "vectors": [
+        "DIGEST-001"
+      ]
+    },
+    {
+      "id": "PSI46-AC-08",
+      "requirement": "The normative model and language-neutral vectors are linked into the repository catalogue and architecture decision index.",
+      "tests": [
+        "test_version_dimension_catalogue_is_registered"
+      ],
+      "vectors": []
+    }
+  ]
+}
