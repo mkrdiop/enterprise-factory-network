@@ -33,7 +33,7 @@ def test_machine_readable_compatibility_vectors():
             target = CompatibilityDimension.RUNTIME if dimension == "runtime-execution" else CompatibilityDimension.PROTOCOL
             result = assess_profile_mapping(
                 target, subject_profile_id=vector["subjectProfile"], consumer_profile_id=vector["consumerProfile"],
-                mapping_id=vector["mapping"], evidence=EVIDENCE if vector["evidence"] else (),
+                mapping_id=vector["mapping"], mapping_outcome=vector.get("mappingOutcome"),\n                evidence=EVIDENCE if vector["evidence"] else (),
             )
         else:
             result = assess_governance(
