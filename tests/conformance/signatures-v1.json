@@ -17,7 +17,7 @@
           "efs_version": "1.0.0",
           "digest": {
             "profile_id": "efs-jcs-sha256-v1",
-            "algorithm": "sha-256",
+            "algorithm": "SHA-256",
             "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           }
         },
@@ -27,11 +27,11 @@
         }
       },
       "expected": {
-        "jcs": "{\"domain\":\"efs.release.signature.v1\",\"signer\":{\"algorithm\":\"Ed25519\",\"key_id\":\"release-2026-01\"},\"statement\":{\"digest\":{\"algorithm\":\"sha-256\",\"profile_id\":\"efs-jcs-sha256-v1\",\"value\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"},\"efs_version\":\"1.0.0\",\"factory_id\":\"payments-risk\",\"publisher_id\":\"urn:example:publishers:acme\",\"purpose\":\"efs.release.signature.v1\",\"release_version\":\"1.4.2\"}}",
-        "preimage_base64url": "RUZTLVNJR05BVFVSRS1WMQp7ImRvbWFpbiI6ImVmcy5yZWxlYXNlLnNpZ25hdHVyZS52MSIsInNpZ25lciI6eyJhbGdvcml0aG0iOiJFZDI1NTE5Iiwia2V5X2lkIjoicmVsZWFzZS0yMDI2LTAxIn0sInN0YXRlbWVudCI6eyJkaWdlc3QiOnsiYWxnb3JpdGhtIjoic2hhLTI1NiIsInByb2ZpbGVfaWQiOiJlZnMtamNzLXNoYTI1Ni12MSIsInZhbHVlIjoiQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQSJ9LCJlZnNfdmVyc2lvbiI6IjEuMC4wIiwiZmFjdG9yeV9pZCI6InBheW1lbnRzLXJpc2siLCJwdWJsaXNoZXJfaWQiOiJ1cm46ZXhhbXBsZTpwdWJsaXNoZXJzOmFjbWUiLCJwdXJwb3NlIjoiZWZzLnJlbGVhc2Uuc2lnbmF0dXJlLnYxIiwicmVsZWFzZV92ZXJzaW9uIjoiMS40LjIifX0",
+        "jcs": "{\"domain\":\"efs.release.signature.v1\",\"signer\":{\"algorithm\":\"Ed25519\",\"key_id\":\"release-2026-01\"},\"statement\":{\"digest\":{\"algorithm\":\"SHA-256\",\"profile_id\":\"efs-jcs-sha256-v1\",\"value\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"},\"efs_version\":\"1.0.0\",\"factory_id\":\"payments-risk\",\"publisher_id\":\"urn:example:publishers:acme\",\"purpose\":\"efs.release.signature.v1\",\"release_version\":\"1.4.2\"}}",
+        "preimage_base64url": "RUZTLVNJR05BVFVSRS1WMQp7ImRvbWFpbiI6ImVmcy5yZWxlYXNlLnNpZ25hdHVyZS52MSIsInNpZ25lciI6eyJhbGdvcml0aG0iOiJFZDI1NTE5Iiwia2V5X2lkIjoicmVsZWFzZS0yMDI2LTAxIn0sInN0YXRlbWVudCI6eyJkaWdlc3QiOnsiYWxnb3JpdGhtIjoiU0hBLTI1NiIsInByb2ZpbGVfaWQiOiJlZnMtamNzLXNoYTI1Ni12MSIsInZhbHVlIjoiQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQSJ9LCJlZnNfdmVyc2lvbiI6IjEuMC4wIiwiZmFjdG9yeV9pZCI6InBheW1lbnRzLXJpc2siLCJwdWJsaXNoZXJfaWQiOiJ1cm46ZXhhbXBsZTpwdWJsaXNoZXJzOmFjbWUiLCJwdXJwb3NlIjoiZWZzLnJlbGVhc2Uuc2lnbmF0dXJlLnYxIiwicmVsZWFzZV92ZXJzaW9uIjoiMS40LjIifX0",
         "public_key_base64url": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
-        "signature_base64url": "mszUaqedGSjNEHmi5bYoN3K2_tEVRr5uG_Lk2rse_pQoSi5zjKxCKazx9MQBNwuBVUqUZWkqRwLwOWZ6HEqoCw",
-        "preimage_sha256": "3dfe3719e41cf07ce2594cc736dc95f59ee2c5158dbc89a685284f4f2df443e8",
+        "signature_base64url": "K7Mg-P0PlWYibFA_vQ3xqt3DvO88XjCHGEcJJcF0_GNtHwjTtAEWUU6BlUiO6-3CCQW8dyw3T0G_jvEWJjgtCw",
+        "preimage_sha256": "32f44e821c247d8beff88dd0fa17e8c5f3ca9c745775fe56578d67a42d40a708",
         "valid": true
       }
     },
@@ -118,6 +118,116 @@
       "mutation": "Manifest contains release.signature or non-canonical publisher URI.",
       "expected": "manifest-semantic-validation-failure",
       "valid": false
+    },
+    {
+      "id": "sig-encoding-001",
+      "kind": "encoding",
+      "description": "Canonical 32-octet public-key Base64URL has 43 characters and zero unused pad bits.",
+      "input": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "expected": {
+        "decoded_octets": 32,
+        "canonical": true
+      }
+    },
+    {
+      "id": "sig-encoding-002",
+      "kind": "encoding",
+      "description": "Reject non-zero unused pad bits in a 32-octet Base64URL value.",
+      "input": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB",
+      "expected": {
+        "canonical": false
+      }
+    },
+    {
+      "id": "sig-encoding-003",
+      "kind": "encoding",
+      "description": "Canonical 64-octet signature Base64URL has 86 characters and zero unused pad bits.",
+      "input": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "expected": {
+        "decoded_octets": 64,
+        "canonical": true
+      }
+    },
+    {
+      "id": "sig-encoding-004",
+      "kind": "encoding",
+      "description": "Reject non-zero unused pad bits in a 64-octet Base64URL value.",
+      "input": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB",
+      "expected": {
+        "canonical": false
+      }
+    },
+    {
+      "id": "sig-uri-001",
+      "kind": "publisher-uri",
+      "input": "urn:example:publishers:acme",
+      "expected": {
+        "valid": true,
+        "canonical": "urn:example:publishers:acme"
+      }
+    },
+    {
+      "id": "sig-uri-002",
+      "kind": "publisher-uri",
+      "input": "URN:example:publishers:acme",
+      "expected": {
+        "valid": true,
+        "canonical": "urn:example:publishers:acme"
+      }
+    },
+    {
+      "id": "sig-uri-003",
+      "kind": "publisher-uri",
+      "input": "https://IDENTITY.example/publishers/acme",
+      "expected": {
+        "valid": true,
+        "canonical": "https://identity.example/publishers/acme"
+      }
+    },
+    {
+      "id": "sig-uri-004",
+      "kind": "publisher-uri",
+      "input": "https://identity.example/publishers/%7eacme",
+      "expected": {
+        "valid": true,
+        "canonical": "https://identity.example/publishers/~acme"
+      }
+    },
+    {
+      "id": "sig-uri-005",
+      "kind": "publisher-uri",
+      "input": "https://identity.example/a/../publishers/acme",
+      "expected": {
+        "valid": true,
+        "canonical": "https://identity.example/publishers/acme"
+      }
+    },
+    {
+      "id": "sig-uri-006",
+      "kind": "publisher-uri",
+      "input": "https://identity.example/publishers/acme?x=1",
+      "expected": {
+        "valid": false
+      }
+    },
+    {
+      "id": "sig-uri-007",
+      "kind": "publisher-uri",
+      "input": "https://user@identity.example/publishers/acme",
+      "expected": {
+        "valid": false
+      }
+    },
+    {
+      "id": "sig-uri-008",
+      "kind": "publisher-uri",
+      "input": "https://identity.example/publishers/%2f",
+      "expected": {
+        "valid": true,
+        "canonical": "https://identity.example/publishers/%2F"
+      }
     }
-  ]
+  ],
+  "interop_fixture": "tests/conformance/fixtures/psi50-release-interoperability-v1.json",
+  "independent_verifier": "tests/conformance/verify_psi50_interop.mjs"
 }
