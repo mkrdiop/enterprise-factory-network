@@ -1,0 +1,447 @@
+{
+  "vector_set": "psi-54-lifecycle-v1",
+  "version": "1.0.0",
+  "states": [
+    "published",
+    "suspended",
+    "deprecated",
+    "revoked",
+    "archived"
+  ],
+  "legal_transitions": [
+    {
+      "from": "published",
+      "to": "suspended"
+    },
+    {
+      "from": "published",
+      "to": "deprecated"
+    },
+    {
+      "from": "published",
+      "to": "revoked"
+    },
+    {
+      "from": "suspended",
+      "to": "published"
+    },
+    {
+      "from": "suspended",
+      "to": "deprecated"
+    },
+    {
+      "from": "suspended",
+      "to": "revoked"
+    },
+    {
+      "from": "deprecated",
+      "to": "revoked"
+    },
+    {
+      "from": "deprecated",
+      "to": "archived"
+    },
+    {
+      "from": "revoked",
+      "to": "archived"
+    }
+  ],
+  "vectors": [
+    {
+      "id": "psi54-001",
+      "scenario": "published to suspended",
+      "input": {
+        "from": "published",
+        "to": "suspended",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-002",
+      "scenario": "published to deprecated",
+      "input": {
+        "from": "published",
+        "to": "deprecated",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-003",
+      "scenario": "published to revoked",
+      "input": {
+        "from": "published",
+        "to": "revoked",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-004",
+      "scenario": "suspended to published re-admission",
+      "input": {
+        "from": "suspended",
+        "to": "published",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-005",
+      "scenario": "suspended to deprecated",
+      "input": {
+        "from": "suspended",
+        "to": "deprecated",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-006",
+      "scenario": "suspended to revoked",
+      "input": {
+        "from": "suspended",
+        "to": "revoked",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-007",
+      "scenario": "deprecated to revoked",
+      "input": {
+        "from": "deprecated",
+        "to": "revoked",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-008",
+      "scenario": "deprecated to archived",
+      "input": {
+        "from": "deprecated",
+        "to": "archived",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-009",
+      "scenario": "revoked to archived",
+      "input": {
+        "from": "revoked",
+        "to": "archived",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "TRANSITION_ACCEPTED"
+      }
+    },
+    {
+      "id": "psi54-010",
+      "scenario": "archived is terminal",
+      "input": {
+        "from": "archived",
+        "to": "published",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "ILLEGAL_TRANSITION"
+      }
+    },
+    {
+      "id": "psi54-011",
+      "scenario": "revoked cannot be republished",
+      "input": {
+        "from": "revoked",
+        "to": "published",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "ILLEGAL_TRANSITION"
+      }
+    },
+    {
+      "id": "psi54-012",
+      "scenario": "draft is not a registered release",
+      "input": {
+        "from": "draft",
+        "to": "validated",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "ILLEGAL_TRANSITION"
+      }
+    },
+    {
+      "id": "psi54-013",
+      "scenario": "validated is not a registered release",
+      "input": {
+        "from": "validated",
+        "to": "published",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "ILLEGAL_TRANSITION"
+      }
+    },
+    {
+      "id": "psi54-014",
+      "scenario": "self transition rejected",
+      "input": {
+        "from": "published",
+        "to": "published",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "ILLEGAL_TRANSITION"
+      }
+    },
+    {
+      "id": "psi54-015",
+      "scenario": "authorization denied",
+      "input": {
+        "from": "published",
+        "to": "suspended",
+        "authorized": false,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "AUTHORIZATION_DENIED"
+      }
+    },
+    {
+      "id": "psi54-016",
+      "scenario": "reason required",
+      "input": {
+        "from": "published",
+        "to": "deprecated",
+        "authorized": true,
+        "reason_present": false,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "REASON_REQUIRED"
+      }
+    },
+    {
+      "id": "psi54-017",
+      "scenario": "revocation evidence required",
+      "input": {
+        "from": "published",
+        "to": "revoked",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": false,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "REVOCATION_EVIDENCE_REQUIRED"
+      }
+    },
+    {
+      "id": "psi54-018",
+      "scenario": "failed re-admission precondition",
+      "input": {
+        "from": "suspended",
+        "to": "published",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": false,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "PRECONDITION_FAILED"
+      }
+    },
+    {
+      "id": "psi54-019",
+      "scenario": "failed retention precondition",
+      "input": {
+        "from": "deprecated",
+        "to": "archived",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": false,
+        "expected_revision_matches": true,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "PRECONDITION_FAILED"
+      }
+    },
+    {
+      "id": "psi54-020",
+      "scenario": "stale lifecycle revision",
+      "input": {
+        "from": "published",
+        "to": "suspended",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": false,
+        "idempotency_replay": "none"
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "STALE_REVISION"
+      }
+    },
+    {
+      "id": "psi54-021",
+      "scenario": "same idempotency key and fingerprint replay",
+      "input": {
+        "from": "published",
+        "to": "suspended",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "same_request"
+      },
+      "expected": {
+        "result": "accepted",
+        "reason": "IDEMPOTENT_REPLAY"
+      }
+    },
+    {
+      "id": "psi54-022",
+      "scenario": "same idempotency key different fingerprint",
+      "input": {
+        "from": "published",
+        "to": "suspended",
+        "authorized": true,
+        "reason_present": true,
+        "evidence_present": true,
+        "preconditions_met": true,
+        "expected_revision_matches": true,
+        "idempotency_replay": "different_request"
+      },
+      "expected": {
+        "result": "rejected",
+        "reason": "IDEMPOTENCY_CONFLICT"
+      }
+    }
+  ]
+}
