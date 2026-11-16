@@ -85,6 +85,16 @@ class SemVer:
             return NotImplemented
         return self.compare_precedence(other) < 0
 
+    def __hash__(self) -> int:
+        # SemVer precedence deliberately ignores build metadata; equality must
+        # therefore have the same hash for labels that differ only by build.
+        prerelease_key = tuple(
+            (0, int(identifier)) if identifier.isascii() and identifier.isdigit()
+            else (1, identifier)
+            for identifier in self.prerelease
+        )
+        return hash((self.major, self.minor, self.patch, prerelease_key))
+
 
 def parse_field_version(field: VersionDimension | str, value: str) -> SemVer:
     """Parse only the two SemVer-governed EFS v1 fields."""
