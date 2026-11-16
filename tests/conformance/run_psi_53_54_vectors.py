@@ -83,13 +83,41 @@ def psi53(data):
  if not commit_data["audit_outbox_available"]: return "rejected","AUDIT_DURABILITY_FAILURE"
  side=commit_data["side_effect"]
  if commit_data["operation_kind"]=="external_effect":
-  state=commit_data["execution_state"]
-  required_intent=(side["intent_durable"] and side["idempotency_key"] and side["operation_id"] and side["intent_record_id"] and side["audit_record_id"] and side["payload_fingerprint"] and state is not None and state["persisted_with_intent"] and state["revision_cas"] and state["initial_state"]=="requested" and state["initial_revision"]==1 and state["invocation_id"]==side["operation_id"] and state["initial_event_id"] and side["payload_fingerprint"].startswith("sha256:") and len(side["payload_fingerprint"])==50)
-  if not required_intent: return "rejected","EXECUTION_INTENT_NOT_DURABLE"
-  if side["dispatch_attempted"] and side["outcome_recorded"] and (not side["outcome_ref"] or state["current_state"] not in ("succeeded","failed","cancelled") or (state["current_state"]=="cancelled" and not state.get("governance_reference")) or state["current_revision"]<2):
-   return "indeterminate","EXECUTION_OUTCOME_UNKNOWN"
+  execution=commit_data["execution_state"]
+  request=execution["request_event"]
+  initial=execution["initial_snapshot"]
+  current=execution["current_snapshot"]
+  intent_ok=(
+   side["intent_durable"] and side["idempotency_key"] and side["operation_id"] and
+   side["intent_record_id"] and side["audit_record_id"] and
+   side["payload_fingerprint"].startswith("sha256:") and len(side["payload_fingerprint"])==50 and
+   execution["persisted_with_intent"] and execution["revision_cas"] and
+   request["eventVersion"]=="1.0" and request["eventType"]=="request" and
+   request["source"]=="envelope" and request["fromState"]=="created" and
+   request["toState"]=="requested" and request["expectedRevision"]==0 and
+   request["invocationId"]==side["operation_id"] and request["eventId"] and
+   initial["stateVersion"]=="1.0" and initial["state"]=="requested" and
+   initial["revision"]==1 and initial["lastEventId"]==request["eventId"] and
+   initial["invocationId"]==request["invocationId"] and
+   initial["correlationId"]==request["correlationId"] and
+   initial["context"]==request["context"] and
+   current["invocationId"]==request["invocationId"] and
+   current["correlationId"]==request["correlationId"] and
+   current["context"]==initial["context"]
+  )
+  if not intent_ok: return "rejected","EXECUTION_INTENT_NOT_DURABLE"
+  if side["dispatch_attempted"] and side["outcome_recorded"]:
+   outcome=execution["outcome_event"]
+   terminal=outcome is not None and outcome["eventType"] in ("succeeded","failed","cancelled")
+   terminal=terminal and outcome["invocationId"]==request["invocationId"] and outcome["correlationId"]==request["correlationId"]
+   terminal=terminal and outcome["expectedRevision"]==1 and outcome["fromState"] in ("requested","accepted","queued","running","waiting")
+   terminal=terminal and outcome["toState"]==current["state"] and current["revision"]==2
+   terminal=terminal and current["lastEventId"]==outcome["eventId"] and bool(side["outcome_ref"])
+   terminal=terminal and (outcome["eventType"]!="cancelled" or (outcome["source"]=="governed_control" and outcome.get("governanceRef")))
+   if not terminal: return "indeterminate","EXECUTION_OUTCOME_UNKNOWN"
   if side["dispatch_attempted"] and not side["outcome_recorded"]:
    return "indeterminate","EXECUTION_OUTCOME_UNKNOWN"
+
  return "enforced","PERMIT_ENFORCED"
 
 def psi54(data):
