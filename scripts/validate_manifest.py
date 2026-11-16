@@ -12,7 +12,7 @@ import json
 import re
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlsplit, urlparse
+from urllib.parse import urlparse, urlsplit
 
 from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError
@@ -163,9 +163,7 @@ def _remove_dot_segments(path: str) -> str:
     while source:
         if source.startswith("../"):
             source = source[3:]
-        elif source.startswith("./"):
-            source = source[2:]
-        elif source.startswith("/./"):
+        elif source.startswith("./") or source.startswith("/./"):
             source = source[2:]
         elif source == "/.":
             source = "/"
