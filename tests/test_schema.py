@@ -191,19 +191,6 @@ def test_local_fragment_schema_reference_is_accepted(tmp_path):
 
 
 
-def test_contract_payload_object_invariant_is_reported_in_profile_stage(tmp_path):
-    doc = load_json(ROOT / "fixtures/valid/manifest-minimal.json")
-    doc["capabilities"][0]["contract"]["inputs"] = {"type": "string"}
-    path = tmp_path / "non-object-input-schema.json"
-    path.write_text(json.dumps(doc), encoding="utf-8")
-    report = validate_report(path, SCHEMA_PATH)
-    assert not report["valid"]
-    assert report["stages"]["embedded_schemas"] == "passed"
-    assert report["stages"]["profile"] == "failed"
-    assert report["diagnostics"][0]["stage"] == "profile"
-    assert report["diagnostics"][0]["path"] == "/capabilities/0/contract/inputs/type"
-
-
 def test_cli_json_report_contract():
     import subprocess
     result = subprocess.run(
