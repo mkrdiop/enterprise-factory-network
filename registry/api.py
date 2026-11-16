@@ -10,10 +10,10 @@ from .digests import ReleaseDigestError, reconstruct_manifest
 from .publication_contracts import DigestIdentity
 from .publication_service import ManifestValidationError, RegistryPublicationService
 from .passports import (
+    PassportSourceMismatch,
     build_factory_passport,
     canonical_passport_json,
     render_factory_passport_markdown,
-    PassportSourceMismatch,
 )
 from .query_repository import (
     ArtifactLocationUnavailable,
