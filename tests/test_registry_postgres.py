@@ -1,11 +1,10 @@
-"""PostgreSQL-only behavior tests; configure EFS_TEST_DATABASE_URL to run."""
+"""PostgreSQL-only behavior tests; migrations are applied by the CI job."""
 import os
 from datetime import datetime, timezone
 import pytest
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy.orm import Session
-from registry.models import Base
 from registry.repositories import FactoryRepository, PublisherRepository, ReleaseRepository, RegistryConflict
 
 URL=os.getenv("EFS_TEST_DATABASE_URL")
@@ -14,10 +13,10 @@ pytestmark=pytest.mark.skipif(not URL,reason="EFS_TEST_DATABASE_URL not configur
 @pytest.fixture
 def session():
     engine=create_engine(URL)
-    Base.metadata.create_all(engine)
     with Session(engine) as s:
-        with s.begin(): yield s
-    Base.metadata.drop_all(engine); engine.dispose()
+        with s.begin():
+            yield s
+    engine.dispose()
 
 def test_publisher_scoped_factory_identity(session):
     p=PublisherRepository(session); p.create("urn:example:publisher:a"); p.create("urn:example:publisher:b")
@@ -37,6 +36,12 @@ def test_release_is_immutable_and_digest_bound(session):
     row=ReleaseRepository(session).publish("urn:example:publisher:r","f","1.0","efs-jcs-sha256-v1","SHA-256","abc",12,"test","abc",datetime.now(timezone.utc))
     with pytest.raises(DBAPIError):
         session.execute(text("UPDATE factory_releases SET digest_value='changed' WHERE release_record_id=:id"),{"id":str(row.release_record_id)})
+        session.flush()
+
+def test_publisher_identity_is_immutable(session):
+    pub=PublisherRepository(session).create("urn:example:publisher:immutable")
+    with pytest.raises(DBAPIError):
+        session.execute(text("UPDATE publishers SET publisher_uri='urn:example:publisher:changed' WHERE publisher_record_id=:id"),{"id":str(pub.publisher_record_id)})
         session.flush()
 
 def test_retired_factory_cannot_publish(session):
