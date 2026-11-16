@@ -191,6 +191,7 @@ def test_execution_acceptance_registry_maps_to_executable_tests():
         "test_mode_specific_envelopes_and_transition_rules",
         "test_vectors_make_transport_and_guarantee_non_inference_explicit",
         "test_execution_acceptance_registry_maps_to_executable_tests",
+        "test_context_mismatch_stops_before_payload_validator_invocation",
     }
     criteria = registry["acceptanceCriteria"]
     assert [item["id"] for item in criteria] == [
