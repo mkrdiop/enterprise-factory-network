@@ -65,10 +65,11 @@
               },
               "scope": {
                 "type": "object",
+                "additionalProperties": false,
                 "required": [
                   "tenant_id",
                   "principal_id",
-                  "release_record_id",
+                  "release_coordinate",
                   "operation"
                 ],
                 "properties": {
@@ -80,9 +81,33 @@
                     "type": "string",
                     "minLength": 1
                   },
-                  "release_record_id": {
-                    "type": "string",
-                    "minLength": 1
+                  "release_coordinate": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "publisher_id",
+                      "factory_id",
+                      "release_version",
+                      "digest"
+                    ],
+                    "properties": {
+                      "publisher_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "factory_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "release_version": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "digest": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_-]{43}$"
+                      }
+                    }
                   },
                   "operation": {
                     "enum": [
@@ -128,10 +153,11 @@
                         "properties": {
                           "scope": {
                             "type": "object",
+                            "additionalProperties": false,
                             "required": [
                               "tenant_id",
                               "principal_id",
-                              "release_record_id",
+                              "release_coordinate",
                               "operation"
                             ],
                             "properties": {
@@ -143,9 +169,33 @@
                                 "type": "string",
                                 "minLength": 1
                               },
-                              "release_record_id": {
-                                "type": "string",
-                                "minLength": 1
+                              "release_coordinate": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                  "publisher_id",
+                                  "factory_id",
+                                  "release_version",
+                                  "digest"
+                                ],
+                                "properties": {
+                                  "publisher_id": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "factory_id": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "release_version": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "digest": {
+                                    "type": "string",
+                                    "pattern": "^[A-Za-z0-9_-]{43}$"
+                                  }
+                                }
                               },
                               "operation": {
                                 "enum": [
