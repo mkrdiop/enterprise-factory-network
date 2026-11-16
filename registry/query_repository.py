@@ -170,6 +170,7 @@ class RegistryQueryRepository:
             if blob is None or location is None:
                 raise ArtifactLocationUnavailable("release artifact location is unavailable")
             return {
+                "releaseRecordId": str(release.release_record_id),
                 "publisherId": publisher_uri,
                 "factoryId": factory_id,
                 "version": release.version,

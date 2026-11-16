@@ -14,6 +14,7 @@ tags:
   - name: publications
   - name: factories
   - name: releases
+  - name: passports
 paths:
   /v1/releases:
     post:
@@ -151,6 +152,56 @@ paths:
                 $ref: '#/components/schemas/ErrorEnvelope'
         '404':
           description: Factory not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+  /v1/passports:
+    get:
+      tags: [passports]
+      operationId: getExactFactoryPassport
+      summary: Generate a deterministic Passport from one exact registered release
+      description: >
+        Read-only derived projection. The exact release is fetched from the registry
+        and its digest-addressed artifact is independently verified before projection.
+        No Passport identity, latest-version resolution, trust, signature validation,
+        policy evaluation or authorization is introduced.
+      parameters:
+        - $ref: '#/components/parameters/PublisherId'
+        - $ref: '#/components/parameters/FactoryId'
+        - name: version
+          in: query
+          required: true
+          description: Exact opaque release version; no latest or semantic-version resolution.
+          schema:
+            type: string
+            minLength: 1
+        - name: format
+          in: query
+          required: false
+          description: Machine-readable canonical JSON or human-readable Markdown.
+          schema:
+            type: string
+            enum: [json, markdown]
+            default: json
+      responses:
+        '200':
+          description: Deterministic Passport derived from the exact verified release.
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/passport/v1/factory-passport.schema.json
+            text/markdown:
+              schema:
+                type: string
+        '404':
+          description: Exact registered release not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '503':
+          description: Artifact unavailable or integrity verification failed.
           content:
             application/json:
               schema:
