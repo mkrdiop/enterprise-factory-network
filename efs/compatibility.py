@@ -8,9 +8,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from enum import Enum
-from collections.abc import Iterable
 
 
 class CompatibilityError(ValueError):
