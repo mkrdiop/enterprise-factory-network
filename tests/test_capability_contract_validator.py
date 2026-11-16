@@ -205,6 +205,8 @@ def test_validator_acceptance_registry_maps_to_executable_tests():
         "test_payload_validation_uses_exact_release_contract_and_direction",
         "test_payload_validation_supports_only_preloaded_local_resource_graph",
         "test_declared_error_details_are_validated_by_the_contract_error_schema",
+        "test_definition_reference_graph_resolves_only_prebundled_resources",
+        "test_duplicate_schema_resource_ids_are_rejected",
         "test_publication_rejects_invalid_contract_before_digest_storage_or_commit",
         "test_validator_acceptance_registry_maps_to_executable_tests",
     }
