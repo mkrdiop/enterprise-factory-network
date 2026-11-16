@@ -8,6 +8,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 from registry.digests import canonicalize_and_verify
 from registry.signatures import (
+    EFSReleaseSignatureVerifier,
     Ed25519Signer,
     KeyResolution,
     KeyTrustStatus,
@@ -20,7 +21,10 @@ from registry.signatures import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-MANIFEST_FIXTURE = ROOT / "fixtures/valid/manifest-minimal.json"
+DIGEST_VECTOR = json.loads(
+    (ROOT / "conformance/efs/v1/release-digest-vectors.json").read_text(encoding="utf-8")
+)["vectors"][0]
+MANIFEST_FIXTURE = ROOT / DIGEST_VECTOR["fixture"]
 SEED = bytes(range(32))
 PRIVATE = Ed25519PrivateKey.from_private_bytes(SEED)
 PUBLIC = PRIVATE.public_key().public_bytes_raw()
@@ -47,9 +51,9 @@ class FixtureResolver:
 
 
 def _manifest_bytes():
-    raw = MANIFEST_FIXTURE.read_bytes()
-    manifest = json.loads(raw)
-    # Fixture carries a valid digest already; assert rather than rewrite it.
+    manifest = json.loads(MANIFEST_FIXTURE.read_text(encoding="utf-8"))
+    manifest["release"]["digest"]["value"] = DIGEST_VECTOR["expectedDigest"]
+    raw = json.dumps(manifest, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     canonicalize_and_verify(raw)
     return raw, manifest
 
@@ -60,6 +64,12 @@ def _signed():
     return raw, manifest, envelope, serialize_signature_envelope(envelope)
 
 
+def test_transport_neutral_verifier_adapter_uses_injected_resolver():
+    raw, _manifest, _envelope, encoded = _signed()
+    verifier = EFSReleaseSignatureVerifier(FixtureResolver())
+    assert verifier.verify(raw, encoded).code is SignatureCode.VERIFIED
+
+
 def test_known_seed_ed25519_signing_and_verification_round_trip():
     raw, _manifest, _envelope, encoded = _signed()
     resolver = FixtureResolver()
@@ -68,7 +78,7 @@ def test_known_seed_ed25519_signing_and_verification_round_trip():
     assert result.digest_valid is True
     assert result.cryptographic_valid is True
     assert result.all_keys_trusted is True
-    assert result.admission_eligible is True
+    assert result.trusted_signature_evidence is True
     assert resolver.calls == [(
         "urn:example:publishers:acme",
         "test-release-key",
@@ -77,9 +87,24 @@ def test_known_seed_ed25519_signing_and_verification_round_trip():
     )]
 
 
+def test_psi50_known_answer_vector_matches_exact_preimage_and_ed25519():
+    vectors = json.loads(
+        (ROOT / "tests/conformance/signatures-v1.json").read_text(encoding="utf-8")
+    )
+    vector = next(item for item in vectors["vectors"] if item["id"] == "sig-kat-001")
+    statement = vector["input"]["statement"]
+    signer = vector["input"]["signer"]
+    preimage = signing_input(statement, signer["key_id"], signer["algorithm"])
+    assert base64.urlsafe_b64encode(preimage).rstrip(b"=").decode() == vector["expected"]["preimage_base64url"]
+    public_key = base64.urlsafe_b64decode(vector["expected"]["public_key_base64url"] + "==")
+    signature = base64.urlsafe_b64decode(vector["expected"]["signature_base64url"] + "==")
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+    Ed25519PublicKey.from_public_bytes(public_key).verify(signature, preimage)
+
+
 def test_exact_signing_prefix_and_domain_are_stable():
-    raw, manifest = _manifest_bytes()
-    envelope = create_signature_envelope(raw, "test-release-key", SIGNER)
+    _raw, _manifest = _manifest_bytes()
+    envelope = create_signature_envelope(_raw, "test-release-key", SIGNER)
     message = signing_input(envelope["statement"], "test-release-key")
     assert message.startswith(b"EFS-SIGNATURE-V1\n")
     canonical = message.removeprefix(b"EFS-SIGNATURE-V1\n")
@@ -90,7 +115,7 @@ def test_exact_signing_prefix_and_domain_are_stable():
 
 
 def test_manifest_digest_tampering_fails_before_resolver():
-    raw, manifest = _manifest_bytes()
+    _raw, manifest = _manifest_bytes()
     manifest["factory"]["id"] = "substituted-factory"
     changed = json.dumps(manifest).encode()
     resolver = FixtureResolver()
@@ -136,7 +161,7 @@ def test_cryptographic_validity_is_separate_from_key_trust(trust, expected):
     assert result.code is expected
     assert result.cryptographic_valid is True
     assert result.all_keys_trusted is False
-    assert result.admission_eligible is False
+    assert result.trusted_signature_evidence is False
 
 
 def test_unknown_key_is_typed_and_fails_closed():
@@ -182,7 +207,7 @@ def test_cross_publisher_key_substitution_is_binding_failure():
 
 
 def test_duplicate_signer_entries_are_rejected():
-    raw, _manifest, envelope, _encoded = _signed()
+    _raw, _manifest, envelope, _encoded = _signed()
     envelope["signatures"].append(dict(envelope["signatures"][0]))
     with pytest.raises(SignatureEnvelopeError) as error:
         serialize_signature_envelope(envelope)
@@ -200,7 +225,7 @@ def test_duplicate_json_members_are_rejected():
 
 
 def test_manifest_embedded_signature_is_rejected():
-    raw, manifest = _manifest_bytes()
+    _raw, manifest = _manifest_bytes()
     manifest["release"]["signature"] = {"signature": "attacker-controlled"}
     with pytest.raises(SignatureEnvelopeError) as error:
         create_signature_envelope(json.dumps(manifest).encode(), "test-release-key", SIGNER)
@@ -211,7 +236,7 @@ def test_manifest_embedded_signature_is_rejected():
 
 
 def test_unknown_envelope_property_is_rejected():
-    raw, _manifest, envelope, _encoded = _signed()
+    _raw, _manifest, envelope, _encoded = _signed()
     envelope["public_key"] = base64.urlsafe_b64encode(PUBLIC).rstrip(b"=").decode()
     with pytest.raises(SignatureEnvelopeError) as error:
         serialize_signature_envelope(envelope)
