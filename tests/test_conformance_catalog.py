@@ -102,8 +102,14 @@ def test_catalog_and_acceptance_registry_are_complete():
             "EFS_SCHEMA_CONSTRAINT", "EFS_EMBEDDED_SCHEMA_INVALID",
             "EFS_SCHEMA_REF_REMOTE", "EFS_SCHEMA_REF_UNSUPPORTED",
             "EFS_PROFILE_INVARIANT_FAILED", "EFS_PUBLISHER_URI_INVALID",
-            "EFS_PUBLISHER_URI_NON_CANONICAL", "EFS_CAPABILITY_ID_DUPLICATE",\n            "EFS_CONTRACT_ERROR_CODE_DUPLICATE", "EFS_CAPABILITY_EXECUTION_PROFILE_UNRESOLVED",\n            "EFS_SCHEMA_REF_UNRESOLVED"} <= codes
-    contract_catalog = catalog["capabilityContractValidation"]\n    assert (ROOT / contract_catalog["vectors"]).is_file()\n    assert (ROOT / contract_catalog["acceptance"]).is_file()\n    assert (ROOT / contract_catalog["testModule"]).is_file()\n    identity_catalog = catalog["publisherIdentity"]
+            "EFS_PUBLISHER_URI_NON_CANONICAL", "EFS_CAPABILITY_ID_DUPLICATE",
+            "EFS_CONTRACT_ERROR_CODE_DUPLICATE", "EFS_CAPABILITY_EXECUTION_PROFILE_UNRESOLVED",
+            "EFS_SCHEMA_REF_UNRESOLVED"} <= codes
+    contract_catalog = catalog["capabilityContractValidation"]
+    assert (ROOT / contract_catalog["vectors"]).is_file()
+    assert (ROOT / contract_catalog["acceptance"]).is_file()
+    assert (ROOT / contract_catalog["testModule"]).is_file()
+    identity_catalog = catalog["publisherIdentity"]
     assert (ROOT / identity_catalog["vectors"]).is_file()
     assert (ROOT / identity_catalog["acceptance"]).is_file()
     assert (ROOT / identity_catalog["testModule"]).is_file()
