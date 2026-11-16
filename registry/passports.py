@@ -104,7 +104,14 @@ def build_factory_passport(
     ):
         raise ValueError("registry release coordinates do not match verified manifest")
 
-    provenance: list[dict[str, str]] = []
+    provenance: list[dict[str, str]] = [
+        {
+            "target": "/passportVersion",
+            "source": "derivation",
+            "sourcePointer": "/passportVersion",
+            "rule": "passport-contract-version",
+        }
+    ]
     passport: dict[str, Any] = {
         "passportVersion": PASSPORT_VERSION,
         "source": {
@@ -176,7 +183,45 @@ def build_factory_passport(
             "authorization": "not_evaluated",
             "signatureMaterial": "not_part_of_digest_artifact",
         },
+        "summary": {
+            "capabilityCount": len(manifest["capabilities"]),
+            "dependencyCount": len(manifest["dependencies"]),
+            "policyDeclarationCount": len(manifest["policies"].get("declarations", [])),
+            "policyReferenceCount": len(manifest["policies"].get("references", [])),
+        },
     }
+    for field in ("artifactIntegrity",):
+        provenance.append({
+            "target": f"/assurance/{field}",
+            "source": "derivation",
+            "sourcePointer": "/registry/artifactReadback",
+            "rule": "verified-artifact-readback",
+        })
+    for field in ("publisherAuthentication", "publisherTrust", "signatureVerification", "authorization"):
+        provenance.append({
+            "target": f"/assurance/{field}",
+            "source": "derivation",
+            "sourcePointer": "/registry/verification",
+            "rule": "not-evaluated-by-registry",
+        })
+    provenance.append({
+        "target": "/assurance/signatureMaterial",
+        "source": "derivation",
+        "sourcePointer": "/release/digest",
+        "rule": "excluded-from-digest-artifact",
+    })
+    for field, source_path in (
+        ("capabilityCount", "/capabilities"),
+        ("dependencyCount", "/dependencies"),
+        ("policyDeclarationCount", "/policies/declarations"),
+        ("policyReferenceCount", "/policies/references"),
+    ):
+        provenance.append({
+            "target": f"/summary/{field}",
+            "source": "manifest",
+            "sourcePointer": source_path,
+            "rule": "count-items",
+        })
 
     if "name" in manifest["publisher"]:
         passport["publisher"]["name"] = _copy_with_provenance(
@@ -268,12 +313,12 @@ def render_factory_passport_markdown(passport: dict[str, Any]) -> str:
             "",
             "## Dependencies",
             "",
-            f"{len(passport['dependencies'])} dependency declaration(s).",
+            f"{passport['summary']['dependencyCount']} dependency declaration(s).",
             "",
             "## Policies",
             "",
-            f"{len(passport['policies'].get('declarations', []))} embedded declaration(s); "
-            f"{len(passport['policies'].get('references', []))} external reference(s).",
+            f"{passport['summary']['policyDeclarationCount']} embedded declaration(s); "
+            f"{passport['summary']['policyReferenceCount']} external reference(s).",
             "",
             "## Assurance",
             "",
