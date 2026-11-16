@@ -188,6 +188,7 @@ def build_factory_passport(
             "dependencyCount": len(manifest["dependencies"]),
             "policyDeclarationCount": len(manifest["policies"].get("declarations", [])),
             "policyReferenceCount": len(manifest["policies"].get("references", [])),
+            "endpointCount": sum(len(item["endpoints"]) for item in manifest["capabilities"]),
         },
     }
     for field in ("artifactIntegrity",):
@@ -215,12 +216,13 @@ def build_factory_passport(
         ("dependencyCount", "/dependencies"),
         ("policyDeclarationCount", "/policies/declarations"),
         ("policyReferenceCount", "/policies/references"),
+        ("endpointCount", "/capabilities"),
     ):
         provenance.append({
             "target": f"/summary/{field}",
             "source": "manifest",
             "sourcePointer": source_path,
-            "rule": "count-items",
+            "rule": "count-endpoint-items" if field == "endpointCount" else "count-items",
         })
 
     if "name" in manifest["publisher"]:
@@ -270,10 +272,6 @@ def render_factory_passport_markdown(passport: dict[str, Any]) -> str:
         f"- **Registry release record:** `{source['registry']['releaseRecordId']}`",
         f"- **Published at:** `{source['registry']['publishedAt']}`",
         "",
-        "## Description",
-        "",
-        factory.get("description", "No description declared in the source manifest."),
-        "",
         "## Capabilities",
         "",
     ]
@@ -296,6 +294,10 @@ def render_factory_passport_markdown(passport: dict[str, Any]) -> str:
                 "",
             ]
         )
+    if factory.get("description"):
+        lines[lines.index("## Capabilities"):lines.index("## Capabilities")] = [
+            "## Description", "", factory["description"], ""
+        ]
     lines.extend(["## Execution", "", f"- **Profile source:** `{passport['execution']['source']}`"])
     if passport["execution"]["source"] == "manifest":
         for profile in passport["execution"]["profiles"]:
