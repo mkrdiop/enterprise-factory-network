@@ -2,13 +2,13 @@
 import ast
 import base64
 import json
+import sys
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[1]
 sys_path = ROOT / "scripts"
-import sys
 sys.path.insert(0, str(sys_path))
 from validate_manifest import validate_report
 
