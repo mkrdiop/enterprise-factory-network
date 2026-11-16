@@ -14,6 +14,7 @@ tags:
   - name: publications
   - name: factories
   - name: releases
+  - name: passports
 paths:
   /v1/releases:
     post:
