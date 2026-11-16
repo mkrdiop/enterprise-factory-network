@@ -4,6 +4,7 @@ import copy
 import hashlib
 import json
 import os
+import uuid
 from dataclasses import replace
 from pathlib import Path
 
@@ -84,7 +85,7 @@ def test_finalize_commits_blob_location_release_and_operation_together():
         assert committed.release_record_id == release_id
         with Session(engine) as session:
             rows = session.scalars(
-                select(FactoryRelease).where(FactoryRelease.release_record_id == release_id)
+                select(FactoryRelease).where(FactoryRelease.release_record_id == uuid.UUID(release_id))
             ).all()
             assert len(rows) == 1
             location = session.scalar(
