@@ -148,7 +148,7 @@ def test_retired_factory_cannot_publish(session):
 
 def test_migration_revision_is_installed(session):
     revision = session.scalar(text("SELECT version_num FROM alembic_version"))
-    assert revision == "0001_initial_registry"
+    assert revision == "0002_publication_operations"
 
 
 def test_concurrent_factory_registration_has_one_winner():
