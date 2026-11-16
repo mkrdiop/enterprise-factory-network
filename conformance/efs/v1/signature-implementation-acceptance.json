@@ -1,0 +1,36 @@
+{
+  "acceptanceVersion": "1.0",
+  "issue": "PSI-51",
+  "profile": "efs-ed25519-jcs-v1",
+  "digestProfile": "efs-jcs-sha256-v1",
+  "implementation": "registry/signatures.py",
+  "verifierInterface": "ReleaseSignatureVerifier",
+  "signerAdapter": "Ed25519Signer",
+  "resolverContract": "PublisherKeyResolver",
+  "testFile": "tests/test_signatures.py",
+  "checks": [
+    "PSI-50 known-answer preimage and Ed25519 signature",
+    "release digest verified before signature verification",
+    "exact release-coordinate and digest statement binding",
+    "detached envelope schema and strict JSON parsing",
+    "canonical unpadded Base64URL signature encoding",
+    "duplicate signer and unknown property rejection",
+    "publisher-scoped key resolution and key binding",
+    "cryptographic validity separated from trust state",
+    "unknown, expired, revoked and unavailable resolver outcomes fail closed",
+    "no algorithm fallback or policy authorization in verifier",
+    "envelope-level evaluation is signer-selection neutral and exposes no any/all signer aggregate",
+    "mixed valid+invalid, valid+unknown and valid+revoked signer outcomes remain independent",
+    "trusted resolver status must agree with validity interval at verifier UTC evaluation time"
+  ],
+  "trustStates": [
+    "trusted",
+    "not_trusted",
+    "expired",
+    "revoked",
+    "not_found",
+    "binding_mismatch",
+    "unavailable"
+  ],
+  "policyBoundary": "PSI-52/PSI-53 remain authoritative for policy, authorization and trust lifecycle."
+}
