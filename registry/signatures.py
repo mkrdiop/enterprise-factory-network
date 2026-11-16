@@ -123,7 +123,7 @@ class ReleaseSignatureVerifier(Protocol):
 
     def verify(
         self, manifest_bytes: bytes, envelope_bytes: bytes
-    ) -> "SignatureVerificationReport":
+    ) -> SignatureVerificationReport:
         ...
 
 
@@ -136,7 +136,7 @@ class Ed25519Signer:
         self._private_key = private_key
 
     @classmethod
-    def from_private_bytes(cls, private_key: bytes) -> "Ed25519Signer":
+    def from_private_bytes(cls, private_key: bytes) -> Ed25519Signer:
         if not isinstance(private_key, bytes) or len(private_key) != 32:
             raise ValueError("Ed25519 private seed must be exactly 32 bytes")
         return cls(Ed25519PrivateKey.from_private_bytes(private_key))
@@ -437,7 +437,7 @@ def _decode_signature(value: str) -> bytes:
 def _key_result(resolver: PublisherKeyResolver, publisher_id: str, key_id: str) -> KeyResolution:
     try:
         result = resolver.resolve(publisher_id, key_id, "Ed25519", KEY_USAGE)
-    except Exception:
+    except Exception:  # noqa: BLE001 - any resolver failure must fail closed
         return KeyResolution(KeyTrustStatus.UNAVAILABLE)
     if not isinstance(result, KeyResolution) or not isinstance(result.status, KeyTrustStatus):
         return KeyResolution(KeyTrustStatus.UNAVAILABLE)
