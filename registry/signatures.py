@@ -438,6 +438,33 @@ def _decode_signature(value: str) -> bytes:
     return decoded
 
 
+def _valid_resolution_metadata(
+    resolution: KeyResolution, publisher_id: str, key_id: str
+) -> bool:
+    valid_from = resolution.valid_from
+    valid_until = resolution.valid_until
+    return (
+        resolution.publisher_id == publisher_id
+        and resolution.key_id == key_id
+        and resolution.algorithm == "Ed25519"
+        and resolution.usage == KEY_USAGE
+        and isinstance(valid_from, datetime)
+        and valid_from.tzinfo is not None
+        and valid_from.utcoffset() is not None
+        and (
+            valid_until is None
+            or (
+                isinstance(valid_until, datetime)
+                and valid_until.tzinfo is not None
+                and valid_until.utcoffset() is not None
+                and valid_until > valid_from
+            )
+        )
+        and isinstance(resolution.evidence_version, str)
+        and bool(resolution.evidence_version)
+    )
+
+
 def _key_result(resolver: PublisherKeyResolver, publisher_id: str, key_id: str) -> KeyResolution:
     try:
         result = resolver.resolve(publisher_id, key_id, "Ed25519", KEY_USAGE)
@@ -520,6 +547,12 @@ def verify_release_signature(
             KeyTrustStatus.EXPIRED,
             KeyTrustStatus.REVOKED,
         } and resolution.public_key is None:
+            if not _valid_resolution_metadata(resolution, publisher_id, key_id):
+                results.append(SignerVerification(
+                    key_id, None, KeyTrustStatus.BINDING_MISMATCH,
+                    SignatureCode.KEY_BINDING_MISMATCH, resolution.evidence_version
+                ))
+                continue
             trust_code = {
                 KeyTrustStatus.NOT_TRUSTED: SignatureCode.KEY_NOT_TRUSTED,
                 KeyTrustStatus.EXPIRED: SignatureCode.KEY_EXPIRED,
@@ -531,26 +564,9 @@ def verify_release_signature(
             continue
 
         if (
-            resolution.publisher_id != publisher_id
-            or resolution.key_id != key_id
-            or resolution.algorithm != "Ed25519"
-            or resolution.usage != KEY_USAGE
+            not _valid_resolution_metadata(resolution, publisher_id, key_id)
             or not isinstance(resolution.public_key, bytes)
             or len(resolution.public_key) != 32
-            or not isinstance(resolution.valid_from, datetime)
-            or resolution.valid_from.tzinfo is None
-            or resolution.valid_from.utcoffset() is None
-            or (
-                resolution.valid_until is not None
-                and (
-                    not isinstance(resolution.valid_until, datetime)
-                    or resolution.valid_until.tzinfo is None
-                    or resolution.valid_until.utcoffset() is None
-                    or resolution.valid_until <= resolution.valid_from
-                )
-            )
-            or not isinstance(resolution.evidence_version, str)
-            or not resolution.evidence_version
         ):
             results.append(SignerVerification(
                 key_id, None, KeyTrustStatus.BINDING_MISMATCH,
