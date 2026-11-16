@@ -196,3 +196,34 @@ def test_expiry_equality_is_stale():
 def test_contract_validation_does_not_claim_to_implement_a_pdp():
     docs = (ROOT / "docs/specs/efs-v1-authorization-policy.md").read_text(encoding="utf-8")
     assert "independent PDP implementations consume" in docs
+
+
+def test_machine_readable_negative_vectors_are_executable():
+    package = vector_package()
+    schema = policy_schema()
+    validation_schema = load_json(VECTOR_SCHEMA_PATH)
+    for vector in package["validation_vectors"]:
+        kind = vector["kind"]
+        if kind == "invalid-policy":
+            with pytest.raises(Exception):
+                validate(vector["policy"], schema["$defs"]["policy"])
+        elif kind == "invalid-resource":
+            with pytest.raises(Exception):
+                validate(vector["resource"], schema["$defs"]["resource"])
+        elif kind == "semantic-policy":
+            ids = [rule["rule_id"] for rule in vector["policy"]["rules"]]
+            assert len(ids) != len(set(ids))
+        elif kind == "condition-limit":
+            condition = vector["condition"]
+            if vector["limit"] in {"children", "literal-array"}:
+                with pytest.raises(Exception):
+                    validate(condition, schema["$defs"]["condition"])
+            else:
+                with pytest.raises(ValueError):
+                    condition_metrics(condition)
+        elif kind == "timestamp-format":
+            with pytest.raises(Exception):
+                validate(vector["attribute"], schema["$defs"]["attribute"])
+        elif kind == "freshness-boundary":
+            assert vector["evaluation_time"] == vector["expires_at"]
+            assert not (vector["evaluation_time"] < vector["expires_at"])
