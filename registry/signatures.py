@@ -308,6 +308,10 @@ def _validate_envelope(envelope: dict, schema_path: str | Path | None = None):
             raise SignatureEnvelopeError(
                 SignatureCode.UNSUPPORTED_PROFILE, "unsupported signature profile or algorithm"
             )
+        if "signature" in first.path and "signatures" in first.path:
+            raise SignatureEnvelopeError(
+                SignatureCode.ENVELOPE_ENCODING_INVALID, "signature encoding violates the canonical Base64URL profile"
+            )
         raise SignatureEnvelopeError(
             SignatureCode.ENVELOPE_INVALID, f"signature envelope schema violation: {first.message}"
         )
@@ -337,8 +341,14 @@ def create_signature_envelope(
     try:
         payload = canonicalize_and_verify(manifest_bytes)
     except ReleaseDigestError as exc:
+        message = str(exc).lower()
+        code = (
+            SignatureCode.DIGEST_PROFILE_MISMATCH
+            if "unsupported" in message or "profile" in message or "algorithm" in message
+            else SignatureCode.DIGEST_MISMATCH
+        )
         raise SignatureEnvelopeError(
-            SignatureCode.DIGEST_MISMATCH, "manifest release digest failed verification"
+            code, "manifest release digest failed verification"
         ) from exc
     statement = _release_statement(manifest, payload.digest.value)
     message = signing_input(statement, key_id)
@@ -395,7 +405,7 @@ def _key_result(resolver: PublisherKeyResolver, publisher_id: str, key_id: str) 
         result = resolver.resolve(publisher_id, key_id, "Ed25519", KEY_USAGE)
     except Exception:
         return KeyResolution(KeyTrustStatus.UNAVAILABLE)
-    if not isinstance(result, KeyResolution):
+    if not isinstance(result, KeyResolution) or not isinstance(result.status, KeyTrustStatus):
         return KeyResolution(KeyTrustStatus.UNAVAILABLE)
     return result
 
