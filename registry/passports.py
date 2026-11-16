@@ -3,7 +3,7 @@
 A Passport is a read-only derived representation. Registry records and the
 verified EFS release artifact remain authoritative for identity and content.
 """
-from __future__ import annotations
+from __future__ import annotations  # noqa: I001
 
 import json
 from copy import deepcopy
