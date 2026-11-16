@@ -113,10 +113,9 @@
         "digest": {
           "$ref": "#/$defs/releaseDigest"
         },
-        "signature": {
-          "$ref": "#/$defs/signature"
-        }
-      }
+        "signature": false
+      },
+      "description": "EFS v1 release metadata. Signature material is detached and the reserved `signature` member is forbidden."
     },
     "releaseDigest": {
       "type": "object",
