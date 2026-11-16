@@ -2,7 +2,7 @@
 
 - **Status:** Normative specification proposal; pending explicit acceptance and independent review
 - **Version:** 1.1.0
-- **Dependencies:** PSI-37, PSI-40, PSI-45, PSI-50, PSI-51, PSI-52
+- **Dependencies:** PSI-37, PSI-40, PSI-45, PSI-50, PSI-51, PSI-52, PSI-54
 
 ## 1. Enforcement invariant
 One mandatory server-side Policy Enforcement Point (PEP) guards every protected API route, job, administrative command, Runtime entry point and internal service call. UI checks are not enforcement. The PDP remains the pure, deterministic PSI-52 evaluator.
@@ -30,6 +30,9 @@ The PEP derives subject, action and resource coordinates from authenticated iden
 
 This table is exhaustive for PSI-52 v1. Unknown actions are rejected before PDP invocation. An action/resource type mismatch or missing required resource coordinate is PSI-52 invalid evaluation input and therefore produces an indeterminate, fail-closed outcome with `INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR`, never a policy deny or permit. PSI-53 MUST NOT extend the PSI-52 vocabulary. The implementation MUST maintain a machine-testable inventory covering HTTP routes, jobs, admin commands, Runtime adapters and internal service entry points. Every protected entry point maps to a check set and is tested for PEP invocation; unlisted protected entry points fail closed. This is a required implementation artifact, not an assertion that this specification enumerates repository-specific route paths.
 
+### PEP/lifecycle ordering (no recursive enforcement)
+For `capability.invoke` and other operations that start a new execution against an already registered release, the PEP evaluates authorization and then requires PSI-54 lifecycle admission before dispatch. For lifecycle transition actions (`release.suspend`, `release.deprecate`, `release.revoke`, `release.archive`), the PEP authorizes the requested transition but MUST NOT recursively call PSI-54 admission; PSI-54 then performs the transition with its expected-revision transaction. Initial publication also does not call admission because no registered release exists yet; it validates the publication check set and atomically creates the release in `published`. This ordering is normative and prevents a PSI-53 ↔ PSI-54 call cycle.
+
 ## 3. PSI-52 policy evaluation and obligations
 Each check pins `policy_id`, `policy_version`, `policy_profile=efs-policy-v1`, `digest_profile_id=efs-policy-jcs-sha256-v1`, `digest_algorithm=sha-256` and the exact digest value. No latest-version substitution is permitted. The PEP supplies the complete PSI-52 evaluation request, including authenticated subject provenance, exact resource coordinates, finite action and trusted evaluation context. PSI-52 owns policy syntax, action vocabulary, resource compatibility, combination semantics and PDP result. PSI-53 owns check-set composition and enforcement.
 
@@ -53,7 +56,7 @@ Dispatch occurs only after that durable local commit and uses the same stable in
 PSI-45 remains authoritative for execution lifecycle, state vocabulary, event replay and revision semantics. PSI-53 defines only the authorization/audit gate and durable hand-off contract; it creates no competing execution state machine and promises no cross-system atomicity.
 
 ## 6. Stable enforcement reasons
-`AUTHN_REQUIRED`, `ACTION_UNMAPPED`, `INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR`, `INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR`, `POLICY_DENIED`, `PDP_INDETERMINATE`, `OBLIGATION_UNFULFILLED`, `TRUST_UNAVAILABLE`, `KEY_NOT_TRUSTED`, `KEY_REVOKED`, `KEY_NOT_YET_VALID`, `KEY_EXPIRED`, `SIGNATURE_INVALID`, `RELEASE_NOT_ADMISSIBLE`, `EVIDENCE_STALE`, `AUDIT_DURABILITY_FAILURE`, `AUTHORIZATION_REVISION_CHANGED`, `EXECUTION_INTENT_NOT_DURABLE`, `EXECUTION_OUTCOME_UNKNOWN`.
+`AUTHN_REQUIRED`, `ACTION_UNMAPPED`, `INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR`, `POLICY_DENIED`, `PDP_INDETERMINATE`, `OBLIGATION_UNFULFILLED`, `TRUST_UNAVAILABLE`, `KEY_NOT_TRUSTED`, `KEY_REVOKED`, `KEY_NOT_YET_VALID`, `KEY_EXPIRED`, `SIGNATURE_INVALID`, `RELEASE_NOT_ADMISSIBLE`, `EVIDENCE_STALE`, `AUDIT_DURABILITY_FAILURE`, `AUTHORIZATION_REVISION_CHANGED`, `EXECUTION_INTENT_NOT_DURABLE`, `EXECUTION_OUTCOME_UNKNOWN`.
 
 ## 7. Conformance and acceptance
 The v1.1 vector package exercises exact action/resource compatibility, composite all-permit semantics, deny/indeterminate composition, trust-required and trust-not-required behavior, evidence freshness, obligations, commit-generation changes and external-effect intent/outcome handling. It is a composition oracle, not a replacement for PSI-52 PDP vectors.
