@@ -133,6 +133,14 @@ def upgrade():
           RAISE EXCEPTION 'only one active-to-retired transition is permitted';
         END IF;
 
+      ELSIF TG_TABLE_NAME = 'artifact_blobs' THEN
+        IF NEW.digest_profile IS DISTINCT FROM OLD.digest_profile
+           OR NEW.digest_algorithm IS DISTINCT FROM OLD.digest_algorithm
+           OR NEW.digest_value IS DISTINCT FROM OLD.digest_value
+           OR NEW.byte_length IS DISTINCT FROM OLD.byte_length THEN
+          RAISE EXCEPTION 'artifact content identity is immutable';
+        END IF;
+
       ELSIF TG_TABLE_NAME = 'factory_releases' THEN
         RAISE EXCEPTION 'published release is immutable';
       END IF;
@@ -176,6 +184,10 @@ def upgrade():
             "FOR EACH ROW EXECUTE FUNCTION efs_guard_registry_rows()"
         )
 
+    op.execute(
+        "CREATE TRIGGER artifact_blobs_guard BEFORE UPDATE OR DELETE ON artifact_blobs "
+        "FOR EACH ROW EXECUTE FUNCTION efs_guard_registry_rows()"
+    )
     op.execute(
         "CREATE TRIGGER factories_parent_guard BEFORE INSERT ON factories "
         "FOR EACH ROW EXECUTE FUNCTION efs_guard_parent_active()"
