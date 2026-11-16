@@ -296,12 +296,13 @@ def evaluate_efs_version_range(candidate: str, supported_range: str) -> bool:
         return parsed_candidate.compare_precedence(bound) == 0
 
     tokens = supported_range.split(" ")
-    if any(not token for token in tokens) or len(tokens) % 2 != 0:
-        raise VersionRangeError("comparison range must be operator/version pairs separated by one ASCII space")
-    for index in range(0, len(tokens), 2):
-        operator, version_text = tokens[index], tokens[index + 1]
-        if operator not in (">", ">=", "<", "<=", "="):
-            raise VersionRangeError(f"unsupported range operator: {operator!r}")
+    if any(not token for token in tokens):
+        raise VersionRangeError("comparison terms must be separated by exactly one ASCII space")
+    for token in tokens:
+        match = re.fullmatch(r"(>=|<=|>|<|=)(.+)", token, re.ASCII)
+        if match is None:
+            raise VersionRangeError(f"invalid comparison term: {token!r}")
+        operator, version_text = match.groups()
         try:
             bound = parse_field_version(VersionDimension.EFS_SPECIFICATION, version_text)
         except VersionError as exc:
