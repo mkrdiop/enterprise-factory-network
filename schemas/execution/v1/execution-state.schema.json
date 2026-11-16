@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.enterprise-factory.example/execution/v1/state.schema.json",
+  "title": "EFS v1 Execution State Snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["stateVersion", "invocationId", "correlationId", "context", "state", "revision", "lastEventId"],
+  "properties": {
+    "stateVersion": {"const": "1.0"},
+    "invocationId": {"type": "string", "minLength": 1, "maxLength": 255},
+    "correlationId": {"type": "string", "minLength": 1, "maxLength": 255},
+    "context": {"$ref": "execution-envelope.schema.json#/$defs/context"},
+    "state": {"enum": ["created", "requested", "accepted", "queued", "running", "waiting", "succeeded", "failed", "cancelled"]},
+    "revision": {"type": "integer", "minimum": 0},
+    "lastEventId": {"type": ["string", "null"], "maxLength": 255}
+  }
+}
