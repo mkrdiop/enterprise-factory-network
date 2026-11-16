@@ -7,10 +7,10 @@ dependencies, or authorize runtime execution.
 from __future__ import annotations
 
 import argparse
-import json
-from pathlib import Path
 import ipaddress
+import json
 import re
+from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit, urlparse
 
@@ -143,8 +143,8 @@ def _embedded_schema_checks(manifest):
 
 
 _PCT = re.compile(r"%([0-9A-Fa-f]{2})")
-_PATH_CHARS = re.compile(r"""[A-Za-z0-9._~!$&'()*+,;=:@/%-]*\\Z""")
-_REG_NAME_CHARS = re.compile(r"""[A-Za-z0-9._~!$&'()*+,;=%-]*\\Z""")
+_PATH_CHARS = re.compile(r"""[A-Za-z0-9._~!$&'()*+,;=:@/%-]*\Z""")
+_REG_NAME_CHARS = re.compile(r"""[A-Za-z0-9._~!$&'()*+,;=%-]*\Z""")
 _UNRESERVED = frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~")
 
 
@@ -199,7 +199,7 @@ def canonical_publisher_uri(value: str) -> str | None:
             or any(ch.isspace() for ch in value)
             or "?" in value or "#" in value):
         return None
-    match = re.match(r"^([A-Za-z][A-Za-z0-9+.-]*):(.*)\\Z", value, re.DOTALL)
+    match = re.match(r"^([A-Za-z][A-Za-z0-9+.-]*):(.*)\Z", value, re.DOTALL)
     if not match:
         return None
     scheme, remainder = match.groups()
@@ -232,7 +232,7 @@ def canonical_publisher_uri(value: str) -> str | None:
             if suffix and not re.fullmatch(r":[0-9]*", suffix):
                 return None
             if literal.lower().startswith("v"):
-                if not re.fullmatch(r"v[0-9A-Fa-f]+\\.[A-Za-z0-9._~!$&'()*+,;=:-]+", literal):
+                if not re.fullmatch(r"v[0-9A-Fa-f]+\.[A-Za-z0-9._~!$&'()*+,;=:-]+", literal):
                     return None
             else:
                 try:
