@@ -1,6 +1,5 @@
 """PSI-40 digest and immutable storage contract tests."""
 import base64
-import copy
 import json
 from pathlib import Path
 
@@ -15,36 +14,29 @@ from registry.digests import (
     reconstruct_manifest,
     verify_canonical_payload,
 )
+from registry.publication_contracts import DigestIdentity
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = ROOT / "fixtures/valid/manifest-minimal.json"
-EXPECTED_MINIMAL_DIGEST = "hROVecZSWoQuNQ3GSNaxPx73s9m8-PtehAKXaHG7f2c"
+VECTORS = json.loads((ROOT / "conformance/efs/v1/release-digest-vectors.json").read_text(encoding="utf-8"))
+MINIMAL_VECTOR = VECTORS["vectors"][0]
+EXPECTED_MINIMAL_DIGEST = MINIMAL_VECTOR["expectedDigest"]
 
 
 def _fixture_object():
     return json.loads(FIXTURE.read_text(encoding="utf-8"))
 
 
-def _with_digest(manifest):
-    payload = canonicalize_and_verify(
-        json.dumps(manifest, ensure_ascii=False, separators=(",", ":")).encode()
-    )
-    manifest["release"]["digest"] = {
-        "profile": payload.digest.profile,
-        "algorithm": payload.digest.algorithm,
-        "value": payload.digest.value,
-    }
-    return manifest, payload
-
-
 def test_minimal_manifest_matches_language_neutral_digest_vector():
     manifest = _fixture_object()
     manifest["release"]["digest"]["value"] = EXPECTED_MINIMAL_DIGEST
     payload = canonicalize_and_verify(json.dumps(manifest).encode())
+    expected_bytes = base64.b64decode(MINIMAL_VECTOR["canonicalEnvelopeBase64"])
     assert payload.digest.profile == DIGEST_PROFILE
     assert payload.digest.algorithm == DIGEST_ALGORITHM
     assert payload.digest.value == EXPECTED_MINIMAL_DIGEST
-    assert payload.byte_length == 1315
+    assert payload.byte_length == MINIMAL_VECTOR["canonicalEnvelopeByteLength"]
+    assert payload.canonical_bytes == expected_bytes
 
 
 def test_whitespace_and_key_order_do_not_change_digest():
@@ -140,8 +132,6 @@ def test_filesystem_store_never_overwrites_corrupt_existing_object(tmp_path):
 
 
 def test_filesystem_store_rejects_path_traversal_digest(tmp_path):
-    from registry.publication_contracts import DigestIdentity
-
     store = LocalFilesystemArtifactStore(tmp_path)
     with pytest.raises(ValueError):
         store.read(DigestIdentity(DIGEST_PROFILE, DIGEST_ALGORITHM, "../escape"))
