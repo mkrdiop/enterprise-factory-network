@@ -83,9 +83,8 @@ def psi53(data):
   state=commit_data["execution_state"]
   required_intent=(side["intent_durable"] and side["idempotency_key"] and side["operation_id"] and side["intent_record_id"] and side["audit_record_id"] and side["payload_fingerprint"] and state is not None and state["persisted_with_intent"] and state["revision_cas"] and state["initial_state"]=="requested" and state["initial_revision"]==1 and state["invocation_id"]==side["operation_id"] and state["initial_event_id"] and side["payload_fingerprint"].startswith("sha256:") and len(side["payload_fingerprint"])==50)
   if not required_intent: return "rejected","EXECUTION_INTENT_NOT_DURABLE"
-  if side["dispatch_attempted"] and side["outcome_recorded"]:
-   if not side["outcome_ref"] or state["current_state"] not in ("succeeded","failed") or state["current_revision"]<2:
-    return "indeterminate","EXECUTION_OUTCOME_UNKNOWN"
+  if side["dispatch_attempted"] and side["outcome_recorded"] and (not side["outcome_ref"] or state["current_state"] not in ("succeeded","failed") or state["current_revision"]<2):
+   return "indeterminate","EXECUTION_OUTCOME_UNKNOWN"
   if side["dispatch_attempted"] and not side["outcome_recorded"]:
    return "indeterminate","EXECUTION_OUTCOME_UNKNOWN"
  return "enforced","PERMIT_ENFORCED"
