@@ -44,7 +44,7 @@ class SemVer:
     exact: str = ""
 
     @classmethod
-    def parse(cls, value: str) -> "SemVer":
+    def parse(cls, value: str) -> SemVer:
         if not isinstance(value, str):
             raise VersionError("SemVer value must be a string")
         match = _SEMVER.fullmatch(value)
@@ -55,7 +55,7 @@ class SemVer:
         return cls(int(match.group("major")), int(match.group("minor")),
                    int(match.group("patch")), pre, build, value)
 
-    def compare_precedence(self, other: "SemVer") -> int:
+    def compare_precedence(self, other: SemVer) -> int:
         left_core = (self.major, self.minor, self.patch)
         right_core = (other.major, other.minor, other.patch)
         if left_core != right_core:
