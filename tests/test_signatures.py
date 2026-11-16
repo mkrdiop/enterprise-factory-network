@@ -199,7 +199,7 @@ def test_cross_publisher_key_substitution_is_binding_failure():
 
     result = verify_release_signature(raw, encoded, WrongPublisherResolver())
     assert result.signers[0].code is SignatureCode.KEY_BINDING_MISMATCH
-    assert result.signers[0].cryptographic_valid is False
+    assert result.signers[0].cryptographic_valid is None
 
 
 def test_duplicate_signer_entries_are_rejected():
