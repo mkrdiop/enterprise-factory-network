@@ -85,7 +85,7 @@ def test_offset_datetime_is_accepted():
 def test_embedded_input_output_and_error_schemas_are_meta_validated(tmp_path, location):
     doc = load_json(ROOT / "fixtures/valid/manifest-minimal.json")
     if location == "errors":
-        doc["capabilities"][0]["contract"]["errors"][0]["schema"] = {"type": "string", "minLength": "bad"}
+        doc["capabilities"][0]["contract"]["errors"][0]["schema"] = {"type": "object", "minLength": "bad"}
     else:
         doc["capabilities"][0]["contract"][location]["minLength"] = "bad"
     path = tmp_path / f"invalid-{location}-schema.json"
