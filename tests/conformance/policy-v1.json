@@ -25,6 +25,38 @@
   },
   "vectors": [
     {
+      "id": "pol-kat-001",
+      "kind": "policy-digest-known-answer",
+      "name": "JCS and SHA-256 policy digest fixture",
+      "policy": {
+        "policy_profile": "efs-policy-v1",
+        "policy_id": "p1",
+        "policy_version": "1",
+        "rules": [
+          {
+            "rule_id": "r1",
+            "effect": "permit",
+            "subject": {
+              "type": "user",
+              "id": "user:alice"
+            },
+            "resource": {
+              "type": "factory",
+              "id": "factory:acme:payments"
+            },
+            "actions": [
+              "factory.publish"
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "jcs": "{\"domain\":\"efs.policy.v1\",\"policy\":{\"policy_id\":\"p1\",\"policy_profile\":\"efs-policy-v1\",\"policy_version\":\"1\",\"rules\":[{\"actions\":[\"factory.publish\"],\"effect\":\"permit\",\"resource\":{\"id\":\"factory:acme:payments\",\"type\":\"factory\"},\"rule_id\":\"r1\",\"subject\":{\"id\":\"user:alice\",\"type\":\"user\"}}]}}",
+        "sha256_hex": "440765761c7beb990294b5ec32fa350b456345007cc7c54e3baa97e98fc36ae4",
+        "digest_base64url": "RAdldhx765kClLXsMvo1C0VjRQB8x8VOO6qX6Y_DauQ"
+      }
+    },
+    {
       "id": "pol-001",
       "name": "explicit permit",
       "policy": {
@@ -331,6 +363,38 @@
       "action": "factory.admin",
       "expected": "indeterminate",
       "reason": "INDETERMINATE_INVALID_ACTION_RESOURCE_PAIR"
+    },
+    {
+      "id": "pol-018",
+      "name": "indeterminate overrides an otherwise applicable permit",
+      "combination": [
+        "permit",
+        "indeterminate"
+      ],
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_MISSING_ATTRIBUTE"
+    },
+    {
+      "id": "pol-019",
+      "name": "combination remains indeterminate when policy order is reversed",
+      "permutation_of": "pol-018",
+      "combination": [
+        "indeterminate",
+        "permit"
+      ],
+      "expected": "indeterminate",
+      "reason": "INDETERMINATE_MISSING_ATTRIBUTE"
+    },
+    {
+      "id": "pol-020",
+      "name": "exists on an absent attribute is false, so the rule is not applicable",
+      "condition": {
+        "op": "exists",
+        "ref": "context.attributes.optional_claim"
+      },
+      "attribute_present": false,
+      "expected": "deny",
+      "reason": "DEFAULT_DENY_NO_APPLICABLE_PERMIT"
     }
   ]
 }
