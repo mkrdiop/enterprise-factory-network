@@ -171,7 +171,7 @@
       "kind": "publisher-uri",
       "input": "URN:example:publishers:acme",
       "expected": {
-        "valid": true,
+        "valid": false,
         "canonical": "urn:example:publishers:acme"
       }
     },
@@ -180,7 +180,7 @@
       "kind": "publisher-uri",
       "input": "https://IDENTITY.example/publishers/acme",
       "expected": {
-        "valid": true,
+        "valid": false,
         "canonical": "https://identity.example/publishers/acme"
       }
     },
@@ -189,7 +189,7 @@
       "kind": "publisher-uri",
       "input": "https://identity.example/publishers/%7eacme",
       "expected": {
-        "valid": true,
+        "valid": false,
         "canonical": "https://identity.example/publishers/~acme"
       }
     },
@@ -198,7 +198,7 @@
       "kind": "publisher-uri",
       "input": "https://identity.example/a/../publishers/acme",
       "expected": {
-        "valid": true,
+        "valid": false,
         "canonical": "https://identity.example/publishers/acme"
       }
     },
@@ -223,7 +223,7 @@
       "kind": "publisher-uri",
       "input": "https://identity.example/publishers/%2f",
       "expected": {
-        "valid": true,
+        "valid": false,
         "canonical": "https://identity.example/publishers/%2F"
       }
     }
