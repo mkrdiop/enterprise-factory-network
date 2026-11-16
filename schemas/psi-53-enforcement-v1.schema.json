@@ -508,7 +508,6 @@
                   "PERMIT_ENFORCED",
                   "AUTHN_REQUIRED",
                   "ACTION_UNMAPPED",
-                  "RESOURCE_COORDINATES_INVALID",
                   "POLICY_DENIED",
                   "PDP_INDETERMINATE",
                   "OBLIGATION_UNFULFILLED",
