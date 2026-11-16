@@ -36,6 +36,6 @@ The implementation is intentionally transport-neutral and contains no database-b
 
 ## Tests
 
-tests/test_signatures.py covers the PSI-50 known-answer preimage/signature vector, deterministic Ed25519 signing, tampering, statement binding, malformed encodings, duplicate signers and JSON members, unsupported algorithms/profiles, publisher-scoped key substitution, resolver outages and trust-state separation. The existing manifest validator already rejects the reserved release.signature field with EFS_SCHEMA_CONSTRAINT at /release; Registry publication invokes that validator before reserving a publication operation.
+tests/test_signatures.py covers the PSI-50 known-answer preimage/signature vector, deterministic Ed25519 signing, tampering, statement binding, malformed encodings, duplicate signers and JSON members, unsupported algorithms/profiles, publisher-scoped key substitution, resolver outages and trust-state separation. Multi-signer cases explicitly cover valid+invalid, valid+unknown and valid+revoked outcomes without a report-level signer-selection aggregate. Resolver tests reject future-valid and elapsed-validity intervals reported as trusted. The existing manifest validator already rejects the reserved release.signature field with EFS_SCHEMA_CONSTRAINT at /release; Registry publication invokes that validator before reserving a publication operation.
 
 Run: python -m pytest tests/test_signatures.py tests/test_schema.py -q
