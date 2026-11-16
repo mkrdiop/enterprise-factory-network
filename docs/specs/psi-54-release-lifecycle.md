@@ -44,7 +44,9 @@ Lifecycle event fields include event ID, release record ID, exact coordinate/dig
 
 ## 6. Initial publication event
 Creation is not a transition from a prior registered lifecycle state. Network inserts the release directly in `published` and writes the initial event in the same database transaction as the release row and PSI-53 audit outbox:
+- event ID: globally unique, stable event identifier;
 - event type: `factory_release.published`;
+- action: `release.publish` (the composite authorization decision also records each required check, including conditional `factory.register`);
 - revision: `1`;
 - `from_state: null`, `to_state: published`;
 - actor: authenticated PSI-53 principal;
