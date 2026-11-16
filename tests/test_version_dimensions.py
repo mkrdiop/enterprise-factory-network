@@ -64,7 +64,8 @@ def test_contract_version_remains_opaque_and_exact():
 def test_build_identity_is_external_provenance():
     build = next(item for item in _vectors()["dimensions"] if item["id"] == "implementation-build")
     assert build["field"] == "external-provenance-only"
-    assert "buildVersion" not in SPEC_PATH.read_text(encoding="utf-8")
+    manifest_schema = _json(ROOT / "schemas/efs/v1/factory-manifest.schema.json")
+    assert "buildVersion" not in manifest_schema["properties"]
 
 
 def test_release_comparison_scope_is_exact_factory_identity():
