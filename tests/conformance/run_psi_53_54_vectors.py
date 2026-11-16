@@ -84,6 +84,7 @@ def psi53(data):
  return "enforced","PERMIT_ENFORCED"
 
 def psi54(data):
+ if data["scope"]["operation"]!=data["operation"]: return "rejected","IDEMPOTENCY_CONFLICT"
  lookup=data["idempotency_lookup"]
  # Scope is derived after authentication. Lookup precedes state and revision reads.
  if lookup["status"]=="same_fingerprint":
