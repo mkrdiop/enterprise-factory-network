@@ -29,7 +29,7 @@
       "requirement": "Exact subject release/digest/EFS and consumer/profile/range coordinates are preserved; no latest resolution or fallback occurs.",
       "tests": [
         "test_exact_subject_coordinates_and_consumer_ranges_are_preserved",
-        "test_equal_precedence_release_labels_are_never_implicitly_selected"
+        "test_equal_precedence_release_labels_require_explicit_exact_coordinate"
       ]
     },
     {
