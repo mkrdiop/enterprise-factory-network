@@ -60,7 +60,7 @@
       "coordinates": {}
     },
     {
-      "dimension": "protocol",
+      "dimension": "specification",
       "outcome": "unknown",
       "ruleId": "EFC-FIXTURE-001",
       "explanation": "No assessment evidence was supplied.",
