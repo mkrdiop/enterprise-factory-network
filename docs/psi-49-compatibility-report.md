@@ -23,7 +23,7 @@ Report arrays that represent sets (dimensions, evidence references, mappings, co
 
 - Contract versions remain opaque exact strings; no SemVer parsing or normalization.
 - Release version and digest remain distinct exact coordinates.
-- The engine accepts an already selected exact subject; it does not implement latest/latest-compatible selection. PSI-47's exact-selection helper rejects equal-precedence labels.
+- The engine accepts an already selected exact subject; it does not implement latest/latest-compatible selection. PSI-47's `require_exact_release_selection(candidates, requested_coordinate)` requires the caller to supply the exact requested `ReleaseCoordinate` and matches its complete six-field identity. Equal-precedence labels may therefore be selected explicitly; SemVer precedence never ranks candidates or supplies an implicit tie-breaker.
 - Compatible/breaking conclusions require evidence; conditional outcomes require conditions; breaking outcomes require blockers; missing evidence remains unknown.
 - Governance remains unknown unless M5 authority and evidence are explicitly supplied.
 - A compatibility report does not establish publisher trust, signature validity, authorization, policy compliance or runtime admission.
