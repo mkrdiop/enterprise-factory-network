@@ -199,27 +199,33 @@ class ReleaseCoordinate:
                 self.digest_algorithm, self.digest_value)
 
 
-def require_exact_release_selection(candidates: list[ReleaseCoordinate]) -> ReleaseCoordinate:
-    """Reject ambiguous equal-precedence labels; never invent a tie-breaker."""
+def require_exact_release_selection(
+    candidates: list[ReleaseCoordinate],
+    requested_coordinate: ReleaseCoordinate,
+) -> ReleaseCoordinate:
+    """Return the one candidate matching the caller's complete exact release coordinate.
+
+    Candidate discovery and release selection are separate operations. This
+    helper never ranks candidates or applies SemVer precedence: publisher,
+    Factory, exact release-version string and all immutable digest dimensions
+    must match the caller-supplied coordinate.
+    """
+    if not isinstance(requested_coordinate, ReleaseCoordinate):
+        raise VersionError("an explicit exact requested release coordinate is required")
     if not candidates:
         raise VersionError("no release candidates supplied")
-    scopes = {item.factory_scope for item in candidates}
-    if len(scopes) != 1:
-        raise VersionError("release candidates span different publisher/Factory scopes")
-    highest = candidates[0]
-    for item in candidates[1:]:
-        comparison = compare_field_versions(
-            VersionDimension.FACTORY_RELEASE, item.version,
-            VersionDimension.FACTORY_RELEASE, highest.version,
-            left_publisher_id=item.publisher_id, left_factory_id=item.factory_id,
-            right_publisher_id=highest.publisher_id, right_factory_id=highest.factory_id,
-        )
-        if comparison > 0:
-            highest = item
-    tied = [item for item in candidates if SemVer.parse(item.version).compare_precedence(SemVer.parse(highest.version)) == 0]
-    if len(tied) > 1:
-        raise VersionError("equal-precedence release labels require explicit exact release selection")
-    return highest
+    if any(not isinstance(candidate, ReleaseCoordinate) for candidate in candidates):
+        raise VersionError("all release candidates must be exact ReleaseCoordinate values")
+
+    matches = [
+        candidate for candidate in candidates
+        if candidate.exact_identity == requested_coordinate.exact_identity
+    ]
+    if not matches:
+        raise VersionError("requested exact release coordinate does not match any candidate")
+    if len(matches) != 1:
+        raise VersionError("ambiguous exact release coordinate matches multiple candidates")
+    return matches[0]
 
 
 def validate_manifest_versions(manifest: dict) -> list[dict[str, str]]:
