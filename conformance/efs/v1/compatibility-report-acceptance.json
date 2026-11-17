@@ -84,6 +84,14 @@
       "tests": [
         "test_report_rejects_specification_assessed_against_different_coordinates"
       ]
+    },
+    {
+      "id": "PSI49-AC-11",
+      "requirement": "The Draft 2020-12 report schema requires exactly one entry for each of the five PSI-48 assessment dimensions; portable positive and negative fixtures prove duplicates, omissions, short arrays and unsupported dimensions are rejected.",
+      "tests": [
+        "test_compatibility_report_dimension_fixtures_are_schema_conformant",
+        "test_engine_materializes_missing_dimensions_and_rejects_duplicates"
+      ]
     }
   ]
 }
