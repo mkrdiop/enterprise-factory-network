@@ -5,83 +5,368 @@
   "description": "Deterministic derived compatibility assessment. It is not a trust, authorization, admission, or release-selection decision.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["reportVersion", "rulesetVersion", "subject", "consumer", "dimensions", "outcome", "warnings", "blockers", "provenance"],
+  "required": [
+    "reportVersion",
+    "rulesetVersion",
+    "subject",
+    "consumer",
+    "dimensions",
+    "outcome",
+    "warnings",
+    "blockers",
+    "provenance"
+  ],
   "properties": {
-    "reportVersion": {"const": "1.0"},
-    "rulesetVersion": {"type": "string", "minLength": 1},
+    "reportVersion": {
+      "const": "1.0"
+    },
+    "rulesetVersion": {
+      "type": "string",
+      "minLength": 1
+    },
     "subject": {
-      "type": "object", "additionalProperties": false,
-      "required": ["publisherId", "factoryId", "releaseVersion", "digest", "efsVersion"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "publisherId",
+        "factoryId",
+        "releaseVersion",
+        "digest",
+        "efsVersion"
+      ],
       "properties": {
-        "publisherId": {"type": "string", "minLength": 1},
-        "factoryId": {"type": "string", "minLength": 1},
-        "releaseVersion": {"type": "string", "minLength": 1},
-        "efsVersion": {"type": "string", "minLength": 1},
+        "publisherId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "factoryId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "releaseVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "efsVersion": {
+          "type": "string",
+          "minLength": 1
+        },
         "digest": {
-          "type": "object", "additionalProperties": false,
-          "required": ["profile", "algorithm", "value"],
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "profile",
+            "algorithm",
+            "value"
+          ],
           "properties": {
-            "profile": {"type": "string", "minLength": 1},
-            "algorithm": {"type": "string", "minLength": 1},
-            "value": {"type": "string", "minLength": 1}
+            "profile": {
+              "type": "string",
+              "minLength": 1
+            },
+            "algorithm": {
+              "type": "string",
+              "minLength": 1
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         }
       }
     },
     "consumer": {
-      "type": "object", "additionalProperties": false,
-      "required": ["consumerId", "profileId", "profileVersion", "supportedEfsRange", "runtimeProfileId", "protocolProfileIds"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "consumerId",
+        "profileId",
+        "profileVersion",
+        "supportedEfsRange",
+        "runtimeProfileId",
+        "protocolProfileIds"
+      ],
       "properties": {
-        "consumerId": {"type": "string", "minLength": 1},
-        "profileId": {"type": "string", "minLength": 1},
-        "profileVersion": {"type": "string", "minLength": 1},
-        "supportedEfsRange": {"type": "string", "minLength": 1},
-        "runtimeProfileId": {"type": "string", "minLength": 1},
-        "protocolProfileIds": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
-      }
-    },
-    "dimensions": {
-      "type": "array", "minItems": 5, "maxItems": 5,
-      "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["dimension", "outcome", "ruleId", "explanation", "evidence", "conditions", "blockers", "mappings", "authority", "coordinates"],
-        "properties": {
-          "dimension": {"enum": ["specification", "factory-release-capability-contract", "runtime-execution", "protocol", "governance"]},
-          "outcome": {"enum": ["compatible", "breaking", "conditional", "unknown"]},
-          "ruleId": {"type": "string", "minLength": 1},
-          "explanation": {"type": "string", "minLength": 1},
-          "evidence": {
-            "type": "array",
-            "items": {
-              "type": "object", "additionalProperties": false,
-              "required": ["evidence_id", "source", "digest", "authority"],
-              "properties": {
-                "evidence_id": {"type": "string", "minLength": 1},
-                "source": {"type": "string", "minLength": 1},
-                "digest": {"type": ["string", "null"]},
-                "authority": {"type": ["string", "null"]}
-              }
-            }
+        "consumerId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "profileId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "profileVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "supportedEfsRange": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runtimeProfileId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "protocolProfileIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
           },
-          "conditions": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
-          "blockers": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
-          "mappings": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
-          "authority": {"type": ["string", "null"]},
-          "coordinates": {"type": "object", "additionalProperties": {"type": "string", "minLength": 1}}
+          "uniqueItems": true
         }
       }
     },
-    "outcome": {"enum": ["compatible", "breaking", "conditional", "unknown"]},
-    "warnings": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
-    "blockers": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "dimensions": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "dimension",
+          "outcome",
+          "ruleId",
+          "explanation",
+          "evidence",
+          "conditions",
+          "blockers",
+          "mappings",
+          "authority",
+          "coordinates"
+        ],
+        "properties": {
+          "dimension": {
+            "enum": [
+              "specification",
+              "factory-release-capability-contract",
+              "runtime-execution",
+              "protocol",
+              "governance"
+            ]
+          },
+          "outcome": {
+            "enum": [
+              "compatible",
+              "breaking",
+              "conditional",
+              "unknown"
+            ]
+          },
+          "ruleId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "explanation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "evidence_id",
+                "source",
+                "digest",
+                "authority"
+              ],
+              "properties": {
+                "evidence_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "digest": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "authority": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "blockers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "mappings": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "authority": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "coordinates": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "dimension": {
+                "const": "specification"
+              }
+            },
+            "required": [
+              "dimension"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "dimension": {
+                "const": "factory-release-capability-contract"
+              }
+            },
+            "required": [
+              "dimension"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "dimension": {
+                "const": "runtime-execution"
+              }
+            },
+            "required": [
+              "dimension"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "dimension": {
+                "const": "protocol"
+              }
+            },
+            "required": [
+              "dimension"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {
+              "dimension": {
+                "const": "governance"
+              }
+            },
+            "required": [
+              "dimension"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ],
+      "description": "Exactly one assessment for each PSI-48 dimension is required."
+    },
+    "outcome": {
+      "enum": [
+        "compatible",
+        "breaking",
+        "conditional",
+        "unknown"
+      ]
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
     "provenance": {
-      "type": "object", "additionalProperties": false,
-      "required": ["engine", "engineVersion", "normativeAuthorities", "canonicalization"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "engine",
+        "engineVersion",
+        "normativeAuthorities",
+        "canonicalization"
+      ],
       "properties": {
-        "engine": {"const": "efs.compatibility"},
-        "engineVersion": {"type": "string", "minLength": 1},
-        "normativeAuthorities": {"const": ["PSI-46", "PSI-47", "PSI-48"]},
-        "canonicalization": {"const": "RFC8785"}
+        "engine": {
+          "const": "efs.compatibility"
+        },
+        "engineVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "normativeAuthorities": {
+          "const": [
+            "PSI-46",
+            "PSI-47",
+            "PSI-48"
+          ]
+        },
+        "canonicalization": {
+          "const": "RFC8785"
+        }
       }
     }
   }
