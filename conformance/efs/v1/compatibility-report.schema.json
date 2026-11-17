@@ -69,7 +69,54 @@
           "authority": {"type": ["string", "null"]},
           "coordinates": {"type": "object", "additionalProperties": {"type": "string", "minLength": 1}}
         }
-      }
+      },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "properties": {"dimension": {"const": "specification"}},
+            "required": ["dimension"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {"dimension": {"const": "factory-release-capability-contract"}},
+            "required": ["dimension"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {"dimension": {"const": "runtime-execution"}},
+            "required": ["dimension"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {"dimension": {"const": "protocol"}},
+            "required": ["dimension"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "properties": {"dimension": {"const": "governance"}},
+            "required": ["dimension"]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
     },
     "outcome": {"enum": ["compatible", "breaking", "conditional", "unknown"]},
     "warnings": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},

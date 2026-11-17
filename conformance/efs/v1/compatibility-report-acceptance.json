@@ -29,7 +29,7 @@
       "requirement": "Exact subject release/digest/EFS and consumer/profile/range coordinates are preserved; no latest resolution or fallback occurs.",
       "tests": [
         "test_exact_subject_coordinates_and_consumer_ranges_are_preserved",
-        "test_equal_precedence_release_labels_are_never_implicitly_selected"
+        "test_equal_precedence_release_labels_require_explicit_exact_coordinate"
       ]
     },
     {
@@ -83,6 +83,14 @@
       "requirement": "The evaluated specification coordinates must match the exact report subject efsVersion and consumer profile/range; inconsistent caller-supplied assessments are rejected.",
       "tests": [
         "test_report_rejects_specification_assessed_against_different_coordinates"
+      ]
+    },
+    {
+      "id": "PSI49-AC-11",
+      "requirement": "The Draft 2020-12 report schema requires exactly one entry for each of the five PSI-48 assessment dimensions; portable positive and negative fixtures prove duplicates, omissions, short arrays and unsupported dimensions are rejected.",
+      "tests": [
+        "test_compatibility_report_dimension_fixtures_are_schema_conformant",
+        "test_engine_materializes_missing_dimensions_and_rejects_duplicates"
       ]
     }
   ]
