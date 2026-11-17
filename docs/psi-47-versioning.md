@@ -13,7 +13,13 @@ The reference implementation in `efs.versioning` parses SemVer 2.0.0 only for th
 
 `validate_release_transition` requires an explicit reviewed classification (`breaking`, `additive`, or `fix`); it does not infer API impact from an arbitrary manifest diff. Breaking public-surface changes require a MAJOR increment, compatible additive changes a MINOR increment without changing MAJOR, and backward-compatible fixes a PATCH increment. Every proposed release must have greater SemVer precedence. Callers remain responsible for immutable registry uniqueness by exact release string and digest conflict handling; this module never rewrites identifiers or replaces digest checks.
 
-`ReleaseCoordinate` retains the exact publisher, Factory, version and digest tuple. `require_exact_release_selection` finds the highest precedence only within one exact Factory stream and rejects multiple distinct exact labels at equal precedence. Build metadata is not a tie-breaker.
+`ReleaseCoordinate` retains the complete exact release coordinate:
+`(publisher.id, factory.id, release.version, release.digest.profile, release.digest.algorithm, release.digest.value)`.
+The public API is `require_exact_release_selection(candidates, requested_coordinate)`; the second argument is mandatory and must be a `ReleaseCoordinate`. The helper returns exactly one candidate whose complete `exact_identity` equals the requested coordinate. Missing/non-coordinate requests, no matching candidate and multiple exact matches raise `VersionError`. A missing positional argument is rejected by Python's required-argument contract.
+
+Candidate discovery and release selection are separate operations. A registry/discovery layer may supply a candidate set, but this helper does not rank or authorize candidates. SemVer precedence is not a selection policy: it cannot establish caller intent or authorization, and therefore the helper never chooses a highest, newest, latest or preferred release. Exact version strings—including build metadata—and all immutable digest dimensions remain part of identity. A version match with a different digest is not a match, and a digest is never substituted for the release version.
+
+This is an intentional public API compatibility break for callers of the former one-argument helper. Every caller must supply the exact requested coordinate; no implicit-selection fallback is retained. EFS v1 defines no `latest` or `latest-compatible` mode. Any future resolution policy requires a separate explicit product/registry decision.
 
 ## Diagnostics and API boundary
 

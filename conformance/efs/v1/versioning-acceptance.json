@@ -60,10 +60,18 @@
     },
     {
       "id": "PSI47-AC-05",
-      "requirement": "Release version and digest remain separate immutable coordinates; equal-precedence labels require exact selection.",
+      "requirement": "Release version and digest remain separate immutable coordinates; release selection requires one exact six-field coordinate and never uses SemVer precedence as an implicit policy.",
       "tests": [
         "test_release_coordinate_keeps_version_and_digest_separate",
-        "test_equal_precedence_labels_require_exact_selection"
+        "test_equal_precedence_labels_require_exact_selection",
+        "test_release_selection_requires_explicit_requested_coordinate",
+        "test_release_selection_returns_only_exact_requested_candidate",
+        "test_release_selection_rejects_missing_coordinate_without_fallback",
+        "test_release_selection_rejects_ambiguous_exact_matches",
+        "test_release_selection_does_not_confuse_any_exact_identity_dimension",
+        "test_release_selection_does_not_use_higher_precedence_as_policy",
+        "test_release_selection_candidate_order_cannot_change_result",
+        "test_release_selection_does_not_fallback_after_digest_mismatch"
       ],
       "vectors": [
         "DIGEST-001",

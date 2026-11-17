@@ -224,13 +224,17 @@ def test_report_rejects_specification_assessed_against_different_coordinates():
                                ruleset_version="rules-1")
 
 
-def test_equal_precedence_release_labels_are_never_implicitly_selected():
+def test_equal_precedence_release_labels_require_explicit_exact_coordinate():
     first = ReleaseCoordinate("urn:publisher:acme", "support", "1.2.3+one", "efs-jcs-sha256-v1",
                               "SHA-256", "a" * 64)
     second = ReleaseCoordinate("urn:publisher:acme", "support", "1.2.3+two", "efs-jcs-sha256-v1",
                                "SHA-256", "b" * 64)
-    with pytest.raises(VersionError, match="equal-precedence"):
-        require_exact_release_selection([first, second])
+    assert require_exact_release_selection([first, second], second) is second
+    with pytest.raises(VersionError, match="does not match any candidate"):
+        require_exact_release_selection([first, second], ReleaseCoordinate(
+            "urn:publisher:acme", "support", "1.2.3+three", "efs-jcs-sha256-v1",
+            "SHA-256", "c" * 64
+        ))
 
 
 def test_report_is_derived_and_does_not_mutate_source_coordinates():
