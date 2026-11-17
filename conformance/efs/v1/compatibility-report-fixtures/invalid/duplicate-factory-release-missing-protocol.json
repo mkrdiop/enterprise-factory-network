@@ -36,7 +36,7 @@
       "coordinates": {}
     },
     {
-      "dimension": "specification",
+      "dimension": "factory-release-capability-contract",
       "outcome": "unknown",
       "ruleId": "EFC-FIXTURE-001",
       "explanation": "No assessment evidence was supplied.",
@@ -60,7 +60,7 @@
       "coordinates": {}
     },
     {
-      "dimension": "specification",
+      "dimension": "factory-release-capability-contract",
       "outcome": "unknown",
       "ruleId": "EFC-FIXTURE-001",
       "explanation": "No assessment evidence was supplied.",
