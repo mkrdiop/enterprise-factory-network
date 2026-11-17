@@ -1,0 +1,100 @@
+{
+  "reportVersion": "1.0",
+  "rulesetVersion": "efs-compatibility/1.0",
+  "subject": {
+    "publisherId": "urn:publisher:fixture",
+    "factoryId": "fixture-factory",
+    "releaseVersion": "1.2.3",
+    "digest": {
+      "profile": "efs-jcs-sha256-v1",
+      "algorithm": "SHA-256",
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "efsVersion": "1.0.0"
+  },
+  "consumer": {
+    "consumerId": "fixture-consumer",
+    "profileId": "fixture-profile",
+    "profileVersion": "1",
+    "supportedEfsRange": "*",
+    "runtimeProfileId": "fixture-runtime",
+    "protocolProfileIds": [
+      "https-json"
+    ]
+  },
+  "dimensions": [
+    {
+      "dimension": "specification",
+      "outcome": "unknown",
+      "ruleId": "EFC-FIXTURE-001",
+      "explanation": "No assessment evidence was supplied.",
+      "evidence": [],
+      "conditions": [],
+      "blockers": [],
+      "mappings": [],
+      "authority": null,
+      "coordinates": {}
+    },
+    {
+      "dimension": "factory-release-capability-contract",
+      "outcome": "unknown",
+      "ruleId": "EFC-FIXTURE-001",
+      "explanation": "No assessment evidence was supplied.",
+      "evidence": [],
+      "conditions": [],
+      "blockers": [],
+      "mappings": [],
+      "authority": null,
+      "coordinates": {}
+    },
+    {
+      "dimension": "governance",
+      "outcome": "unknown",
+      "ruleId": "EFC-FIXTURE-001",
+      "explanation": "No assessment evidence was supplied.",
+      "evidence": [],
+      "conditions": [],
+      "blockers": [],
+      "mappings": [],
+      "authority": null,
+      "coordinates": {}
+    },
+    {
+      "dimension": "protocol",
+      "outcome": "unknown",
+      "ruleId": "EFC-FIXTURE-001",
+      "explanation": "No assessment evidence was supplied.",
+      "evidence": [],
+      "conditions": [],
+      "blockers": [],
+      "mappings": [],
+      "authority": null,
+      "coordinates": {}
+    },
+    {
+      "dimension": "governance",
+      "outcome": "unknown",
+      "ruleId": "EFC-FIXTURE-001",
+      "explanation": "No assessment evidence was supplied.",
+      "evidence": [],
+      "conditions": [],
+      "blockers": [],
+      "mappings": [],
+      "authority": null,
+      "coordinates": {}
+    }
+  ],
+  "outcome": "unknown",
+  "warnings": [],
+  "blockers": [],
+  "provenance": {
+    "engine": "efs.compatibility",
+    "engineVersion": "1.0.0",
+    "normativeAuthorities": [
+      "PSI-46",
+      "PSI-47",
+      "PSI-48"
+    ],
+    "canonicalization": "RFC8785"
+  }
+}
