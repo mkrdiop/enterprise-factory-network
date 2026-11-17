@@ -146,16 +146,11 @@ def test_release_selection_rejects_ambiguous_exact_matches():
 ])
 def test_release_selection_does_not_confuse_any_exact_identity_dimension(field, value):
     requested = ReleaseCoordinate("urn:acme", "factory", "1.0.0", "p", "SHA-256", "a")
-    mismatched = ReleaseCoordinate(
-        **{**requested.__dict__, field: value}
-    ) if hasattr(requested, "__dict__") else ReleaseCoordinate(
-        value if field == "publisher_id" else requested.publisher_id,
-        value if field == "factory_id" else requested.factory_id,
-        value if field == "version" else requested.version,
-        value if field == "digest_profile" else requested.digest_profile,
-        value if field == "digest_algorithm" else requested.digest_algorithm,
-        value if field == "digest_value" else requested.digest_value,
-    )
+    fields = ("publisher_id", "factory_id", "version", "digest_profile",
+              "digest_algorithm", "digest_value")
+    mismatched = ReleaseCoordinate(*(
+        value if name == field else getattr(requested, name) for name in fields
+    ))
     with pytest.raises(VersionError, match="does not match any candidate"):
         require_exact_release_selection([mismatched], requested)
 
